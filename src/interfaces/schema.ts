@@ -1,4 +1,4 @@
-export default interface Struct {
+export interface Struct {
   desc?: string;
   fields: Field[];
   full_name: string;
