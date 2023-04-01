@@ -9,8 +9,7 @@
         </div>
       </div>
       <div class="content">
-        {{ selectedRootField.desc }}
-        <br/>
+        <div class="desc">{{ selectedRootField.desc }}</div>
         <br/>
         Type: <code>{{ schema.typeDisplay(selectedRootField.type) }}</code>
         <br/>
@@ -57,5 +56,10 @@ const liftedStructs = computed(() => {
 
 button.active {
   background-color: #ccc;
+}
+
+.desc {
+  padding: 10px;
+  background-color: #f0f0f0
 }
 </style>
