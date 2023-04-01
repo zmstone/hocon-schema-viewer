@@ -4,6 +4,7 @@
             {
                 "aliases": ["alias1", "alias2"],
                 "name": "listeners",
+                "desc": "Listeners configuration.",
                 "type": {
                     "kind": "struct",
                     "name": "broker:listeners"

@@ -9,7 +9,6 @@
         <span v-if="field.aliases.length>0">]</span>
         <span>: <code>{{ typeDisplay(field.type) }}</code></span>
         <struct-view v-if="field.type.kind === 'struct'" :struct="findStruct(field.type.name)" />
-        <!-- go deep -->
         <div v-if="isComplexType(field.type)">
           <div v-for="(st, index) in subStructs(field.type)">
             <struct-view :struct="findStruct(st.name)" />
@@ -19,7 +18,6 @@
     </ul>
   </div>
 </template>
-
 <script lang="ts">
 import { defineComponent } from 'vue';
 import * as schema from '../interfaces/schema';
@@ -37,12 +35,6 @@ export default defineComponent({
     StructView: () => import('./StructView.vue'),
   },
   methods: {
-    isComplexField(fieldType: schema.FieldType): boolean {
-        return fieldType.kind === 'map' ||
-               fieldType.kind === 'array' ||
-               fieldType.kind === 'union' ||
-               fieldType.kind === 'struct';
-    },
     isComplexType(type: schema.FieldType): boolean {
       return schema.isComplexType(type);
     },
