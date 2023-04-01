@@ -10,27 +10,33 @@
       </div>
       <div class="content">
         {{ selectedRootField.desc }}
-        <!-- struct-view :struct="selectedStruct" /-->
+        <br/>
+        <br/>
+        Type: <code>{{ schema.typeDisplay(selectedRootField.type) }}</code>
+        <br/>
+        <struct-view v-for="(st, i) in liftedStructs" :key="i" :struct="st" />
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import { defineComponent, ref, computed } from 'vue'
+import StructView from './views/StructView.vue'
+import { Root, findStruct } from './data/data'
+import * as schema from './interfaces/schema'
+const root: schema.Struct = Root
 
-import { defineComponent, ref, computed } from 'vue';
-import StructView from './views/StructView.vue';
-import { Root } from './data/data';
-import * as schema from './interfaces/schema';
-const root: schema.Struct = Root;
-
-const selectedTabIndex = ref(0);
+const selectedTabIndex = ref(0)
 const selectTab = (index) => {
   selectedTabIndex.value = index;
-};
+}
 
-const selectedRootField = computed(() => root.fields[selectedTabIndex.value]);
-
+const selectedRootField = computed(() => root.fields[selectedTabIndex.value])
+const liftedStructs = computed(() => {
+   const refs = schema.liftStructs(root.fields[selectedTabIndex.value].type);
+   return refs.map((r: schema.StructReference) => findStruct(r.name));
+});
 </script>
 
 <style>
