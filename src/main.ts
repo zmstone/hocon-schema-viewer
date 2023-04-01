@@ -2,7 +2,7 @@ import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 import './assets/main.css';
 
-import App from './Esv.vue'
+import App from './HSV.vue'
 
 const app = createApp(App)
 

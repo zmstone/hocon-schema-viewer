@@ -61,11 +61,9 @@
 
 @font-face {
   font-family: 'Inter';
+  src: url('src/assets/Inter-Regular.woff2') format('woff2');
   font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-  src: url('/Inter-Regular.woff2') format('woff2'),
-       url('/Inter-Regular.woff') format('woff');
+  font-weight: normal;
 }
 
 body {
@@ -74,7 +72,7 @@ body {
   background: var(--color-background);
   transition: color 0.5s, background-color 0.5s;
   line-height: 1.5;
-  font-family: Inter, sans-serif;
+  font-family: Monaco, Lucida Console, monospace;
   font-size: 16px;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
