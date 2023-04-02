@@ -1,40 +1,11 @@
-<template>
-  <h1>HOCON schema viewer (EMQX)</h1>
-  <div class="split-view">
-    <div class="sidebar">
-      <ul class="nav-list">
-        <li v-for="(field, index) in root.fields" :key="index">
-          <span @click="selectTab(index)" :class="{ 'active-tab': selectedTabIndex === index }">
-            {{ field.name }}{{ annotate(field.type) }}
-          </span>
-          <ul v-show="expanded[index]" class="sub-buttons">
-            <li
-              v-for="(expand, expIndex) in getExpands(field.type)"
-              :key="expIndex"
-              @click="selectType(expand.type, expand.desc, expIndex)"
-            >
-              <span :class="{ 'selected-expand': selectedExpandIndex === expIndex }">
-                {{ expand.label }}
-              </span>
-            </li>
-          </ul>
-        </li>
-      </ul>
-    </div>
-    <div class="content">
-      <div class="desc">{{ displayType.desc }}</div>
-      <br/><div class="type_display"><code>{{ displayType.label }}</code></div><br/>
-      <struct-view v-for="(st, i) in liftedStructs" :key="i" :struct="st" />
-    </div>
-  </div>
-</template>
-
 <script setup lang="ts">
 import { defineComponent, ref, computed } from 'vue'
 import StructView from './views/StructView.vue'
 import { Root, findStruct } from './data/data'
 import * as schema from './interfaces/schema'
 import { stringify } from 'querystring'
+import * as markdown from './markdown';
+
 const root: schema.Struct = Root
 
 const selectedTabIndex = ref(0)
@@ -67,6 +38,10 @@ const toggleExpand = (index) => {
   expanded.value[index] = !expanded.value[index]
 }
 
+const renderMarkdown = (desc) => {
+  return markdown.render(desc)
+}
+
 const annotate = (type: schema.FieldType) => {
   if (type.kind === 'array') {
     return '[...]'
@@ -75,10 +50,6 @@ const annotate = (type: schema.FieldType) => {
     return schema.shortTypeDisplay(type)
   }
   return ''
-}
-
-const isExpandable = (type: schema.FieldType) => {
-  return getExpands(type).length > 0
 }
 
 const getExpands = (type: schema.FieldType) => {
@@ -156,6 +127,37 @@ const liftedStructs = computed(() => {
   return refs.map((r: schema.StructReference) => findStruct(r.name))
 })
 </script>
+
+<template>
+  <h1>HOCON schema viewer (EMQX)</h1>
+  <div class="split-view">
+    <div class="sidebar">
+      <ul class="nav-list">
+        <li v-for="(field, index) in root.fields" :key="index">
+          <span @click="selectTab(index)" :class="{ 'active-tab': selectedTabIndex === index }">
+            {{ field.name }}{{ annotate(field.type) }}
+          </span>
+          <ul v-show="expanded[index]" class="sub-buttons">
+            <li
+              v-for="(expand, expIndex) in getExpands(field.type)"
+              :key="expIndex"
+              @click="selectType(expand.type, expand.desc, expIndex)"
+            >
+              <span :class="{ 'selected-expand': selectedExpandIndex === expIndex }">
+                {{ expand.label }}
+              </span>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+    <div class="content">
+      <div class="desc" v-html="renderMarkdown(displayType.desc)"></div>
+      <br/><div class="type_display"><code>{{ displayType.label }}</code></div><br/>
+      <struct-view v-for="(st, i) in liftedStructs" :key="i" :struct="st" />
+    </div>
+  </div>
+</template>
 
 <style scoped>
 /* Light mode styles (default) */

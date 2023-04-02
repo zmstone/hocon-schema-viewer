@@ -2,6 +2,7 @@
 import { defineComponent } from 'vue'
 import * as schema from '../interfaces/schema'
 import { findStruct } from '../data/data'
+import * as markdown from '../markdown';
 
 export default defineComponent({
   name: 'StructView',
@@ -27,7 +28,10 @@ export default defineComponent({
     typeDisplay(type: schema.FieldType): string {
       return schema.shortTypeDisplay(type)
     },
-    findStruct
+    findStruct,
+    renderMarkdown (desc) {
+      return markdown.render(desc)
+    }
   }
 })
 </script>
@@ -47,7 +51,7 @@ export default defineComponent({
 
         : <span class="type-display"><code>{{ typeDisplay(field.type) }}</code></span>
         <br />
-        <div class="desc">{{ field.desc }}</div>
+        <div class="desc" v-html="renderMarkdown(field.desc)"></div>
         <struct-view v-if="field.type.kind === 'struct'" :struct="findStruct(field.type.name)" />
         <div v-if="isComplexType(field.type)">
           <div v-for="(st, index) in subStructs(field)">
