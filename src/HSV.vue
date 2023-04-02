@@ -152,7 +152,7 @@ const liftedStructs = computed(() => {
       </ul>
     </div>
     <div class="content">
-      <div class="desc" v-html="renderMarkdown(displayType.desc)"></div>
+      <div class="desc" v-if="displayType.desc" v-html="renderMarkdown(displayType.desc)"></div>
       <br/><div class="type_display"><code>{{ displayType.type_display }}</code></div><br/>
       <struct-view v-for="(st, i) in liftedStructs" :key="i" :struct="st" />
     </div>
