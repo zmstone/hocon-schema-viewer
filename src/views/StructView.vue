@@ -16,7 +16,7 @@
         <div class="desc">{{ field.desc }}</div>
         <struct-view v-if="field.type.kind === 'struct'" :struct="findStruct(field.type.name)" />
         <div v-if="isComplexType(field.type)">
-          <div v-for="(st, index) in subStructs(field.type)">
+          <div v-for="(st, index) in subStructs(field)">
             <struct-view :struct="findStruct(st.name)" />
           </div>
         </div>
@@ -44,8 +44,11 @@ export default defineComponent({
     isComplexType(type: schema.FieldType): boolean {
       return schema.isComplexType(type)
     },
-    subStructs(type: schema.FieldType): schema.FieldType[] {
-      return schema.liftStructs(type)
+    subStructs(field: schema.Field): schema.FieldType[] {
+      if(field.doc_lift === true){
+        return [];
+      }
+      return schema.liftStructs(field.type);
     },
     typeDisplay(type: schema.FieldType): string {
       return schema.shortTypeDisplay(type)

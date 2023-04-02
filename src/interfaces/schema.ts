@@ -10,6 +10,7 @@ export interface Field {
   aliases: string[]
   default?: DefaultValue
   desc?: string
+  doc_lift?: boolean
   name: string
   raw_default?: string
   type: FieldType

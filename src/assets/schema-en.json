@@ -13490,6 +13490,7 @@
                 },
                 "desc": "Authorization data sources.<br/>\nAn array of authorization (ACL) data providers.\nIt is designed as an array, not a hash-map, so the sources can be\nordered to form a chain of access controls.<br/>\n\nWhen authorizing a 'publish' or 'subscribe' action, the configured\nsources are checked in order. When checking an ACL source,\nin case the client (identified by username or client ID) is not found,\nit moves on to the next source. And it stops immediately\nonce an 'allow' or 'deny' decision is returned.<br/>\n\nIf the client is not found in any of the sources,\nthe default action configured in 'authorization.no_match' is applied.<br/>\n\nNOTE:\nThe source elements are identified by their 'type'.\nIt is NOT allowed to configure two or more sources of the same type.",
                 "name": "sources",
+                "doc_lift": true,
                 "raw_default": [],
                 "type": {
                     "elements": {

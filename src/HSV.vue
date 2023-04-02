@@ -10,7 +10,7 @@
             <li
               v-for="(expand, expIndex) in getExpands(field.type)"
               :key="expIndex"
-              @click="selectType(expand.type, expIndex)"
+              @click="selectType(expand.type, expand.desc, expIndex)"
             >
               <span :class="{ 'selected-expand': selectedExpandIndex === expIndex }">
                 {{ expand.label }}
@@ -51,7 +51,10 @@ const selectTab = (index) => {
 
 const selectedType = ref(null)
 const selectedExpandIndex = ref(null)
-const selectType = (type, expIndex) => {
+const selectType = (type, desc, expIndex) => {
+  if(type.desc === undefined){
+    type.desc = desc
+  }
   selectedType.value = type
   selectedExpandIndex.value = expIndex
 }
@@ -96,6 +99,7 @@ const getExpands = (type: schema.FieldType) => {
         }
       })
     }
+    return [];
   }
   if (type.kind === 'union') {
     const displayNames = type.members.map((m) => {
@@ -126,6 +130,10 @@ function tidyNames(strings: string[]): string[] {
     .map((s) => {
       // remove ':authentication' suffix
       return s.replace(':authentication', '')
+    })
+    .map((s) => {
+      // remove 'authz:' prefix
+      return s.replace('authz:', '')
     })
 }
 
@@ -158,7 +166,7 @@ const liftedStructs = computed(() => {
 }
 
 .sidebar {
-  width: 250px;
+  width: 320px;
   border-right: 1px solid #ccc;
   padding: 10px;
 }
