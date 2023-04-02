@@ -162,14 +162,16 @@ const liftedStructs = computed(() => {
 </script>
 
 <style scoped>
+/* Light mode styles (default) */
 .split-view {
   display: flex;
 }
 
 .sidebar {
-  width: 320px;
+  width: 250px;
   border-right: 1px solid #ccc;
   padding: 10px;
+  background-color: #fff;
 }
 
 .nav-list {
@@ -179,7 +181,7 @@ const liftedStructs = computed(() => {
 }
 
 .nav-list li {
-  padding: 0px 0;
+  padding: 4px 0;
 }
 
 .nav-list li span {
@@ -197,6 +199,7 @@ const liftedStructs = computed(() => {
 .content {
   flex: 1;
   padding: 10px;
+  background-color: #fff;
 }
 
 .active-tab {
@@ -213,14 +216,43 @@ const liftedStructs = computed(() => {
   padding: 10px;
   background-color: #e4f5ea;
 }
+
 .sub-buttons {
   padding-left: 20px;
   list-style-type: none;
 }
+
 .selected-expand {
   color: #fff;
   background-color: #5a8dd6;
   padding: 2px 4px;
   border-radius: 4px;
+}
+
+/* Dark mode styles */
+@media (prefers-color-scheme: dark) {
+  .sidebar,
+  .content {
+    background-color: #1e1e1e;
+  }
+
+  .nav-list li span:hover {
+    background-color: #3a3a3a;
+  }
+
+  .desc {
+    background-color: #282828;
+    color: #ccc;
+  }
+
+  .type_display {
+    background-color: #2d2d2d;
+    color: #ccc;
+  }
+
+  .small-type {
+    background-color: #3a3a3a;
+    color: #ccc;
+  }
 }
 </style>
