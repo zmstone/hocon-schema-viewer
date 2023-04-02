@@ -46,7 +46,7 @@ export default defineComponent({
   <div class="struct-view">
     <ul class="field-list">
       <li v-for="(field, index) in visibleFields(struct)" class="field-item">
-        <div class="fieldname">{{ field.name }} </div>
+        <div class="fieldname">{{ field.name }}</div>
         <table>
           <tr v-if="field.aliases.length > 0">
             <td>Aliases:</td>
@@ -87,8 +87,16 @@ export default defineComponent({
 <style scoped>
 .field-list {
   list-style-type: none;
-  padding-left: 16px;
-  margin: 0;
+  padding-left: 20px;
+}
+.field-list::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background-color: rgba(0, 0, 0, 0.3);
 }
 
 .fieldname {
@@ -134,6 +142,9 @@ table th {
   }
   table tr:nth-child(even) {
     background-color: #2a2a2a;
+  }
+  .field-list::before {
+    background-color: rgba(255, 255, 255, 0.3);
   }
 }
 </style>
