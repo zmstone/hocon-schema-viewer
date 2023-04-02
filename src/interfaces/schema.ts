@@ -56,14 +56,17 @@ export interface MapFieldType {
 
 export interface ArrayFieldType {
   kind: 'array'
-  name: string
   elements: FieldType
 }
 
 export interface UnionFieldType {
   kind: 'union'
-  name: string
   members: FieldType[]
+}
+
+export interface RootExpand {
+  display: string
+  selected: FieldType
 }
 
 // Dig up all the fist-level structs of a given type
