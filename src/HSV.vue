@@ -5,7 +5,7 @@
       <ul class="nav-list">
         <li v-for="(field, index) in root.fields" :key="index">
           <span @click="selectTab(index)" :class="{ 'active-tab': selectedTabIndex === index }">
-            {{ field.name }} {{ annotate(field.type) }} {{ maybeExpandable(field.type) }}
+            {{ field.name }}{{ annotate(field.type) }}
           </span>
           <ul v-show="expanded[index]" class="sub-buttons">
             <li
@@ -79,10 +79,6 @@ const annotate = (type: schema.FieldType) => {
 
 const isExpandable = (type: schema.FieldType) => {
   return getExpands(type).length > 0
-}
-
-const maybeExpandable = (type: schema.FieldType) => {
-  return isExpandable(type) ? '+' : ''
 }
 
 const getExpands = (type: schema.FieldType) => {
@@ -164,11 +160,12 @@ const liftedStructs = computed(() => {
 <style scoped>
 /* Light mode styles (default) */
 .split-view {
-  display: flex;
+  display: grid;
+  grid-template-columns: min-content 1fr;
+  grid-gap: 20px;
 }
 
 .sidebar {
-  width: 250px;
   border-right: 1px solid #ccc;
   padding: 10px;
   background-color: #fff;
@@ -178,6 +175,7 @@ const liftedStructs = computed(() => {
   list-style-type: none;
   padding: 0;
   margin: 0;
+  display: contents;
 }
 
 .nav-list li {
