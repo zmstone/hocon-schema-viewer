@@ -9,6 +9,7 @@ export interface Struct {
 export interface Field {
   aliases: string[]
   default?: DefaultValue
+  importance?: string
   desc?: string
   doc_lift?: boolean
   name: string
@@ -141,7 +142,17 @@ export function shortTypeDisplay(type: FieldType): string {
   return maybeShortTypeDisplay(type, short);
 }
 
+export function visibleFields(struct) {
+  return struct.fields.filter(field => {
+      if(field.importance) {
+          return (field.importance !== 'hidden');
+      }
+      return true;
+  });
+}
+
 // remove the module:type() prefix from a type name
 function short(typeName: string, isShort: boolean): string {
   return typeName.replace(/.*:/, '').replace(/.*\./, '');
 }
+

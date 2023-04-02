@@ -1,4 +1,4 @@
-import type { Struct, Field } from '../interfaces/schema'
+import { Struct, Field, visibleFields } from '../interfaces/schema'
 import jsonData from '../assets/schema-en.json'
 
 type StructMap = { [name: string]: number }
@@ -25,7 +25,7 @@ export let Root: Struct = allStructs[0]
 function updateRootFields(root: Struct) {
   const updatedFields: Field[] = [];
 
-  root.fields.forEach((field) => {
+  visibleFields(root).forEach((field) => {
     updatedFields.push(field); // Keep the parent field
     const parentName = field.name;
     if (field.type.kind === 'struct') {

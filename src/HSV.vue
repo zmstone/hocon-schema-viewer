@@ -6,8 +6,6 @@ import * as schema from './interfaces/schema'
 import { stringify } from 'querystring'
 import * as markdown from './markdown';
 
-const root: schema.Struct = Root
-
 const selectedTabIndex = ref(0)
 const expanded = ref([])
 const selectTab = (index) => {
@@ -59,7 +57,7 @@ const getExpands = (type: schema.FieldType) => {
   if (type.kind === 'struct') {
     const struct = findStruct(type.name);
     if(allFieldsAreComplex(struct)){
-      return struct.fields.map((f) => {
+      return visibleFields(struct).map((f) => {
         return {
           type_display: f.name,
           desc: f.desc,
@@ -86,7 +84,11 @@ const getExpands = (type: schema.FieldType) => {
 }
 
 function allFieldsAreComplex(type: schema.Struct) {
-  return type.fields.every(schema.isComplexField);
+  return visibleFields(type).every(schema.isComplexField);
+}
+
+function visibleFields(struct) {
+    return schema.visibleFields(struct);
 }
 
 function tidyNames(strings: string[]): string[] {
@@ -113,7 +115,8 @@ const displayType = computed(() => {
       type: selectedType.value
     }
   } else {
-    const field = root.fields[selectedTabIndex.value]
+    // root fields are always visible (already filtered)
+    const field = Root.fields[selectedTabIndex.value]
     return {
       desc: field.desc,
       type_display: schema.typeDisplay(field.type),
@@ -133,7 +136,7 @@ const liftedStructs = computed(() => {
   <div class="split-view">
     <div class="sidebar">
       <ul class="nav-list">
-        <li v-for="(field, index) in root.fields" :key="index">
+        <li v-for="(field, index) in Root.fields" :key="index">
           <span @click="selectTab(index)" :class="{ 'active-tab': selectedTabIndex === index }">
             {{ field.name }}{{ annotate(field.type) }}
           </span>

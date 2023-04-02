@@ -31,6 +31,9 @@ export default defineComponent({
     findStruct,
     renderMarkdown (desc) {
       return markdown.render(desc)
+    },
+    visibleFields (struct) {
+      return schema.visibleFields(struct)
     }
   }
 })
@@ -39,7 +42,7 @@ export default defineComponent({
 <template>
   <div class="struct-view">
     <ul class="field-list">
-      <li v-for="(field, index) in struct.fields" class="field-item">
+      <li v-for="(field, index) in visibleFields(struct)" class="field-item">
         <span class="fieldname">{{ field.name }} </span>
 
         <span v-if="field.aliases.length > 0"> [</span>
@@ -100,5 +103,6 @@ export default defineComponent({
     color: #ccc;
   }
 }
+
 </style>
 
