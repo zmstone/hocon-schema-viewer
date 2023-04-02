@@ -23,27 +23,27 @@ export function findStruct(name: string): Struct | undefined {
 export let Root: Struct = allStructs[0]
 
 function updateRootFields(root: Struct) {
-  const updatedFields: Field[] = [];
+  const updatedFields: Field[] = []
 
   visibleFields(root).forEach((field) => {
-    updatedFields.push(field); // Keep the parent field
-    const parentName = field.name;
+    updatedFields.push(field) // Keep the parent field
+    const parentName = field.name
     if (field.type.kind === 'struct') {
-      const subStruct = findStruct(field.type.name);
+      const subStruct = findStruct(field.type.name)
 
       if (subStruct) {
         subStruct.fields.forEach((subField) => {
           if (subField.doc_lift === true) {
-            subField.name = `${parentName}.${subField.name}`; // Update the sub-field name
-            updatedFields.push(subField); // Add the sub-field next to the parent field if doc_lift is true
+            subField.name = `${parentName}.${subField.name}` // Update the sub-field name
+            updatedFields.push(subField) // Add the sub-field next to the parent field if doc_lift is true
           }
-        });
+        })
       }
     }
-  });
+  })
 
-  root.fields = updatedFields;
+  root.fields = updatedFields
 }
 
 // Update the Root fields
-updateRootFields(Root);
+updateRootFields(Root)

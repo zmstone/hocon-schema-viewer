@@ -2,7 +2,7 @@
 import { defineComponent } from 'vue'
 import * as schema from '../interfaces/schema'
 import { findStruct } from '../data/data'
-import * as markdown from '../markdown';
+import * as markdown from '../markdown'
 
 export default defineComponent({
   name: 'StructView',
@@ -20,21 +20,24 @@ export default defineComponent({
       return schema.isComplexType(type)
     },
     subStructs(field: schema.Field): schema.FieldType[] {
-      if(field.doc_lift === true){
-        return [];
+      if (field.doc_lift === true) {
+        return []
       }
-      return schema.liftStructs(field.type);
+      return schema.liftStructs(field.type)
     },
     typeDisplay(type: schema.FieldType): string {
       return schema.shortTypeDisplay(type)
     },
     findStruct,
-    renderMarkdown (desc) {
+    renderMarkdown(desc) {
       return markdown.render(desc)
     },
-    visibleFields (struct) {
+    visibleFields(struct) {
       return schema.visibleFields(struct)
-    }
+    },
+    aliasesDisplay(field) {
+      return '[' + field.aliases.join(',') + ']';
+    },
   }
 })
 </script>
@@ -44,17 +47,28 @@ export default defineComponent({
     <ul class="field-list">
       <li v-for="(field, index) in visibleFields(struct)" class="field-item">
         <span class="fieldname">{{ field.name }} </span>
-
-        <span v-if="field.aliases.length > 0"> [</span>
-        <span v-for="(alias, index) in field.aliases">
-          <span v-if="index > 0">,</span>
-          {{ alias }}
-        </span>
-        <span v-if="field.aliases.length > 0">]</span>
-
-        : <span class="type-display"><code>{{ typeDisplay(field.type) }}</code></span>
-        <br />
-        <div class="desc" v-html="renderMarkdown(field.desc)"></div>
+        <table>
+          <tr v-if="field.aliases.length > 0">
+            <td>Aliases:</td>
+            <td>
+              <span v-for="(alias, index) in field.aliases">
+                <span v-if="index > 0">, </span>{{ alias }}
+              </span>
+            </td>
+          </tr>
+          <tr>
+            <td>Type</td>
+            <td><code>{{ typeDisplay(field.type) }}</code></td>
+          </tr>
+          <tr v-if="field.raw_default">
+            <td>Default</td>
+            <td><code>{{ field.raw_default }}</code></td>
+          </tr>
+          <tr v-if="field.desc">
+            <td>Description</td>
+            <td> <div v-html="renderMarkdown(field.desc)"></div></td>
+          </tr>
+        </table>
         <struct-view v-if="field.type.kind === 'struct'" :struct="findStruct(field.type.name)" />
         <div v-if="isComplexType(field.type)">
           <div v-for="(st, index) in subStructs(field)">
@@ -68,20 +82,13 @@ export default defineComponent({
 
 <style scoped>
 .field-list {
-    list-style-type: none;
-    padding-left: 16px;
-    margin: 0;
+  list-style-type: none;
+  padding-left: 16px;
+  margin: 0;
 }
 
 .fieldname {
   font-weight: bold;
-}
-
-.desc {
-  padding: 10px;
-  background-color: #f5f5f5;
-  color: #333;
-  margin-bottom: 8px;
 }
 
 .type_display {
@@ -91,18 +98,19 @@ export default defineComponent({
   border-radius: 4px;
 }
 
+table td {
+  vertical-align: top;
+}
+
+table td:first-child {
+  text-align: right;
+}
+
 /* Dark mode styles */
 @media (prefers-color-scheme: dark) {
-  .desc {
-    background-color: #282828;
-    color: #ccc;
-  }
-
   .type_display {
     background-color: #2d2d2d;
     color: #ccc;
   }
 }
-
 </style>
-

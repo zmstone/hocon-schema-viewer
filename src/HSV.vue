@@ -4,25 +4,25 @@ import StructView from './views/StructView.vue'
 import { Root, findStruct } from './data/data'
 import * as schema from './interfaces/schema'
 import { stringify } from 'querystring'
-import * as markdown from './markdown';
+import * as markdown from './markdown'
 
 const selectedTabIndex = ref(0)
 const expanded = ref([])
 const selectTab = (index) => {
   selectedType.value = null
   if (selectedTabIndex.value !== index) {
-    expanded.value = expanded.value.map(() => false); // Reset expanded values
+    expanded.value = expanded.value.map(() => false) // Reset expanded values
   }
   selectedType.value = null
   selectedExpandIndex.value = null
-  selectedTabIndex.value = index;
+  selectedTabIndex.value = index
   toggleExpand(index)
 }
 
 const selectedType = ref(null)
 const selectedExpandIndex = ref(null)
 const selectType = (type, desc, expIndex) => {
-  if(type.desc === undefined){
+  if (type.desc === undefined) {
     type.desc = desc
   }
   selectedType.value = type
@@ -44,7 +44,7 @@ const annotate = (type: schema.FieldType) => {
   if (type.kind === 'array') {
     return '[...]'
   }
-  if(type.kind === 'map') {
+  if (type.kind === 'map') {
     return schema.shortTypeDisplay(type)
   }
   return ''
@@ -55,8 +55,8 @@ const getExpands = (type: schema.FieldType) => {
     return getExpands(type.elements)
   }
   if (type.kind === 'struct') {
-    const struct = findStruct(type.name);
-    if(allFieldsAreComplex(struct)){
+    const struct = findStruct(type.name)
+    if (allFieldsAreComplex(struct)) {
       return visibleFields(struct).map((f) => {
         return {
           type_display: f.name,
@@ -65,7 +65,7 @@ const getExpands = (type: schema.FieldType) => {
         }
       })
     }
-    return [];
+    return []
   }
   if (type.kind === 'union') {
     const displayNames = type.members.map((m) => {
@@ -84,11 +84,11 @@ const getExpands = (type: schema.FieldType) => {
 }
 
 function allFieldsAreComplex(type: schema.Struct) {
-  return visibleFields(type).every(schema.isComplexField);
+  return visibleFields(type).every(schema.isComplexField)
 }
 
 function visibleFields(struct) {
-    return schema.visibleFields(struct);
+  return schema.visibleFields(struct)
 }
 
 function tidyNames(strings: string[]): string[] {
@@ -156,7 +156,11 @@ const liftedStructs = computed(() => {
     </div>
     <div class="content">
       <div class="desc" v-if="displayType.desc" v-html="renderMarkdown(displayType.desc)"></div>
-      <br/><div class="type_display"><code>{{ displayType.type_display }}</code></div><br/>
+      <br />
+      <div class="type_display">
+        <code>{{ displayType.type_display }}</code>
+      </div>
+      <br />
       <struct-view v-for="(st, i) in liftedStructs" :key="i" :struct="st" />
     </div>
   </div>

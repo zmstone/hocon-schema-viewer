@@ -108,51 +108,52 @@ export function isComplexField(field: Field): boolean {
 
 function maybeShortTypeDisplay(type: FieldType, shortener: (typeName: string) => string): string {
   if (type.kind === 'primitive') {
-    return shortener(type.name);
+    return shortener(type.name)
   }
   if (type.kind === 'enum') {
-    return type.symbols.join(' | ');
+    return type.symbols.join(' | ')
   }
   if (type.kind === 'union') {
     const union = type.members.map((elem: FieldType) => {
-      return maybeShortTypeDisplay(elem, shortener);
+      return maybeShortTypeDisplay(elem, shortener)
     })
-    return union.join(' | ');
+    return union.join(' | ')
   }
   if (type.kind === 'array') {
-    return '[' + maybeShortTypeDisplay(type.elements, shortener) + ']';
+    return '[' + maybeShortTypeDisplay(type.elements, shortener) + ']'
   }
   if (type.kind === 'struct') {
-    return shortener(type.name);
+    return shortener(type.name)
   }
   if (type.kind === 'singleton') {
-    return shortener(type.name);
+    return shortener(type.name)
   }
   if (type.kind === 'map') {
-    return '{$' + shortener(type.name) + ' => ' + maybeShortTypeDisplay(type.values, shortener) + '}';
+    return (
+      '{$' + shortener(type.name) + ' => ' + maybeShortTypeDisplay(type.values, shortener) + '}'
+    )
   }
-  return shortener(type.kind);
+  return shortener(type.kind)
 }
 
 export function typeDisplay(type: FieldType): string {
-  return maybeShortTypeDisplay(type, (typeName) => typeName);
+  return maybeShortTypeDisplay(type, (typeName) => typeName)
 }
 
 export function shortTypeDisplay(type: FieldType): string {
-  return maybeShortTypeDisplay(type, short);
+  return maybeShortTypeDisplay(type, short)
 }
 
 export function visibleFields(struct) {
-  return struct.fields.filter(field => {
-      if(field.importance) {
-          return (field.importance !== 'hidden');
-      }
-      return true;
-  });
+  return struct.fields.filter((field) => {
+    if (field.importance) {
+      return field.importance !== 'hidden'
+    }
+    return true
+  })
 }
 
 // remove the module:type() prefix from a type name
 function short(typeName: string, isShort: boolean): string {
-  return typeName.replace(/.*:/, '').replace(/.*\./, '');
+  return typeName.replace(/.*:/, '').replace(/.*\./, '')
 }
-
