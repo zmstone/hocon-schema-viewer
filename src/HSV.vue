@@ -4,7 +4,7 @@
       <ul class="nav-list">
         <li v-for="(field, index) in root.fields" :key="index">
           <span @click="selectTab(index)" :class="{ 'active-tab': selectedTabIndex === index }">
-            {{ field.name }} {{ maybeArray(field.type) }} {{ maybeExpandable(field.type) }}
+            {{ field.name }} {{ annotate(field.type) }} {{ maybeExpandable(field.type) }}
           </span>
           <ul v-show="expanded[index]" class="sub-buttons">
             <li
@@ -22,7 +22,7 @@
     </div>
     <div class="content">
       <div class="desc">{{ displayType.desc }}</div>
-      <!-- br/><div class="type_display">Type: <code>{{ displayType.type_display }}</code></div><br/> -->
+      <br/><div class="type_display"><code>{{ displayType.label }}</code></div><br/>
       <struct-view v-for="(st, i) in liftedStructs" :key="i" :struct="st" />
     </div>
   </div>
@@ -63,9 +63,12 @@ const toggleExpand = (index) => {
   expanded.value[index] = !expanded.value[index]
 }
 
-const maybeArray = (type: schema.FieldType) => {
+const annotate = (type: schema.FieldType) => {
   if (type.kind === 'array') {
     return '[...]'
+  }
+  if(type.kind === 'map') {
+    return schema.shortTypeDisplay(type)
   }
   return ''
 }
@@ -82,6 +85,18 @@ const getExpands = (type: schema.FieldType) => {
   if (type.kind === 'array') {
     return getExpands(type.elements)
   }
+  if (type.kind === 'struct') {
+    const struct = findStruct(type.name);
+    if(allFieldsAreComplex(struct)){
+      return struct.fields.map((f) => {
+        return {
+          label: f.name,
+          desc: f.desc,
+          type: f.type
+        }
+      })
+    }
+  }
   if (type.kind === 'union') {
     const displayNames = type.members.map((m) => {
       return schema.typeDisplay(m)
@@ -96,6 +111,10 @@ const getExpands = (type: schema.FieldType) => {
     })
   }
   return []
+}
+
+function allFieldsAreComplex(type: schema.Struct) {
+  return type.fields.every(schema.isComplexField);
 }
 
 function tidyNames(strings: string[]): string[] {
