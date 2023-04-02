@@ -104,31 +104,43 @@ export function isComplexField(field: Field): boolean {
   return isComplexType(field.type)
 }
 
-export function typeDisplay(type: FieldType): string {
+function maybeShortTypeDisplay(type: FieldType, shortener: (typeName: string) => string): string {
   if (type.kind === 'primitive') {
-    return type.name
+    return shortener(type.name);
   }
   if (type.kind === 'enum') {
-    return type.symbols.join(' | ')
+    return type.symbols.join(' | ');
   }
   if (type.kind === 'union') {
-    const count = type.members.length
     const union = type.members.map((elem: FieldType) => {
-      return typeDisplay(elem)
+      return maybeShortTypeDisplay(elem, shortener);
     })
-    return union.join(' | ')
+    return union.join(' | ');
   }
   if (type.kind === 'array') {
-    return '[' + typeDisplay(type.elements) + ']'
+    return '[' + maybeShortTypeDisplay(type.elements, shortener) + ']';
   }
   if (type.kind === 'struct') {
-    return type.name
+    return shortener(type.name);
   }
   if (type.kind === 'singleton') {
-    return type.name
+    return shortener(type.name);
   }
   if (type.kind === 'map') {
-    return '{$' + type.name + ' => ' + typeDisplay(type.values) + '}'
+    return '{$' + shortener(type.name) + ' => ' + maybeShortTypeDisplay(type.values, shortener) + '}';
   }
-  return type.kind
+  return shortener(type.kind);
+}
+
+export function typeDisplay(type: FieldType): string {
+  return maybeShortTypeDisplay(type, (typeName) => typeName);
+}
+
+export function shortTypeDisplay(type: FieldType): string {
+  return maybeShortTypeDisplay(type, short);
+}
+
+// remove the module:type() prefix from a type name
+function short(typeName: string, isShort: boolean): string {
+  return typeName.replace(/.*:/, '').replace(/.*\./, '');
 }

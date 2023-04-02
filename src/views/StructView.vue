@@ -1,16 +1,17 @@
 <template>
-  <div>
-    <ul style="padding-left: 16px">
-      <li v-for="(field, index) in struct.fields">
+  <div class="struct-view">
+    <ul class="field-list">
+      <li v-for="(field, index) in struct.fields" class="field-item">
         <span class="fieldname">{{ field.name }} </span>
+
         <span v-if="field.aliases.length > 0"> [</span>
         <span v-for="(alias, index) in field.aliases">
-          <span v-if="index > 0">,</span>{{ alias }}</span
-        >
+          <span v-if="index > 0">,</span>
+          {{ alias }}
+        </span>
         <span v-if="field.aliases.length > 0">]</span>
-        <span
-          >: <code>{{ typeDisplay(field.type) }}</code></span
-        >
+
+        : <span class="type-display"><code>{{ typeDisplay(field.type) }}</code></span>
         <br />
         <div class="desc">{{ field.desc }}</div>
         <struct-view v-if="field.type.kind === 'struct'" :struct="findStruct(field.type.name)" />
@@ -47,10 +48,31 @@ export default defineComponent({
       return schema.liftStructs(type)
     },
     typeDisplay(type: schema.FieldType): string {
-      return schema.typeDisplay(type)
+      return schema.shortTypeDisplay(type)
     },
     findStruct
   }
 })
 </script>
-<style scoped></style>
+<style scoped>
+.struct-view {
+  padding: 0;
+  margin: 0;
+}
+.desc {
+  padding: 10px;
+  background-color: #f5f5f5;
+}
+.field-list {
+  list-style-type: none;
+  padding-left: 16px;
+  margin: 0;
+}
+.type-display {
+  font-size: 0.8rem;
+  background-color: #e0f0ff;
+  padding: 2px 4px;
+  border-radius: 4px;
+  color: #333;
+}
+</style>
