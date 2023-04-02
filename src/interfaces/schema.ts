@@ -66,7 +66,7 @@ export interface UnionFieldType {
 }
 
 export interface DisplayType {
-  label: string
+  type_display: string
   desc: string
   type: FieldType
 }

@@ -61,7 +61,7 @@ const getExpands = (type: schema.FieldType) => {
     if(allFieldsAreComplex(struct)){
       return struct.fields.map((f) => {
         return {
-          label: f.name,
+          type_display: f.name,
           desc: f.desc,
           type: f.type
         }
@@ -76,7 +76,7 @@ const getExpands = (type: schema.FieldType) => {
     const tidyDisplayNames = tidyNames(displayNames)
     return tidyDisplayNames.map((tidyName, i) => {
       return {
-        label: tidyName,
+        type_display: tidyName,
         desc: type.members[i].desc,
         type: type.members[i]
       }
@@ -108,7 +108,7 @@ function tidyNames(strings: string[]): string[] {
 const displayType = computed(() => {
   if (selectedType.value) {
     return {
-      label: schema.typeDisplay(selectedType.value),
+      type_display: schema.typeDisplay(selectedType.value),
       desc: selectedType.value.desc,
       type: selectedType.value
     }
@@ -116,7 +116,7 @@ const displayType = computed(() => {
     const field = root.fields[selectedTabIndex.value]
     return {
       desc: field.desc,
-      label: schema.typeDisplay(field.type),
+      type_display: schema.typeDisplay(field.type),
       type: field.type
     }
   }
@@ -144,7 +144,7 @@ const liftedStructs = computed(() => {
               @click="selectType(expand.type, expand.desc, expIndex)"
             >
               <span :class="{ 'selected-expand': selectedExpandIndex === expIndex }">
-                {{ expand.label }}
+                {{ expand.type_display }}
               </span>
             </li>
           </ul>
@@ -153,7 +153,7 @@ const liftedStructs = computed(() => {
     </div>
     <div class="content">
       <div class="desc" v-html="renderMarkdown(displayType.desc)"></div>
-      <br/><div class="type_display"><code>{{ displayType.label }}</code></div><br/>
+      <br/><div class="type_display"><code>{{ displayType.type_display }}</code></div><br/>
       <struct-view v-for="(st, i) in liftedStructs" :key="i" :struct="st" />
     </div>
   </div>
@@ -181,12 +181,15 @@ const liftedStructs = computed(() => {
 }
 
 .nav-list li {
-  padding: 4px 0;
+  padding: 1px 0;
+}
+
+.sub-buttons li {
+  padding: 1px 0;
 }
 
 .nav-list li span {
   display: inline-block;
-  padding: 4px 8px;
   border-radius: 4px;
   cursor: pointer;
   transition: background-color 0.3s, color 0.3s;
@@ -225,7 +228,6 @@ const liftedStructs = computed(() => {
 .selected-expand {
   color: #fff;
   background-color: #5a8dd6;
-  padding: 2px 4px;
   border-radius: 4px;
 }
 

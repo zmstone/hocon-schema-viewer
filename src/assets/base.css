@@ -59,20 +59,13 @@
   font-weight: normal;
 }
 
-@font-face {
-  font-family: 'Inter';
-  src: url('src/assets/Inter-Regular.woff2') format('woff2');
-  font-style: normal;
-  font-weight: normal;
-}
-
 body {
   min-height: 100vh;
   color: var(--color-text);
   background: var(--color-background);
   transition: color 0.5s, background-color 0.5s;
   line-height: 1.5;
-  font-family: Monaco, Lucida Console, monospace;
+  font-family: Tahoma, Geneva, sans-serif;
   font-size: 16px;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
