@@ -1,4 +1,5 @@
 <template>
+  <h1>HOCON schema viewer (EMQX)</h1>
   <div class="split-view">
     <div class="sidebar">
       <ul class="nav-list">
