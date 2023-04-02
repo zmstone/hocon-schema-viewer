@@ -36,8 +36,8 @@ export default defineComponent({
       return schema.visibleFields(struct)
     },
     aliasesDisplay(field) {
-      return '[' + field.aliases.join(',') + ']';
-    },
+      return '[' + field.aliases.join(',') + ']'
+    }
   }
 })
 </script>
@@ -46,7 +46,7 @@ export default defineComponent({
   <div class="struct-view">
     <ul class="field-list">
       <li v-for="(field, index) in visibleFields(struct)" class="field-item">
-        <span class="fieldname">{{ field.name }} </span>
+        <div class="fieldname">{{ field.name }} </div>
         <table>
           <tr v-if="field.aliases.length > 0">
             <td>Aliases:</td>
@@ -58,15 +58,19 @@ export default defineComponent({
           </tr>
           <tr>
             <td>Type</td>
-            <td><code>{{ typeDisplay(field.type) }}</code></td>
+            <td>
+              <code>{{ typeDisplay(field.type) }}</code>
+            </td>
           </tr>
           <tr v-if="field.raw_default">
             <td>Default</td>
-            <td><code>{{ field.raw_default }}</code></td>
+            <td>
+              <code>{{ field.raw_default }}</code>
+            </td>
           </tr>
           <tr v-if="field.desc">
             <td>Description</td>
-            <td> <div v-html="renderMarkdown(field.desc)"></div></td>
+            <td><div v-html="renderMarkdown(field.desc)"></div></td>
           </tr>
         </table>
         <struct-view v-if="field.type.kind === 'struct'" :struct="findStruct(field.type.name)" />
@@ -89,6 +93,8 @@ export default defineComponent({
 
 .fieldname {
   font-weight: bold;
+  padding-top: 8px;
+  padding-bottom: 8px;
 }
 
 .type_display {
@@ -106,11 +112,28 @@ table td:first-child {
   text-align: right;
 }
 
+table tr:nth-child(even) {
+  background-color: #f5f5f5;
+}
+
+table {
+  border-collapse: collapse;
+}
+
+table td,
+table th {
+  border: 0px solid #ccc;
+  padding: 4px;
+}
+
 /* Dark mode styles */
 @media (prefers-color-scheme: dark) {
   .type_display {
     background-color: #2d2d2d;
     color: #ccc;
+  }
+  table tr:nth-child(even) {
+    background-color: #2a2a2a;
   }
 }
 </style>
