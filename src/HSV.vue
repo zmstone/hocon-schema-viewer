@@ -1,7 +1,7 @@
 <template>
   <div class="split-view">
     <div class="sidebar">
-      <ul class="fields-list">
+      <ul class="nav-list">
         <li v-for="(field, index) in root.fields" :key="index">
           <span @click="selectTab(index)" :class="{ 'active-tab': selectedTabIndex === index }">
             {{ field.name }} {{ maybeArray(field.type) }} {{ maybeExpandable(field.type) }}
@@ -40,7 +40,12 @@ const selectedTabIndex = ref(0)
 const expanded = ref([])
 const selectTab = (index) => {
   selectedType.value = null
-  selectedTabIndex.value = index
+  if (selectedTabIndex.value !== index) {
+    expanded.value = expanded.value.map(() => false); // Reset expanded values
+  }
+  selectedType.value = null
+  selectedExpandIndex.value = null
+  selectedTabIndex.value = index;
   toggleExpand(index)
 }
 
@@ -139,17 +144,17 @@ const liftedStructs = computed(() => {
   padding: 10px;
 }
 
-.fields-list {
+.nav-list {
   list-style-type: none;
   padding: 0;
   margin: 0;
 }
 
-.fields-list li {
-  padding: 4px 0;
+.nav-list li {
+  padding: 0px 0;
 }
 
-.fields-list li span {
+.nav-list li span {
   display: inline-block;
   padding: 4px 8px;
   border-radius: 4px;
@@ -157,7 +162,7 @@ const liftedStructs = computed(() => {
   transition: background-color 0.3s, color 0.3s;
 }
 
-.fields-list li span:hover {
+.nav-list li span:hover {
   background-color: #eee;
 }
 
