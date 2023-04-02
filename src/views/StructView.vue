@@ -2,15 +2,16 @@
   <div>
     <ul style="padding-left: 16px">
       <li v-for="(field, index) in struct.fields">
-        <span class="fieldname">{{ field.name }}
-        </span>
+        <span class="fieldname">{{ field.name }} </span>
         <span v-if="field.aliases.length > 0"> [</span>
         <span v-for="(alias, index) in field.aliases">
           <span v-if="index > 0">,</span>{{ alias }}</span
         >
         <span v-if="field.aliases.length > 0">]</span>
-        <span>: <code>{{ typeDisplay(field.type) }}</code></span>
-        <br/>
+        <span
+          >: <code>{{ typeDisplay(field.type) }}</code></span
+        >
+        <br />
         <div class="desc">{{ field.desc }}</div>
         <struct-view v-if="field.type.kind === 'struct'" :struct="findStruct(field.type.name)" />
         <div v-if="isComplexType(field.type)">
@@ -48,9 +49,8 @@ export default defineComponent({
     typeDisplay(type: schema.FieldType): string {
       return schema.typeDisplay(type)
     },
-    findStruct,
+    findStruct
   }
 })
 </script>
-<style scoped>
-</style>
+<style scoped></style>

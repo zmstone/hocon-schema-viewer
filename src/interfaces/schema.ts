@@ -116,19 +116,19 @@ export function typeDisplay(type: FieldType): string {
     const union = type.members.map((elem: FieldType) => {
       return typeDisplay(elem)
     })
-    return union.join(' | ');
+    return union.join(' | ')
   }
   if (type.kind === 'array') {
-    return '[' + typeDisplay(type.elements) + ']';
+    return '[' + typeDisplay(type.elements) + ']'
   }
   if (type.kind === 'struct') {
-    return type.name;
+    return type.name
   }
   if (type.kind === 'singleton') {
-    return type.name;
+    return type.name
   }
   if (type.kind === 'map') {
     return '{$' + type.name + ' => ' + typeDisplay(type.values) + '}'
   }
-  return type.kind;
+  return type.kind
 }
