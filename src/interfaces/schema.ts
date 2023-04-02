@@ -64,9 +64,10 @@ export interface UnionFieldType {
   members: FieldType[]
 }
 
-export interface RootExpand {
-  display: string
-  selected: FieldType
+export interface DisplayType {
+  label: string
+  desc: string
+  type: FieldType
 }
 
 // Dig up all the fist-level structs of a given type

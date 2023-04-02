@@ -10,17 +10,16 @@
             <li
               v-for="(expand, expIndex) in getExpands(field.type)"
               :key="expIndex"
+              @click="selectType(expand.type)"
             >
-              {{ expand.display }}
+              {{ expand.label }}
             </li>
           </ul>
         </div>
       </div>
       <div class="content">
-        <div class="desc">{{ selectedRootField.desc }}</div>
-        <br/>
-        Type: <code>{{ schema.typeDisplay(selectedRootField.type) }}</code>
-        <br/>
+        <div class="desc">{{ displayType.desc }}</div>
+        <!-- br/><div class="type_display">Type: <code>{{ displayType.type_display }}</code></div><br/> -->
         <struct-view v-for="(st, i) in liftedStructs" :key="i" :struct="st" />
       </div>
     </div>
@@ -38,9 +37,15 @@ const root: schema.Struct = Root
 const selectedTabIndex = ref(0)
 const expanded = ref([]);
 const selectTab = (index) => {
+  selectedType.value = null;
   selectedTabIndex.value = index;
   toggleExpand(index);
 }
+
+const selectedType = ref(null);
+const selectType = (type) => {
+  selectedType.value = type;
+};
 
 const toggleExpand = (index) => {
   if (expanded.value[index] === undefined) {
@@ -61,7 +66,7 @@ const isExpandable = (type: schema.FieldType) => {
 }
 
 const maybeExpandable = (type: schema.FieldType) => {
-  return isExpandable(type) ? '>' : '';
+  return isExpandable(type) ? '+' : '';
 }
 
 const getExpands = (type: schema.FieldType) => {
@@ -73,10 +78,11 @@ const getExpands = (type: schema.FieldType) => {
       return schema.typeDisplay(m);
     });
     const tidyDisplayNames = tidyNames(displayNames);
-    return tidyDisplayNames.map((name, i) => {
+    return tidyDisplayNames.map((tidyName, i) => {
       return {
-        display: name,
-        selected: type.members[i]
+        label: tidyName,
+        desc: type.members[i].desc,
+        type: type.members[i]
       }});
   }
   return [];
@@ -92,9 +98,25 @@ function tidyNames(strings: string[]): string[] {
 });
 }
 
-const selectedRootField = computed(() => root.fields[selectedTabIndex.value])
+const displayType = computed(() => {
+  if (selectedType.value) {
+    return {
+      label: schema.typeDisplay(selectedType.value),
+      desc: selectedType.value.desc,
+      type: selectedType.value
+    };
+  } else {
+    const field = root.fields[selectedTabIndex.value];
+    return {
+      desc: field.desc,
+      label: schema.typeDisplay(field.type),
+      type: field.type
+    };
+  }
+});
+
 const liftedStructs = computed(() => {
-   const refs = schema.liftStructs(root.fields[selectedTabIndex.value].type);
+   const refs = schema.liftStructs(displayType.value.type)
    return refs.map((r: schema.StructReference) => findStruct(r.name));
 });
 
@@ -122,7 +144,12 @@ button.active {
 
 .desc {
   padding: 10px;
-  background-color: #f0f0f0
+  background-color: #f5f5f5
+}
+
+.type_display {
+  padding: 10px;
+  background-color: #e4f5ea
 }
 .sub-buttons {
   padding-left: 20px;
