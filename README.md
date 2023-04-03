@@ -1,52 +1,37 @@
-# HOCON Schema Viewer
+# Hocon Schema Viewer
 
-This template should help get you started developing with Vue 3 in Vite.
+Hocon Schema Viewer is a web application that provides a user-friendly interface for exploring and understanding the schema of HOCON (Human-Optimized Config Object Notation) configuration files.
 
-## Recommended IDE Setup
+The schema is represented as a tree structure, where each node represents a configuration element. The tree is built based on the HOCON schema dump in JSON format.
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
+The struct fields are annotated with additional information, such as the type of the element, the default value, and the description.
 
-## Type Support for `.vue` Imports in TS
+You can find more information about HOCON schema [here](https://github.com/emqx/hocon/blob/master/SCHEMA.md)
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin) to make the TypeScript language service aware of `.vue` types.
+## Features
 
-If the standalone TypeScript plugin doesn't feel fast enough to you, Volar has also implemented a [Take Over Mode](https://github.com/johnsoncodehk/volar/discussions/471#discussioncomment-1361669) that is more performant. You can enable it by the following steps:
+- Visual representation of the HOCON schema
+- Intuitive navigation through the schema hierarchy
+- [TODO] search
+- [TODO] interactive example generation
 
-1. Disable the built-in TypeScript Extension
-    1) Run `Extensions: Show Built-in Extensions` from VSCode's command palette
-    2) Find `TypeScript and JavaScript Language Features`, right click and select `Disable (Workspace)`
-2. Reload the VSCode window by running `Developer: Reload Window` from the command palette.
+## Installation
 
-## Customize configuration
+1. Clone the repository:
 
-See [Vite Configuration Reference](https://vitejs.dev/config/).
+```bash
+git clone https://github.com/zmstone/hocon-schema-viewer.git
+```
 
-## Project Setup
+2. Install the dependencies:
 
-```sh
+```bash
+cd hocon-schema-viewer
 npm install
 ```
 
-### Compile and Hot-Reload for Development
-
-```sh
-npm run dev
-```
-
-### Type-Check, Compile and Minify for Production
-
-```sh
-npm run build
-```
-
-### Run Unit Tests with [Vitest](https://vitest.dev/)
-
-```sh
-npm run test:unit
-```
-
-### Lint with [ESLint](https://eslint.org/)
-
-```sh
-npm run lint
+3. Run the development server:
+```bash
+npm start
+The application will be available at http://localhost:5173.
 ```
