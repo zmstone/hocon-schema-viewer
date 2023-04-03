@@ -1,10 +1,38 @@
 <script setup lang="ts">
-import { defineComponent, ref, computed } from 'vue'
+import { defineComponent, ref, computed, watch } from 'vue'
 import StructView from './views/StructView.vue'
-import { Root, findStruct } from './data/data'
+import { Root, findStruct, updateSchema } from './data/data'
 import * as schema from './interfaces/schema'
-import { stringify } from 'querystring'
 import * as markdown from './markdown'
+import SchemaList from './views/SchemaList.vue'
+
+const currentSchema = ref(null)
+const selectedSchema = ref(null)
+watch(selectedSchema, async (newSchema) => {
+  if (newSchema) {
+    await fetchSchema('schemas/' + newSchema.file)
+  }
+})
+
+const fetchSchema = async (path) => {
+  console.log(path)
+  try {
+    const response = await fetch(path)
+    if (response.ok) {
+      const newSchema = await response.json()
+      updateSchema(newSchema)
+      currentSchema.value = path
+    } else {
+      console.error('Failed to fetch schema')
+    }
+  } catch (error) {
+    console.error('Error fetching schema:', error)
+  }
+}
+
+const handleSelectSchema = (schema) => {
+  selectedSchema.value = schema
+}
 
 const selectedTabIndex = ref(0)
 const expanded = ref([])
@@ -109,6 +137,8 @@ function tidyNames(strings: string[]): string[] {
 const displayType = computed(() => {
   if (selectedType.value) {
     return {
+      // inject currentSchema here only to trigger re-render when schema changes
+      current_schema: currentSchema.value,
       type_display: schema.typeDisplay(selectedType.value),
       desc: selectedType.value.desc,
       type: selectedType.value
@@ -117,6 +147,8 @@ const displayType = computed(() => {
     // root fields are always visible (already filtered)
     const field = Root.fields[selectedTabIndex.value]
     return {
+      // inject currentSchema here only to trigger re-render when schema changes
+      current_schema: currentSchema.value,
       desc: field.desc,
       type_display: schema.typeDisplay(field.type),
       type: field.type
@@ -133,7 +165,8 @@ const liftedStructs = computed(() => {
 <template>
   <div class="split-view">
     <div class="sidebar">
-      <ul class="nav-list">
+      <SchemaList @select-schema="handleSelectSchema" />
+      <ul class="nav-list" :currentSchema="currentSchema">
         <li v-for="(field, index) in Root.fields" :key="index">
           <span @click="selectTab(index)" :class="{ 'active-tab': selectedTabIndex === index }">
             {{ field.name }}{{ annotate(field.type) }}
@@ -158,13 +191,17 @@ const liftedStructs = computed(() => {
       <div class="type_display">
         <code>{{ displayType.type_display }}</code>
       </div>
-      <struct-view v-for="(st, i) in liftedStructs" :key="i" :struct="st" />
+      <struct-view
+        v-for="(st, i) in liftedStructs"
+        :key="i"
+        :struct="st"
+        :currentSchema="currentSchema"
+      />
     </div>
   </div>
 </template>
 
 <style scoped>
-
 /* Light mode styles (default) */
 .split-view {
   display: grid;
@@ -254,11 +291,6 @@ const liftedStructs = computed(() => {
 
   .type_display {
     background-color: #2d2d2d;
-    color: #ccc;
-  }
-
-  .small-type {
-    background-color: #3a3a3a;
     color: #ccc;
   }
 }

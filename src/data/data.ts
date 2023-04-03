@@ -2,13 +2,9 @@ import { Struct, Field, visibleFields, isDocLift } from '../interfaces/schema'
 import jsonData from '../../public/schemas/latest-en.json'
 
 type StructMap = { [name: string]: number }
-const allStructs = jsonData as Struct[]
-const nameIndex: StructMap = {}
-
-// index all structs by name
-for (let i = 0; i < allStructs.length; i++) {
-  nameIndex[allStructs[i].full_name] = i
-}
+let allStructs = jsonData as Struct[]
+let nameIndex: StructMap = {}
+export let Root: Struct = {}
 
 // find a struct by name
 // making use of the index
@@ -18,9 +14,6 @@ export function findStruct(name: string): Struct | undefined {
   }
   console.log('Struct not found: ' + name)
 }
-
-// now populate the Root
-export let Root: Struct = allStructs[0]
 
 function updateRootFields(root: Struct) {
   const updatedFields: Field[] = []
@@ -45,5 +38,17 @@ function updateRootFields(root: Struct) {
   root.fields = updatedFields
 }
 
-// Update the Root fields
-updateRootFields(Root)
+export function updateSchema(data) {
+  allStructs = data as Struct[]
+  // index all structs by name
+  for (let i = 0; i < allStructs.length; i++) {
+    nameIndex[allStructs[i].full_name] = i
+  }
+  // now populate the Root
+  Root = allStructs[0]
+  // Update the Root fields
+  updateRootFields(Root)
+}
+
+// initialize
+updateSchema(jsonData)

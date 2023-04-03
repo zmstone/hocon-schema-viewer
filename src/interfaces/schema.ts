@@ -158,7 +158,7 @@ export function visibleFields(struct) {
 }
 
 export function isDocLift(field: Field): boolean {
-  return field?.extra?.doc_lift === true;
+  return field?.extra?.doc_lift === true
 }
 
 // remove the module:type() prefix from a type name
