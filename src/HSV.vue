@@ -15,7 +15,6 @@ watch(selectedSchema, async (newSchema) => {
 })
 
 const fetchSchema = async (path) => {
-  console.log(path)
   try {
     const response = await fetch(path)
     if (response.ok) {

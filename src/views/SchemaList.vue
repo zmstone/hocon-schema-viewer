@@ -1,12 +1,11 @@
 <template>
-  <ul class="nav-list">
-    <li v-for="(schema, index) in schemaList" :key="index">
-      <span @click="selectSchema(schema)" :class="{ 'active-tab': selectedSchema === schema }">{{
-        schema.name
-      }}</span>
-    </li>
-  </ul>
-  <hr class="divider" />
+  <div class="schema-dropdown">
+    <select v-model="selectedSchema" @change="selectSchema">
+      <option value="null" disabled selected>Select a schema</option>
+      <option v-for="schema in schemaList" :value="schema">{{ schema.name }}</option>
+    </select>
+  </div>
+  <hr/>
 </template>
 
 <script lang="ts">
@@ -31,9 +30,8 @@ export default defineComponent({
       }
     }
 
-    const selectSchema = (schema) => {
-      selectedSchema.value = schema
-      emit('select-schema', schema)
+    const selectSchema = () => {
+      emit('select-schema', selectedSchema.value)
     }
 
     fetchSchemaList()
@@ -48,46 +46,63 @@ export default defineComponent({
 </script>
 
 <style scoped>
-.nav-list {
-  list-style-type: none;
-  padding: 0;
-  margin: 0;
-  display: contents;
+
+.schema-dropdown{
+  width: 100%;
 }
 
-.nav-list li {
-  padding: 2px 0;
-}
-
-.sub-buttons li {
-  padding: 2px 0;
-}
-
-.nav-list li span {
-  display: inline-block;
+.select {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0.5rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
   border-radius: 4px;
+}
+
+.select select {
+  width: 100%;
+  height: 100%;
+  padding: 0.5rem;
+  font-size: 1rem;
+  font-weight: bold;
+  line-height: 1.2;
+  color: #444;
+  border: 2px solid #ccc;
+  border-radius: 4px;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-color: #fff;
   cursor: pointer;
-  transition: background-color 0.3s, color 0.3s;
+  transition: all 0.3s ease-in-out;
 }
 
-.nav-list li span:hover {
-  background-color: #eee;
+.select select:hover {
+  border-color: #888;
 }
 
-.active-tab {
-  color: #fff;
-  background-color: #5a8dd6;
+.select select:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(90, 141, 214, 0.2);
+  border-color: #5a8dd6;
 }
 
-.divider {
+.select::after {
+  content: '\25bc';
+  position: absolute;
+  top: 50%;
+  right: 0.5rem;
+  transform: translateY(-50%);
+  font-size: 0.7em;
+  line-height: 1.5;
+  color: #888;
+  pointer-events: none;
+}
+
+hr{
   border: 1px solid #e5e5e5;
   margin: 1rem 0rem 1rem 0rem;
 }
 
-/* Dark mode styles */
-@media (prefers-color-scheme: dark) {
-  .nav-list li span:hover {
-    background-color: #3a3a3a;
-  }
-}
 </style>
