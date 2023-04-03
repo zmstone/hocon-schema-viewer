@@ -23,7 +23,7 @@ export default defineComponent({
       if (field.doc_lift === true) {
         return []
       }
-      return schema.liftStructs(field.type)
+      return schema.liftStructs(field.type);
     },
     typeDisplay(type: schema.FieldType): string {
       return schema.shortTypeDisplay(type)
@@ -44,6 +44,7 @@ export default defineComponent({
 
 <template>
   <div class="struct-view">
+    <div class='struct-fullname'> {{ struct.full_name }}</div>
     <ul class="field-list">
       <li v-for="(field, index) in visibleFields(struct)" class="field-item">
         <div class="fieldname">{{ field.name }}</div>
@@ -74,10 +75,8 @@ export default defineComponent({
           </tr>
         </table>
         <struct-view v-if="field.type.kind === 'struct'" :struct="findStruct(field.type.name)" />
-        <div v-if="isComplexType(field.type)">
-          <div v-for="(st, index) in subStructs(field)">
-            <struct-view :struct="findStruct(st.name)" />
-          </div>
+        <div v-if="isComplexType(field.type)" v-for="(st, index) in subStructs(field)" class="sub-struct">
+          <struct-view :struct="findStruct(st.name)" />
         </div>
       </li>
     </ul>
@@ -132,6 +131,10 @@ table td,
 table th {
   border: 0px solid #ccc;
   padding: 4px;
+}
+
+.sub-struct{
+  border-bottom: 1px solid;
 }
 
 /* Dark mode styles */

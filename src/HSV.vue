@@ -71,8 +71,7 @@ const getExpands = (type: schema.FieldType) => {
     const displayNames = type.members.map((m) => {
       return schema.typeDisplay(m)
     })
-    const tidyDisplayNames = tidyNames(displayNames)
-    return tidyDisplayNames.map((tidyName, i) => {
+    return tidyNames(displayNames).map((tidyName, i) => {
       return {
         type_display: tidyName,
         desc: type.members[i].desc,
