@@ -1,4 +1,4 @@
-import { Struct, Field, visibleFields } from '../interfaces/schema'
+import { Struct, Field, visibleFields, isDocLift } from '../interfaces/schema'
 import jsonData from '../assets/schema-en.json'
 
 type StructMap = { [name: string]: number }
@@ -33,7 +33,7 @@ function updateRootFields(root: Struct) {
 
       if (subStruct) {
         subStruct.fields.forEach((subField) => {
-          if (subField.doc_lift === true) {
+          if (isDocLift(subField)) {
             subField.name = `${parentName}.${subField.name}` // Update the sub-field name
             updatedFields.push(subField) // Add the sub-field next to the parent field if doc_lift is true
           }

@@ -6,15 +6,19 @@ export interface Struct {
   tags: string[]
 }
 
+export interface Extra {
+  doc_lift?: boolean
+}
+
 export interface Field {
   aliases: string[]
   default?: DefaultValue
   importance?: string
   desc?: string
-  doc_lift?: boolean
   name: string
   raw_default?: string
   type: FieldType
+  extra?: Extra
 }
 
 export interface DefaultValue {
@@ -151,6 +155,10 @@ export function visibleFields(struct) {
     }
     return true
   })
+}
+
+export function isDocLift(field: Field): boolean {
+  return field?.extra?.doc_lift === true;
 }
 
 // remove the module:type() prefix from a type name

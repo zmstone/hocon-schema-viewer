@@ -131,7 +131,6 @@ const liftedStructs = computed(() => {
 </script>
 
 <template>
-  <h1>HOCON schema viewer (EMQX)</h1>
   <div class="split-view">
     <div class="sidebar">
       <ul class="nav-list">
@@ -165,6 +164,7 @@ const liftedStructs = computed(() => {
 </template>
 
 <style scoped>
+
 /* Light mode styles (default) */
 .split-view {
   display: grid;
