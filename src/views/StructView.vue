@@ -44,7 +44,8 @@ export default defineComponent({
 
 <template>
   <div class="struct-view">
-    <div class='struct-fullname'> {{ struct.full_name }}</div>
+    <br/>
+    <span class='struct-fullname'> {{ struct.full_name }}</span><span>></span>
     <ul class="field-list">
       <li v-for="(field, index) in visibleFields(struct)" class="field-item">
         <div class="fieldname">{{ field.name }}</div>
@@ -74,7 +75,6 @@ export default defineComponent({
             <td><div v-html="renderMarkdown(field.desc)"></div></td>
           </tr>
         </table>
-        <struct-view v-if="field.type.kind === 'struct'" :struct="findStruct(field.type.name)" />
         <div v-if="isComplexType(field.type)" v-for="(st, index) in subStructs(field)" class="sub-struct">
           <struct-view :struct="findStruct(st.name)" />
         </div>
@@ -87,6 +87,7 @@ export default defineComponent({
 .field-list {
   list-style-type: none;
   padding-left: 20px;
+  padding-top: 8px;
 }
 .field-list::before {
   content: '';
@@ -137,6 +138,13 @@ table th {
   border-bottom: 1px solid;
 }
 
+.struct-fullname {
+  padding: 8px;
+  background-color: #e4f5ea;
+  font-weight: bold;
+  border-radius: 4px;
+}
+
 /* Dark mode styles */
 @media (prefers-color-scheme: dark) {
   .type_display {
@@ -148,6 +156,10 @@ table th {
   }
   .field-list::before {
     background-color: rgba(255, 255, 255, 0.3);
+  }
+  .struct-fullname {
+     background-color: #2e5742;
+     color: #d9e9d9;
   }
 }
 </style>

@@ -159,7 +159,6 @@ const liftedStructs = computed(() => {
       <div class="type_display">
         <code>{{ displayType.type_display }}</code>
       </div>
-      <br />
       <struct-view v-for="(st, i) in liftedStructs" :key="i" :struct="st" />
     </div>
   </div>
