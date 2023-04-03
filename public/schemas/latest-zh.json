@@ -2263,7 +2263,7 @@
                     "hocon": "round_robin",
                     "oneliner": true
                 },
-                "desc": "共享订阅消息派发策略。\n  - `random`：随机挑选一个共享订阅者派发；\n  - `round_robin`：使用 round-robin 策略派发；\n  - `round_robin_per_group`：在共享组内循环选择下一个成员；\n  - `local`：选择随机的本地成员，否则选择随机的集群范围内成员;\n  - `sticky`：总是使用上次选中的订阅者派发，直到它断开连接；\n  - `hash_clientid`：使用发送者的 Client ID 进行 Hash 来选择订阅者;\n  - `hash_topic`：使用源主题进行 Hash 来选择订阅者。",
+                "desc": "共享订阅消息派发策略。\n  - `random`：随机挑选一个共享订阅者派发；\n  - `round_robin`：使用 round-robin 策略派发；\n  - `round_robin_per_group`：在共享组内循环选择下一个成员；\n  - `local`：选择随机的本地成员，否则选择随机的集群范围内成员;\n  - `sticky`：总是使用上次选中的订阅者派发，直到它断开连接；\n  - `hash_clientid`：通过对发送者的客户端 ID 进行 Hash 处理来选择订阅者;\n  - `hash_topic`：通过对源主题进行 Hash 处理来选择订阅者。",
                 "name": "shared_subscription_strategy",
                 "raw_default": "round_robin",
                 "type": {
@@ -2809,7 +2809,10 @@
             },
             {
                 "aliases": [],
-                "desc": "Deprecated since 5.0.20.",
+                "desc": "包含用户密码的字符串。仅在私钥文件受密码保护时使用。",
+                "examples": [
+                    ""
+                ],
                 "name": "password",
                 "type": {
                     "kind": "primitive",
@@ -3099,7 +3102,7 @@
                     "hocon": "\"5s\"",
                     "oneliner": true
                 },
-                "desc": " 在闲置一定时间后休眠 SSL 进程，减少其内存占用。",
+                "desc": "在闲置一定时间后休眠 SSL 进程，减少其内存占用。",
                 "name": "hibernate_after",
                 "raw_default": "5s",
                 "type": {
@@ -3371,7 +3374,7 @@
                     "hocon": "\"5s\"",
                     "oneliner": true
                 },
-                "desc": " 在闲置一定时间后休眠 SSL 进程，减少其内存占用。",
+                "desc": "在闲置一定时间后休眠 SSL 进程，减少其内存占用。",
                 "name": "hibernate_after",
                 "raw_default": "5s",
                 "type": {
@@ -3539,7 +3542,7 @@
                     "hocon": "\"15s\"",
                     "oneliner": true
                 },
-                "desc": "TCP 连接建立后，如果在 <code>idle_timeout</code> 指定的时间内未收到客户端的 MQTT CONNECT 报文，则连接将被断开。\n如果连接在 CONNECT 报文被 EMQX 接受之后空闲超过该时长，那么服务这个连接的 Erlang 进程会进入休眠以节省系统资源。\n注意，该配置值如果设置过大的情况下，如果大量恶意客户端只连接，但不发任何数据，可能会导致系统资源被恶意消耗。",
+                "desc": "设置连接被断开或进入休眠状态前的等待时间，空闲超时后，\n  - 如暂未收到客户端的 CONNECT 报文，连接将断开；\n  - 如已收到客户端的 CONNECT 报文，连接将进入休眠模式以节省系统资源。\n\n注意：请合理设置该参数值，如等待时间设置过长，可能造成系统资源的浪费。",
                 "name": "idle_timeout",
                 "raw_default": "15s",
                 "type": {
@@ -3688,7 +3691,7 @@
                     "hocon": "false",
                     "oneliner": true
                 },
-                "desc": "是否为 MQTT v3.1.1/v3.1.0 客户端忽略投递自己发布的消息，类似于 MQTT 5.0 中的 <code>No Local</code> 订阅选项。",
+                "desc": "设置由 MQTT v3.1.1/v3.1.0 客户端发布的消息是否将转发给其本身；类似 MQTT 5.0 协议中的 <code>No Local</code> 选项。",
                 "name": "ignore_loop_deliver",
                 "raw_default": false,
                 "type": {
@@ -3702,7 +3705,7 @@
                     "hocon": "false",
                     "oneliner": true
                 },
-                "desc": "是否以严格模式解析 MQTT 消息。\n当设置为 true 时，例如客户端 ID、主题名称等中的无效 utf8 字符串将导致客户端断开连接。",
+                "desc": "是否以严格模式解析 MQTT 消息。\n严格模式下，如客户端 ID、主题名称等中包含无效 utf8 字符串，连接将被断开。",
                 "name": "strict_mode",
                 "raw_default": false,
                 "type": {
@@ -3716,7 +3719,7 @@
                     "hocon": "\"\"",
                     "oneliner": true
                 },
-                "desc": "指定返回给客户端的响应信息。如果设置为 \"\"，则禁用此功能。仅适用于使用 MQTT 5.0 协议的客户端。",
+                "desc": "UTF-8 字符串，用于指定返回给客户端的响应主题，如 <code>reqrsp/</code>，此时请求和应答客户端都需要使用 <code>reqrsp/</code> 前缀的主题来完成通讯。\n如希望禁用此功能，请在下方的文字框中输入<code>\"\"</code>；仅适用于 MQTT 5.0 客户端。",
                 "name": "response_information",
                 "raw_default": "",
                 "type": {
@@ -3730,7 +3733,7 @@
                     "hocon": "disabled",
                     "oneliner": true
                 },
-                "desc": "EMQX 要求客户端使用的保活时间，配置为 <code>disabled</code> 表示将使用客户端指定的保活时间。需要用到 MQTT 5.0 中的 <code>Server Keep Alive</code>，因此仅适用于使用 MQTT 5.0 协议的客户端。",
+                "desc": "EMQX 要求的保活时间，如设为 disabled，则将使用客户端指定的保持连接时间；仅适用于 MQTT 5.0 客户端。",
                 "name": "server_keepalive",
                 "raw_default": "disabled",
                 "type": {
@@ -3753,7 +3756,7 @@
                     "hocon": "0.75",
                     "oneliner": true
                 },
-                "desc": "Broker 判定客户端保活超时使用的退避乘数。如果 EMQX 在 <code>Keep Alive * Backoff * 2</code> 秒内未收到任何报文，EMQX 将关闭当前连接。",
+                "desc": "EMQX 判定客户端保活超时使用的阈值系数。计算公式为：Keep Alive * Backoff * 2",
                 "name": "keepalive_backoff",
                 "raw_default": 0.75,
                 "type": {
@@ -3960,7 +3963,7 @@
                     "hocon": "false",
                     "oneliner": true
                 },
-                "desc": "是否使用用户名作为客户端 ID。\n此设置的作用时间晚于 <code>使用对端证书作为用户名</code>（<code>peer_cert_as_username</code>） 和 <code>使用对端证书作为客户端 ID</code>（<code>peer_cert_as_clientid</code>）。",
+                "desc": "是否使用用户名作为客户端 ID。\n此设置的作用时间晚于 <code>对端证书作为用户名</code> 和 <code>对端证书作为客户端 ID</code>。",
                 "name": "use_username_as_clientid",
                 "raw_default": false,
                 "type": {
@@ -3974,7 +3977,7 @@
                     "hocon": "disabled",
                     "oneliner": true
                 },
-                "desc": "使用对端证书中的 CN、DN 字段或整个证书内容来作为用户名。仅适用于 TLS 连接。\n目前支持配置为以下内容：\n- <code>cn</code>: 取证书的 CN 字段作为 Username\n- <code>dn</code>: 取证书的 DN 字段作为 Username\n- <code>crt</code>: 取 <code>DER</code> 或 <code>PEM</code> 证书的内容作为 Username\n- <code>pem</code>: 将 <code>DER</code> 证书内容转换为 <code>PEM</code> 格式后作为 Username\n- <code>md5</code>: 取 <code>DER</code> 或 <code>PEM</code> 证书的内容的 MD5 值作为 Username",
+                "desc": "使用对端证书中的 CN、DN 字段或整个证书内容来作为用户名；仅适用于 TLS 连接。\n目前支持：\n- <code>cn</code>: 取证书的 CN 字段\n- <code>dn</code>: 取证书的 DN 字段\n- <code>crt</code>: 取 <code>DER</code> 或 <code>PEM</code> 的证书内容\n- <code>pem</code>: 将 <code>DER</code> 证书转换为 <code>PEM</code> 格式作为用户名\n- <code>md5</code>: 取 <code>DER</code> 或 <code>PEM</code> 证书内容的 MD5 值",
                 "name": "peer_cert_as_username",
                 "raw_default": "disabled",
                 "type": {
@@ -3995,7 +3998,7 @@
                     "hocon": "disabled",
                     "oneliner": true
                 },
-                "desc": "使用对端证书中的 CN、DN 字段或整个证书内容来作为客户端 ID。仅适用于 TLS 连接。\n目前支持配置为以下内容：\n- <code>cn</code>: 取证书的 CN 字段作为 Client ID\n- <code>dn</code>: 取证书的 DN 字段作为 Client ID\n- <code>crt</code>: 取 <code>DER</code> 或 <code>PEM</code> 证书的内容作为 Client ID\n- <code>pem</code>: 将 <code>DER</code> 证书内容转换为 <code>PEM</code> 格式后作为 Client ID\n- <code>md5</code>: 取 <code>DER</code> 或 <code>PEM</code> 证书的内容的 MD5 值作为 Client ID",
+                "desc": "使用对端证书中的 CN、DN 字段或整个证书内容来作为客户端 ID。仅适用于 TLS 连接；\n目前支持：\n- <code>cn</code>: 取证书的 CN 字段\n- <code>dn</code>: 取证书的 DN 字段\n- <code>crt</code>: 取 <code>DER</code> 或 <code>PEM</code> 证书的内容\n- <code>pem</code>: 将 <code>DER</code> 证书内容转换为 <code>PEM</code> 格式作为客户端 ID\n- <code>md5</code>: 取 <code>DER</code> 或 <code>PEM</code> 证书内容的 MD5 值",
                 "name": "peer_cert_as_clientid",
                 "raw_default": "disabled",
                 "type": {
@@ -4431,79 +4434,6 @@
             },
             {
                 "aliases": [],
-                "desc": "监听器认证重载。\n认证配置可以是单个认证器实例，也可以是一个认证器数组组成的认证链。\n执行登录验证时（用户名、客户端 ID 等），将按配置的顺序执行。",
-                "name": "authentication",
-                "type": {
-                    "elements": {
-                        "kind": "union",
-                        "members": [
-                            {
-                                "kind": "struct",
-                                "name": "authn-builtin_db:authentication"
-                            },
-                            {
-                                "kind": "struct",
-                                "name": "authn-mysql:authentication"
-                            },
-                            {
-                                "kind": "struct",
-                                "name": "authn-postgresql:authentication"
-                            },
-                            {
-                                "kind": "struct",
-                                "name": "authn-mongodb:standalone"
-                            },
-                            {
-                                "kind": "struct",
-                                "name": "authn-mongodb:replica-set"
-                            },
-                            {
-                                "kind": "struct",
-                                "name": "authn-mongodb:sharded-cluster"
-                            },
-                            {
-                                "kind": "struct",
-                                "name": "authn-redis:standalone"
-                            },
-                            {
-                                "kind": "struct",
-                                "name": "authn-redis:cluster"
-                            },
-                            {
-                                "kind": "struct",
-                                "name": "authn-redis:sentinel"
-                            },
-                            {
-                                "kind": "struct",
-                                "name": "authn-http:get"
-                            },
-                            {
-                                "kind": "struct",
-                                "name": "authn-http:post"
-                            },
-                            {
-                                "kind": "struct",
-                                "name": "authn-jwt:hmac-based"
-                            },
-                            {
-                                "kind": "struct",
-                                "name": "authn-jwt:public-key"
-                            },
-                            {
-                                "kind": "struct",
-                                "name": "authn-jwt:jwks"
-                            },
-                            {
-                                "kind": "struct",
-                                "name": "authn-scram-builtin_db:authentication"
-                            }
-                        ]
-                    },
-                    "kind": "array"
-                }
-            },
-            {
-                "aliases": [],
                 "name": "tcp_options",
                 "type": {
                     "kind": "struct",
@@ -4708,79 +4638,6 @@
             },
             {
                 "aliases": [],
-                "desc": "监听器认证重载。\n认证配置可以是单个认证器实例，也可以是一个认证器数组组成的认证链。\n执行登录验证时（用户名、客户端 ID 等），将按配置的顺序执行。",
-                "name": "authentication",
-                "type": {
-                    "elements": {
-                        "kind": "union",
-                        "members": [
-                            {
-                                "kind": "struct",
-                                "name": "authn-builtin_db:authentication"
-                            },
-                            {
-                                "kind": "struct",
-                                "name": "authn-mysql:authentication"
-                            },
-                            {
-                                "kind": "struct",
-                                "name": "authn-postgresql:authentication"
-                            },
-                            {
-                                "kind": "struct",
-                                "name": "authn-mongodb:standalone"
-                            },
-                            {
-                                "kind": "struct",
-                                "name": "authn-mongodb:replica-set"
-                            },
-                            {
-                                "kind": "struct",
-                                "name": "authn-mongodb:sharded-cluster"
-                            },
-                            {
-                                "kind": "struct",
-                                "name": "authn-redis:standalone"
-                            },
-                            {
-                                "kind": "struct",
-                                "name": "authn-redis:cluster"
-                            },
-                            {
-                                "kind": "struct",
-                                "name": "authn-redis:sentinel"
-                            },
-                            {
-                                "kind": "struct",
-                                "name": "authn-http:get"
-                            },
-                            {
-                                "kind": "struct",
-                                "name": "authn-http:post"
-                            },
-                            {
-                                "kind": "struct",
-                                "name": "authn-jwt:hmac-based"
-                            },
-                            {
-                                "kind": "struct",
-                                "name": "authn-jwt:public-key"
-                            },
-                            {
-                                "kind": "struct",
-                                "name": "authn-jwt:jwks"
-                            },
-                            {
-                                "kind": "struct",
-                                "name": "authn-scram-builtin_db:authentication"
-                            }
-                        ]
-                    },
-                    "kind": "array"
-                }
-            },
-            {
-                "aliases": [],
                 "name": "tcp_options",
                 "type": {
                     "kind": "struct",
@@ -4973,79 +4830,6 @@
                 "type": {
                     "kind": "primitive",
                     "name": "emqx_schema:duration()"
-                }
-            },
-            {
-                "aliases": [],
-                "desc": "监听器认证重载。\n认证配置可以是单个认证器实例，也可以是一个认证器数组组成的认证链。\n执行登录验证时（用户名、客户端 ID 等），将按配置的顺序执行。",
-                "name": "authentication",
-                "type": {
-                    "elements": {
-                        "kind": "union",
-                        "members": [
-                            {
-                                "kind": "struct",
-                                "name": "authn-builtin_db:authentication"
-                            },
-                            {
-                                "kind": "struct",
-                                "name": "authn-mysql:authentication"
-                            },
-                            {
-                                "kind": "struct",
-                                "name": "authn-postgresql:authentication"
-                            },
-                            {
-                                "kind": "struct",
-                                "name": "authn-mongodb:standalone"
-                            },
-                            {
-                                "kind": "struct",
-                                "name": "authn-mongodb:replica-set"
-                            },
-                            {
-                                "kind": "struct",
-                                "name": "authn-mongodb:sharded-cluster"
-                            },
-                            {
-                                "kind": "struct",
-                                "name": "authn-redis:standalone"
-                            },
-                            {
-                                "kind": "struct",
-                                "name": "authn-redis:cluster"
-                            },
-                            {
-                                "kind": "struct",
-                                "name": "authn-redis:sentinel"
-                            },
-                            {
-                                "kind": "struct",
-                                "name": "authn-http:get"
-                            },
-                            {
-                                "kind": "struct",
-                                "name": "authn-http:post"
-                            },
-                            {
-                                "kind": "struct",
-                                "name": "authn-jwt:hmac-based"
-                            },
-                            {
-                                "kind": "struct",
-                                "name": "authn-jwt:public-key"
-                            },
-                            {
-                                "kind": "struct",
-                                "name": "authn-jwt:jwks"
-                            },
-                            {
-                                "kind": "struct",
-                                "name": "authn-scram-builtin_db:authentication"
-                            }
-                        ]
-                    },
-                    "kind": "array"
                 }
             },
             {
@@ -5250,79 +5034,6 @@
                 "type": {
                     "kind": "primitive",
                     "name": "emqx_schema:duration()"
-                }
-            },
-            {
-                "aliases": [],
-                "desc": "监听器认证重载。\n认证配置可以是单个认证器实例，也可以是一个认证器数组组成的认证链。\n执行登录验证时（用户名、客户端 ID 等），将按配置的顺序执行。",
-                "name": "authentication",
-                "type": {
-                    "elements": {
-                        "kind": "union",
-                        "members": [
-                            {
-                                "kind": "struct",
-                                "name": "authn-builtin_db:authentication"
-                            },
-                            {
-                                "kind": "struct",
-                                "name": "authn-mysql:authentication"
-                            },
-                            {
-                                "kind": "struct",
-                                "name": "authn-postgresql:authentication"
-                            },
-                            {
-                                "kind": "struct",
-                                "name": "authn-mongodb:standalone"
-                            },
-                            {
-                                "kind": "struct",
-                                "name": "authn-mongodb:replica-set"
-                            },
-                            {
-                                "kind": "struct",
-                                "name": "authn-mongodb:sharded-cluster"
-                            },
-                            {
-                                "kind": "struct",
-                                "name": "authn-redis:standalone"
-                            },
-                            {
-                                "kind": "struct",
-                                "name": "authn-redis:cluster"
-                            },
-                            {
-                                "kind": "struct",
-                                "name": "authn-redis:sentinel"
-                            },
-                            {
-                                "kind": "struct",
-                                "name": "authn-http:get"
-                            },
-                            {
-                                "kind": "struct",
-                                "name": "authn-http:post"
-                            },
-                            {
-                                "kind": "struct",
-                                "name": "authn-jwt:hmac-based"
-                            },
-                            {
-                                "kind": "struct",
-                                "name": "authn-jwt:public-key"
-                            },
-                            {
-                                "kind": "struct",
-                                "name": "authn-jwt:jwks"
-                            },
-                            {
-                                "kind": "struct",
-                                "name": "authn-scram-builtin_db:authentication"
-                            }
-                        ]
-                    },
-                    "kind": "array"
                 }
             },
             {
@@ -5843,7 +5554,7 @@
                     "hocon": "\"5s\"",
                     "oneliner": true
                 },
-                "desc": " 在闲置一定时间后休眠 SSL 进程，减少其内存占用。",
+                "desc": "在闲置一定时间后休眠 SSL 进程，减少其内存占用。",
                 "name": "hibernate_after",
                 "raw_default": "5s",
                 "type": {
@@ -5894,28 +5605,7 @@
             "bridges.mqtt.$name.ssl",
             "bridges.webhook.$name.ssl",
             "cluster.etcd.ssl",
-            "gateway.coap.authentication.ssl",
-            "gateway.coap.listeners.dtls.$name.authentication.ssl",
-            "gateway.coap.listeners.udp.$name.authentication.ssl",
-            "gateway.exproto.authentication.ssl",
-            "gateway.exproto.handler.ssl_options",
-            "gateway.exproto.listeners.dtls.$name.authentication.ssl",
-            "gateway.exproto.listeners.ssl.$name.authentication.ssl",
-            "gateway.exproto.listeners.tcp.$name.authentication.ssl",
-            "gateway.exproto.listeners.udp.$name.authentication.ssl",
-            "gateway.lwm2m.authentication.ssl",
-            "gateway.lwm2m.listeners.dtls.$name.authentication.ssl",
-            "gateway.lwm2m.listeners.udp.$name.authentication.ssl",
-            "gateway.mqttsn.authentication.ssl",
-            "gateway.mqttsn.listeners.dtls.$name.authentication.ssl",
-            "gateway.mqttsn.listeners.udp.$name.authentication.ssl",
-            "gateway.stomp.authentication.ssl",
-            "gateway.stomp.listeners.ssl.$name.authentication.ssl",
-            "gateway.stomp.listeners.tcp.$name.authentication.ssl",
-            "listeners.ssl.$name.authentication.$INDEX.ssl",
-            "listeners.tcp.$name.authentication.$INDEX.ssl",
-            "listeners.ws.$name.authentication.$INDEX.ssl",
-            "listeners.wss.$name.authentication.$INDEX.ssl"
+            "gateway.exproto.handler.ssl_options"
         ],
         "tags": [
             "EMQX"
@@ -7481,7 +7171,7 @@
                     "hocon": "\"5s\"",
                     "oneliner": true
                 },
-                "desc": " 在闲置一定时间后休眠 SSL 进程，减少其内存占用。",
+                "desc": "在闲置一定时间后休眠 SSL 进程，减少其内存占用。",
                 "name": "hibernate_after",
                 "raw_default": "5s",
                 "type": {
@@ -7950,7 +7640,7 @@
                     "hocon": "\"5s\"",
                     "oneliner": true
                 },
-                "desc": " 在闲置一定时间后休眠 SSL 进程，减少其内存占用。",
+                "desc": "在闲置一定时间后休眠 SSL 进程，减少其内存占用。",
                 "name": "hibernate_after",
                 "raw_default": "5s",
                 "type": {
@@ -8136,7 +7826,7 @@
                     "hocon": "\"\"",
                     "oneliner": true
                 },
-                "desc": "",
+                "desc": "发布或订阅时，在所有主题前增加前缀字符串。\n当消息投递给订阅者时，前缀字符串将从主题名称中删除。挂载点是用户可以用来实现不同监听器之间的消息路由隔离的一种方式。\n例如，如果客户端 A 在 `listeners.tcp.\\<name>.mountpoint` 设置为 `some_tenant` 的情况下订阅 `t`，\n则客户端实际上订阅了 `some_tenant/t` 主题。\n类似地，如果另一个客户端 B（连接到与客户端 A 相同的侦听器）向主题 `t` 发送消息，\n则该消息被路由到所有订阅了 `some_tenant/t` 的客户端，因此客户端 A 将收到该消息，带有 主题名称`t`。 设置为 `\"\"` 以禁用该功能。\n挂载点字符串中可用的变量：<br/>\n   - <code>${clientid}</code>：clientid<br/>\n   - <code>${username}</code>：用户名",
                 "name": "mountpoint",
                 "raw_default": "",
                 "type": {
@@ -8203,161 +7893,6 @@
                     "kind": "struct",
                     "name": "gateway:clientinfo_override"
                 }
-            },
-            {
-                "aliases": [],
-                "desc": "网关的认证器配置，对该网关下所以的监听器生效。如果每个监听器需要配置不同的认证器，需要配置监听器下的 <code>authentication</code> 字段。",
-                "examples": {
-                    "jwt": {
-                        "summary": "JWT authentication",
-                        "value": {
-                            "algorithm": "hmac-based",
-                            "mechanism": "jwt",
-                            "secret": "mysecret",
-                            "secret_base64_encoded": false,
-                            "use_jwks": false,
-                            "verify_claims": {
-                                "username": "${username}"
-                            }
-                        }
-                    },
-                    "password_based:built_in_database": {
-                        "summary": "Built-in password_based authentication",
-                        "value": {
-                            "backend": "built_in_database",
-                            "mechanism": "password_based",
-                            "password_hash_algorithm": {
-                                "name": "sha256",
-                                "salt_position": "suffix"
-                            },
-                            "user_id_type": "username"
-                        }
-                    },
-                    "password_based:http": {
-                        "summary": "password_based authentication through external HTTP API",
-                        "value": {
-                            "backend": "http",
-                            "body": {
-                                "password": "${password}",
-                                "username": "${username}"
-                            },
-                            "connect_timeout": 5000,
-                            "enable_pipelining": 100,
-                            "headers": {
-                                "content-type": "application/json"
-                            },
-                            "mechanism": "password_based",
-                            "method": "post",
-                            "pool_size": 8,
-                            "request_timeout": 5000,
-                            "ssl": {
-                                "enable": false
-                            },
-                            "url": "http://127.0.0.1:18083"
-                        }
-                    },
-                    "password_based:mongodb": {
-                        "summary": "password_based authentication with MongoDB backend",
-                        "value": {
-                            "backend": "mongodb",
-                            "collection": "users",
-                            "database": "example",
-                            "filter": {
-                                "username": "${username}"
-                            },
-                            "is_superuser_field": "is_superuser",
-                            "mechanism": "password_based",
-                            "password_hash_algorithm": {
-                                "name": "sha256",
-                                "salt_position": "suffix"
-                            },
-                            "password_hash_field": "password_hash",
-                            "salt_field": "salt",
-                            "server": "127.0.0.1:27017"
-                        }
-                    },
-                    "password_based:redis": {
-                        "summary": "password_based authentication with Redis backend",
-                        "value": {
-                            "backend": "redis",
-                            "cmd": "HMGET ${username} password_hash salt",
-                            "database": 0,
-                            "mechanism": "password_based",
-                            "password_hash_algorithm": {
-                                "name": "sha256",
-                                "salt_position": "suffix"
-                            },
-                            "redis_type": "single",
-                            "server": "127.0.0.1:6379"
-                        }
-                    }
-                },
-                "name": "authentication",
-                "type": {
-                    "kind": "union",
-                    "members": [
-                        {
-                            "kind": "struct",
-                            "name": "authn-builtin_db:authentication"
-                        },
-                        {
-                            "kind": "struct",
-                            "name": "authn-mysql:authentication"
-                        },
-                        {
-                            "kind": "struct",
-                            "name": "authn-postgresql:authentication"
-                        },
-                        {
-                            "kind": "struct",
-                            "name": "authn-mongodb:standalone"
-                        },
-                        {
-                            "kind": "struct",
-                            "name": "authn-mongodb:replica-set"
-                        },
-                        {
-                            "kind": "struct",
-                            "name": "authn-mongodb:sharded-cluster"
-                        },
-                        {
-                            "kind": "struct",
-                            "name": "authn-redis:standalone"
-                        },
-                        {
-                            "kind": "struct",
-                            "name": "authn-redis:cluster"
-                        },
-                        {
-                            "kind": "struct",
-                            "name": "authn-redis:sentinel"
-                        },
-                        {
-                            "kind": "struct",
-                            "name": "authn-http:get"
-                        },
-                        {
-                            "kind": "struct",
-                            "name": "authn-http:post"
-                        },
-                        {
-                            "kind": "struct",
-                            "name": "authn-jwt:hmac-based"
-                        },
-                        {
-                            "kind": "struct",
-                            "name": "authn-jwt:public-key"
-                        },
-                        {
-                            "kind": "struct",
-                            "name": "authn-jwt:jwks"
-                        },
-                        {
-                            "kind": "struct",
-                            "name": "authn-scram-builtin_db:authentication"
-                        }
-                    ]
-                }
             }
         ],
         "full_name": "gateway:coap",
@@ -8369,7 +7904,7 @@
         ]
     },
     {
-        "desc": "Settings for the DTLS listener.",
+        "desc": "Settings for DTLS listener.",
         "fields": [
             {
                 "aliases": [],
@@ -8455,161 +7990,6 @@
             },
             {
                 "aliases": [],
-                "desc": "网关的认证器配置，对该网关下所以的监听器生效。如果每个监听器需要配置不同的认证器，需要配置监听器下的 <code>authentication</code> 字段。",
-                "examples": {
-                    "jwt": {
-                        "summary": "JWT authentication",
-                        "value": {
-                            "algorithm": "hmac-based",
-                            "mechanism": "jwt",
-                            "secret": "mysecret",
-                            "secret_base64_encoded": false,
-                            "use_jwks": false,
-                            "verify_claims": {
-                                "username": "${username}"
-                            }
-                        }
-                    },
-                    "password_based:built_in_database": {
-                        "summary": "Built-in password_based authentication",
-                        "value": {
-                            "backend": "built_in_database",
-                            "mechanism": "password_based",
-                            "password_hash_algorithm": {
-                                "name": "sha256",
-                                "salt_position": "suffix"
-                            },
-                            "user_id_type": "username"
-                        }
-                    },
-                    "password_based:http": {
-                        "summary": "password_based authentication through external HTTP API",
-                        "value": {
-                            "backend": "http",
-                            "body": {
-                                "password": "${password}",
-                                "username": "${username}"
-                            },
-                            "connect_timeout": 5000,
-                            "enable_pipelining": 100,
-                            "headers": {
-                                "content-type": "application/json"
-                            },
-                            "mechanism": "password_based",
-                            "method": "post",
-                            "pool_size": 8,
-                            "request_timeout": 5000,
-                            "ssl": {
-                                "enable": false
-                            },
-                            "url": "http://127.0.0.1:18083"
-                        }
-                    },
-                    "password_based:mongodb": {
-                        "summary": "password_based authentication with MongoDB backend",
-                        "value": {
-                            "backend": "mongodb",
-                            "collection": "users",
-                            "database": "example",
-                            "filter": {
-                                "username": "${username}"
-                            },
-                            "is_superuser_field": "is_superuser",
-                            "mechanism": "password_based",
-                            "password_hash_algorithm": {
-                                "name": "sha256",
-                                "salt_position": "suffix"
-                            },
-                            "password_hash_field": "password_hash",
-                            "salt_field": "salt",
-                            "server": "127.0.0.1:27017"
-                        }
-                    },
-                    "password_based:redis": {
-                        "summary": "password_based authentication with Redis backend",
-                        "value": {
-                            "backend": "redis",
-                            "cmd": "HMGET ${username} password_hash salt",
-                            "database": 0,
-                            "mechanism": "password_based",
-                            "password_hash_algorithm": {
-                                "name": "sha256",
-                                "salt_position": "suffix"
-                            },
-                            "redis_type": "single",
-                            "server": "127.0.0.1:6379"
-                        }
-                    }
-                },
-                "name": "authentication",
-                "type": {
-                    "kind": "union",
-                    "members": [
-                        {
-                            "kind": "struct",
-                            "name": "authn-builtin_db:authentication"
-                        },
-                        {
-                            "kind": "struct",
-                            "name": "authn-mysql:authentication"
-                        },
-                        {
-                            "kind": "struct",
-                            "name": "authn-postgresql:authentication"
-                        },
-                        {
-                            "kind": "struct",
-                            "name": "authn-mongodb:standalone"
-                        },
-                        {
-                            "kind": "struct",
-                            "name": "authn-mongodb:replica-set"
-                        },
-                        {
-                            "kind": "struct",
-                            "name": "authn-mongodb:sharded-cluster"
-                        },
-                        {
-                            "kind": "struct",
-                            "name": "authn-redis:standalone"
-                        },
-                        {
-                            "kind": "struct",
-                            "name": "authn-redis:cluster"
-                        },
-                        {
-                            "kind": "struct",
-                            "name": "authn-redis:sentinel"
-                        },
-                        {
-                            "kind": "struct",
-                            "name": "authn-http:get"
-                        },
-                        {
-                            "kind": "struct",
-                            "name": "authn-http:post"
-                        },
-                        {
-                            "kind": "struct",
-                            "name": "authn-jwt:hmac-based"
-                        },
-                        {
-                            "kind": "struct",
-                            "name": "authn-jwt:public-key"
-                        },
-                        {
-                            "kind": "struct",
-                            "name": "authn-jwt:jwks"
-                        },
-                        {
-                            "kind": "struct",
-                            "name": "authn-scram-builtin_db:authentication"
-                        }
-                    ]
-                }
-            },
-            {
-                "aliases": [],
                 "default": {
                     "hocon": "true",
                     "oneliner": true
@@ -8670,7 +8050,7 @@
         ]
     },
     {
-        "desc": "Settings for the DTLS protocol.",
+        "desc": "Settings for DTLS protocol.",
         "fields": [
             {
                 "aliases": [],
@@ -8827,7 +8207,7 @@
                     "hocon": "\"5s\"",
                     "oneliner": true
                 },
-                "desc": " 在闲置一定时间后休眠 SSL 进程，减少其内存占用。",
+                "desc": "在闲置一定时间后休眠 SSL 进程，减少其内存占用。",
                 "name": "hibernate_after",
                 "raw_default": "5s",
                 "type": {
@@ -8967,7 +8347,7 @@
                     "hocon": "\"\"",
                     "oneliner": true
                 },
-                "desc": "",
+                "desc": "发布或订阅时，在所有主题前增加前缀字符串。\n当消息投递给订阅者时，前缀字符串将从主题名称中删除。挂载点是用户可以用来实现不同监听器之间的消息路由隔离的一种方式。\n例如，如果客户端 A 在 `listeners.tcp.\\<name>.mountpoint` 设置为 `some_tenant` 的情况下订阅 `t`，\n则客户端实际上订阅了 `some_tenant/t` 主题。\n类似地，如果另一个客户端 B（连接到与客户端 A 相同的侦听器）向主题 `t` 发送消息，\n则该消息被路由到所有订阅了 `some_tenant/t` 的客户端，因此客户端 A 将收到该消息，带有 主题名称`t`。 设置为 `\"\"` 以禁用该功能。\n挂载点字符串中可用的变量：<br/>\n   - <code>${clientid}</code>：clientid<br/>\n   - <code>${username}</code>：用户名",
                 "name": "mountpoint",
                 "raw_default": "",
                 "type": {
@@ -9033,161 +8413,6 @@
                 "type": {
                     "kind": "struct",
                     "name": "gateway:clientinfo_override"
-                }
-            },
-            {
-                "aliases": [],
-                "desc": "网关的认证器配置，对该网关下所以的监听器生效。如果每个监听器需要配置不同的认证器，需要配置监听器下的 <code>authentication</code> 字段。",
-                "examples": {
-                    "jwt": {
-                        "summary": "JWT authentication",
-                        "value": {
-                            "algorithm": "hmac-based",
-                            "mechanism": "jwt",
-                            "secret": "mysecret",
-                            "secret_base64_encoded": false,
-                            "use_jwks": false,
-                            "verify_claims": {
-                                "username": "${username}"
-                            }
-                        }
-                    },
-                    "password_based:built_in_database": {
-                        "summary": "Built-in password_based authentication",
-                        "value": {
-                            "backend": "built_in_database",
-                            "mechanism": "password_based",
-                            "password_hash_algorithm": {
-                                "name": "sha256",
-                                "salt_position": "suffix"
-                            },
-                            "user_id_type": "username"
-                        }
-                    },
-                    "password_based:http": {
-                        "summary": "password_based authentication through external HTTP API",
-                        "value": {
-                            "backend": "http",
-                            "body": {
-                                "password": "${password}",
-                                "username": "${username}"
-                            },
-                            "connect_timeout": 5000,
-                            "enable_pipelining": 100,
-                            "headers": {
-                                "content-type": "application/json"
-                            },
-                            "mechanism": "password_based",
-                            "method": "post",
-                            "pool_size": 8,
-                            "request_timeout": 5000,
-                            "ssl": {
-                                "enable": false
-                            },
-                            "url": "http://127.0.0.1:18083"
-                        }
-                    },
-                    "password_based:mongodb": {
-                        "summary": "password_based authentication with MongoDB backend",
-                        "value": {
-                            "backend": "mongodb",
-                            "collection": "users",
-                            "database": "example",
-                            "filter": {
-                                "username": "${username}"
-                            },
-                            "is_superuser_field": "is_superuser",
-                            "mechanism": "password_based",
-                            "password_hash_algorithm": {
-                                "name": "sha256",
-                                "salt_position": "suffix"
-                            },
-                            "password_hash_field": "password_hash",
-                            "salt_field": "salt",
-                            "server": "127.0.0.1:27017"
-                        }
-                    },
-                    "password_based:redis": {
-                        "summary": "password_based authentication with Redis backend",
-                        "value": {
-                            "backend": "redis",
-                            "cmd": "HMGET ${username} password_hash salt",
-                            "database": 0,
-                            "mechanism": "password_based",
-                            "password_hash_algorithm": {
-                                "name": "sha256",
-                                "salt_position": "suffix"
-                            },
-                            "redis_type": "single",
-                            "server": "127.0.0.1:6379"
-                        }
-                    }
-                },
-                "name": "authentication",
-                "type": {
-                    "kind": "union",
-                    "members": [
-                        {
-                            "kind": "struct",
-                            "name": "authn-builtin_db:authentication"
-                        },
-                        {
-                            "kind": "struct",
-                            "name": "authn-mysql:authentication"
-                        },
-                        {
-                            "kind": "struct",
-                            "name": "authn-postgresql:authentication"
-                        },
-                        {
-                            "kind": "struct",
-                            "name": "authn-mongodb:standalone"
-                        },
-                        {
-                            "kind": "struct",
-                            "name": "authn-mongodb:replica-set"
-                        },
-                        {
-                            "kind": "struct",
-                            "name": "authn-mongodb:sharded-cluster"
-                        },
-                        {
-                            "kind": "struct",
-                            "name": "authn-redis:standalone"
-                        },
-                        {
-                            "kind": "struct",
-                            "name": "authn-redis:cluster"
-                        },
-                        {
-                            "kind": "struct",
-                            "name": "authn-redis:sentinel"
-                        },
-                        {
-                            "kind": "struct",
-                            "name": "authn-http:get"
-                        },
-                        {
-                            "kind": "struct",
-                            "name": "authn-http:post"
-                        },
-                        {
-                            "kind": "struct",
-                            "name": "authn-jwt:hmac-based"
-                        },
-                        {
-                            "kind": "struct",
-                            "name": "authn-jwt:public-key"
-                        },
-                        {
-                            "kind": "struct",
-                            "name": "authn-jwt:jwks"
-                        },
-                        {
-                            "kind": "struct",
-                            "name": "authn-scram-builtin_db:authentication"
-                        }
-                    ]
                 }
             }
         ],
@@ -9428,7 +8653,7 @@
                     "hocon": "\"lwm2m/${endpoint_name}/\"",
                     "oneliner": true
                 },
-                "desc": "",
+                "desc": "发布或订阅时，在所有主题前增加前缀字符串。\n当消息投递给订阅者时，前缀字符串将从主题名称中删除。挂载点是用户可以用来实现不同监听器之间的消息路由隔离的一种方式。\n例如，如果客户端 A 在 `listeners.tcp.\\<name>.mountpoint` 设置为 `some_tenant` 的情况下订阅 `t`，\n则客户端实际上订阅了 `some_tenant/t` 主题。\n类似地，如果另一个客户端 B（连接到与客户端 A 相同的侦听器）向主题 `t` 发送消息，\n则该消息被路由到所有订阅了 `some_tenant/t` 的客户端，因此客户端 A 将收到该消息，带有 主题名称`t`。 设置为 `\"\"` 以禁用该功能。\n挂载点字符串中可用的变量：<br/>\n   - <code>${clientid}</code>：clientid<br/>\n   - <code>${username}</code>：用户名",
                 "name": "mountpoint",
                 "raw_default": "lwm2m/${endpoint_name}/",
                 "type": {
@@ -9494,161 +8719,6 @@
                 "type": {
                     "kind": "struct",
                     "name": "gateway:clientinfo_override"
-                }
-            },
-            {
-                "aliases": [],
-                "desc": "网关的认证器配置，对该网关下所以的监听器生效。如果每个监听器需要配置不同的认证器，需要配置监听器下的 <code>authentication</code> 字段。",
-                "examples": {
-                    "jwt": {
-                        "summary": "JWT authentication",
-                        "value": {
-                            "algorithm": "hmac-based",
-                            "mechanism": "jwt",
-                            "secret": "mysecret",
-                            "secret_base64_encoded": false,
-                            "use_jwks": false,
-                            "verify_claims": {
-                                "username": "${username}"
-                            }
-                        }
-                    },
-                    "password_based:built_in_database": {
-                        "summary": "Built-in password_based authentication",
-                        "value": {
-                            "backend": "built_in_database",
-                            "mechanism": "password_based",
-                            "password_hash_algorithm": {
-                                "name": "sha256",
-                                "salt_position": "suffix"
-                            },
-                            "user_id_type": "username"
-                        }
-                    },
-                    "password_based:http": {
-                        "summary": "password_based authentication through external HTTP API",
-                        "value": {
-                            "backend": "http",
-                            "body": {
-                                "password": "${password}",
-                                "username": "${username}"
-                            },
-                            "connect_timeout": 5000,
-                            "enable_pipelining": 100,
-                            "headers": {
-                                "content-type": "application/json"
-                            },
-                            "mechanism": "password_based",
-                            "method": "post",
-                            "pool_size": 8,
-                            "request_timeout": 5000,
-                            "ssl": {
-                                "enable": false
-                            },
-                            "url": "http://127.0.0.1:18083"
-                        }
-                    },
-                    "password_based:mongodb": {
-                        "summary": "password_based authentication with MongoDB backend",
-                        "value": {
-                            "backend": "mongodb",
-                            "collection": "users",
-                            "database": "example",
-                            "filter": {
-                                "username": "${username}"
-                            },
-                            "is_superuser_field": "is_superuser",
-                            "mechanism": "password_based",
-                            "password_hash_algorithm": {
-                                "name": "sha256",
-                                "salt_position": "suffix"
-                            },
-                            "password_hash_field": "password_hash",
-                            "salt_field": "salt",
-                            "server": "127.0.0.1:27017"
-                        }
-                    },
-                    "password_based:redis": {
-                        "summary": "password_based authentication with Redis backend",
-                        "value": {
-                            "backend": "redis",
-                            "cmd": "HMGET ${username} password_hash salt",
-                            "database": 0,
-                            "mechanism": "password_based",
-                            "password_hash_algorithm": {
-                                "name": "sha256",
-                                "salt_position": "suffix"
-                            },
-                            "redis_type": "single",
-                            "server": "127.0.0.1:6379"
-                        }
-                    }
-                },
-                "name": "authentication",
-                "type": {
-                    "kind": "union",
-                    "members": [
-                        {
-                            "kind": "struct",
-                            "name": "authn-builtin_db:authentication"
-                        },
-                        {
-                            "kind": "struct",
-                            "name": "authn-mysql:authentication"
-                        },
-                        {
-                            "kind": "struct",
-                            "name": "authn-postgresql:authentication"
-                        },
-                        {
-                            "kind": "struct",
-                            "name": "authn-mongodb:standalone"
-                        },
-                        {
-                            "kind": "struct",
-                            "name": "authn-mongodb:replica-set"
-                        },
-                        {
-                            "kind": "struct",
-                            "name": "authn-mongodb:sharded-cluster"
-                        },
-                        {
-                            "kind": "struct",
-                            "name": "authn-redis:standalone"
-                        },
-                        {
-                            "kind": "struct",
-                            "name": "authn-redis:cluster"
-                        },
-                        {
-                            "kind": "struct",
-                            "name": "authn-redis:sentinel"
-                        },
-                        {
-                            "kind": "struct",
-                            "name": "authn-http:get"
-                        },
-                        {
-                            "kind": "struct",
-                            "name": "authn-http:post"
-                        },
-                        {
-                            "kind": "struct",
-                            "name": "authn-jwt:hmac-based"
-                        },
-                        {
-                            "kind": "struct",
-                            "name": "authn-jwt:public-key"
-                        },
-                        {
-                            "kind": "struct",
-                            "name": "authn-jwt:jwks"
-                        },
-                        {
-                            "kind": "struct",
-                            "name": "authn-scram-builtin_db:authentication"
-                        }
-                    ]
                 }
             }
         ],
@@ -9799,7 +8869,7 @@
                     "hocon": "\"\"",
                     "oneliner": true
                 },
-                "desc": "",
+                "desc": "发布或订阅时，在所有主题前增加前缀字符串。\n当消息投递给订阅者时，前缀字符串将从主题名称中删除。挂载点是用户可以用来实现不同监听器之间的消息路由隔离的一种方式。\n例如，如果客户端 A 在 `listeners.tcp.\\<name>.mountpoint` 设置为 `some_tenant` 的情况下订阅 `t`，\n则客户端实际上订阅了 `some_tenant/t` 主题。\n类似地，如果另一个客户端 B（连接到与客户端 A 相同的侦听器）向主题 `t` 发送消息，\n则该消息被路由到所有订阅了 `some_tenant/t` 的客户端，因此客户端 A 将收到该消息，带有 主题名称`t`。 设置为 `\"\"` 以禁用该功能。\n挂载点字符串中可用的变量：<br/>\n   - <code>${clientid}</code>：clientid<br/>\n   - <code>${username}</code>：用户名",
                 "name": "mountpoint",
                 "raw_default": "",
                 "type": {
@@ -9866,161 +8936,6 @@
                     "kind": "struct",
                     "name": "gateway:clientinfo_override"
                 }
-            },
-            {
-                "aliases": [],
-                "desc": "网关的认证器配置，对该网关下所以的监听器生效。如果每个监听器需要配置不同的认证器，需要配置监听器下的 <code>authentication</code> 字段。",
-                "examples": {
-                    "jwt": {
-                        "summary": "JWT authentication",
-                        "value": {
-                            "algorithm": "hmac-based",
-                            "mechanism": "jwt",
-                            "secret": "mysecret",
-                            "secret_base64_encoded": false,
-                            "use_jwks": false,
-                            "verify_claims": {
-                                "username": "${username}"
-                            }
-                        }
-                    },
-                    "password_based:built_in_database": {
-                        "summary": "Built-in password_based authentication",
-                        "value": {
-                            "backend": "built_in_database",
-                            "mechanism": "password_based",
-                            "password_hash_algorithm": {
-                                "name": "sha256",
-                                "salt_position": "suffix"
-                            },
-                            "user_id_type": "username"
-                        }
-                    },
-                    "password_based:http": {
-                        "summary": "password_based authentication through external HTTP API",
-                        "value": {
-                            "backend": "http",
-                            "body": {
-                                "password": "${password}",
-                                "username": "${username}"
-                            },
-                            "connect_timeout": 5000,
-                            "enable_pipelining": 100,
-                            "headers": {
-                                "content-type": "application/json"
-                            },
-                            "mechanism": "password_based",
-                            "method": "post",
-                            "pool_size": 8,
-                            "request_timeout": 5000,
-                            "ssl": {
-                                "enable": false
-                            },
-                            "url": "http://127.0.0.1:18083"
-                        }
-                    },
-                    "password_based:mongodb": {
-                        "summary": "password_based authentication with MongoDB backend",
-                        "value": {
-                            "backend": "mongodb",
-                            "collection": "users",
-                            "database": "example",
-                            "filter": {
-                                "username": "${username}"
-                            },
-                            "is_superuser_field": "is_superuser",
-                            "mechanism": "password_based",
-                            "password_hash_algorithm": {
-                                "name": "sha256",
-                                "salt_position": "suffix"
-                            },
-                            "password_hash_field": "password_hash",
-                            "salt_field": "salt",
-                            "server": "127.0.0.1:27017"
-                        }
-                    },
-                    "password_based:redis": {
-                        "summary": "password_based authentication with Redis backend",
-                        "value": {
-                            "backend": "redis",
-                            "cmd": "HMGET ${username} password_hash salt",
-                            "database": 0,
-                            "mechanism": "password_based",
-                            "password_hash_algorithm": {
-                                "name": "sha256",
-                                "salt_position": "suffix"
-                            },
-                            "redis_type": "single",
-                            "server": "127.0.0.1:6379"
-                        }
-                    }
-                },
-                "name": "authentication",
-                "type": {
-                    "kind": "union",
-                    "members": [
-                        {
-                            "kind": "struct",
-                            "name": "authn-builtin_db:authentication"
-                        },
-                        {
-                            "kind": "struct",
-                            "name": "authn-mysql:authentication"
-                        },
-                        {
-                            "kind": "struct",
-                            "name": "authn-postgresql:authentication"
-                        },
-                        {
-                            "kind": "struct",
-                            "name": "authn-mongodb:standalone"
-                        },
-                        {
-                            "kind": "struct",
-                            "name": "authn-mongodb:replica-set"
-                        },
-                        {
-                            "kind": "struct",
-                            "name": "authn-mongodb:sharded-cluster"
-                        },
-                        {
-                            "kind": "struct",
-                            "name": "authn-redis:standalone"
-                        },
-                        {
-                            "kind": "struct",
-                            "name": "authn-redis:cluster"
-                        },
-                        {
-                            "kind": "struct",
-                            "name": "authn-redis:sentinel"
-                        },
-                        {
-                            "kind": "struct",
-                            "name": "authn-http:get"
-                        },
-                        {
-                            "kind": "struct",
-                            "name": "authn-http:post"
-                        },
-                        {
-                            "kind": "struct",
-                            "name": "authn-jwt:hmac-based"
-                        },
-                        {
-                            "kind": "struct",
-                            "name": "authn-jwt:public-key"
-                        },
-                        {
-                            "kind": "struct",
-                            "name": "authn-jwt:jwks"
-                        },
-                        {
-                            "kind": "struct",
-                            "name": "authn-scram-builtin_db:authentication"
-                        }
-                    ]
-                }
             }
         ],
         "full_name": "gateway:mqttsn",
@@ -10062,7 +8977,7 @@
         ]
     },
     {
-        "desc": "Settings for the SSL listener.",
+        "desc": "Settings for SSL listener.",
         "fields": [
             {
                 "aliases": [],
@@ -10173,161 +9088,6 @@
                 "type": {
                     "kind": "primitive",
                     "name": "integer()"
-                }
-            },
-            {
-                "aliases": [],
-                "desc": "网关的认证器配置，对该网关下所以的监听器生效。如果每个监听器需要配置不同的认证器，需要配置监听器下的 <code>authentication</code> 字段。",
-                "examples": {
-                    "jwt": {
-                        "summary": "JWT authentication",
-                        "value": {
-                            "algorithm": "hmac-based",
-                            "mechanism": "jwt",
-                            "secret": "mysecret",
-                            "secret_base64_encoded": false,
-                            "use_jwks": false,
-                            "verify_claims": {
-                                "username": "${username}"
-                            }
-                        }
-                    },
-                    "password_based:built_in_database": {
-                        "summary": "Built-in password_based authentication",
-                        "value": {
-                            "backend": "built_in_database",
-                            "mechanism": "password_based",
-                            "password_hash_algorithm": {
-                                "name": "sha256",
-                                "salt_position": "suffix"
-                            },
-                            "user_id_type": "username"
-                        }
-                    },
-                    "password_based:http": {
-                        "summary": "password_based authentication through external HTTP API",
-                        "value": {
-                            "backend": "http",
-                            "body": {
-                                "password": "${password}",
-                                "username": "${username}"
-                            },
-                            "connect_timeout": 5000,
-                            "enable_pipelining": 100,
-                            "headers": {
-                                "content-type": "application/json"
-                            },
-                            "mechanism": "password_based",
-                            "method": "post",
-                            "pool_size": 8,
-                            "request_timeout": 5000,
-                            "ssl": {
-                                "enable": false
-                            },
-                            "url": "http://127.0.0.1:18083"
-                        }
-                    },
-                    "password_based:mongodb": {
-                        "summary": "password_based authentication with MongoDB backend",
-                        "value": {
-                            "backend": "mongodb",
-                            "collection": "users",
-                            "database": "example",
-                            "filter": {
-                                "username": "${username}"
-                            },
-                            "is_superuser_field": "is_superuser",
-                            "mechanism": "password_based",
-                            "password_hash_algorithm": {
-                                "name": "sha256",
-                                "salt_position": "suffix"
-                            },
-                            "password_hash_field": "password_hash",
-                            "salt_field": "salt",
-                            "server": "127.0.0.1:27017"
-                        }
-                    },
-                    "password_based:redis": {
-                        "summary": "password_based authentication with Redis backend",
-                        "value": {
-                            "backend": "redis",
-                            "cmd": "HMGET ${username} password_hash salt",
-                            "database": 0,
-                            "mechanism": "password_based",
-                            "password_hash_algorithm": {
-                                "name": "sha256",
-                                "salt_position": "suffix"
-                            },
-                            "redis_type": "single",
-                            "server": "127.0.0.1:6379"
-                        }
-                    }
-                },
-                "name": "authentication",
-                "type": {
-                    "kind": "union",
-                    "members": [
-                        {
-                            "kind": "struct",
-                            "name": "authn-builtin_db:authentication"
-                        },
-                        {
-                            "kind": "struct",
-                            "name": "authn-mysql:authentication"
-                        },
-                        {
-                            "kind": "struct",
-                            "name": "authn-postgresql:authentication"
-                        },
-                        {
-                            "kind": "struct",
-                            "name": "authn-mongodb:standalone"
-                        },
-                        {
-                            "kind": "struct",
-                            "name": "authn-mongodb:replica-set"
-                        },
-                        {
-                            "kind": "struct",
-                            "name": "authn-mongodb:sharded-cluster"
-                        },
-                        {
-                            "kind": "struct",
-                            "name": "authn-redis:standalone"
-                        },
-                        {
-                            "kind": "struct",
-                            "name": "authn-redis:cluster"
-                        },
-                        {
-                            "kind": "struct",
-                            "name": "authn-redis:sentinel"
-                        },
-                        {
-                            "kind": "struct",
-                            "name": "authn-http:get"
-                        },
-                        {
-                            "kind": "struct",
-                            "name": "authn-http:post"
-                        },
-                        {
-                            "kind": "struct",
-                            "name": "authn-jwt:hmac-based"
-                        },
-                        {
-                            "kind": "struct",
-                            "name": "authn-jwt:public-key"
-                        },
-                        {
-                            "kind": "struct",
-                            "name": "authn-jwt:jwks"
-                        },
-                        {
-                            "kind": "struct",
-                            "name": "authn-scram-builtin_db:authentication"
-                        }
-                    ]
                 }
             },
             {
@@ -10549,7 +9309,7 @@
                     "hocon": "\"5s\"",
                     "oneliner": true
                 },
-                "desc": " 在闲置一定时间后休眠 SSL 进程，减少其内存占用。",
+                "desc": "在闲置一定时间后休眠 SSL 进程，减少其内存占用。",
                 "name": "hibernate_after",
                 "raw_default": "5s",
                 "type": {
@@ -10648,7 +9408,7 @@
                     "hocon": "\"\"",
                     "oneliner": true
                 },
-                "desc": "",
+                "desc": "发布或订阅时，在所有主题前增加前缀字符串。\n当消息投递给订阅者时，前缀字符串将从主题名称中删除。挂载点是用户可以用来实现不同监听器之间的消息路由隔离的一种方式。\n例如，如果客户端 A 在 `listeners.tcp.\\<name>.mountpoint` 设置为 `some_tenant` 的情况下订阅 `t`，\n则客户端实际上订阅了 `some_tenant/t` 主题。\n类似地，如果另一个客户端 B（连接到与客户端 A 相同的侦听器）向主题 `t` 发送消息，\n则该消息被路由到所有订阅了 `some_tenant/t` 的客户端，因此客户端 A 将收到该消息，带有 主题名称`t`。 设置为 `\"\"` 以禁用该功能。\n挂载点字符串中可用的变量：<br/>\n   - <code>${clientid}</code>：clientid<br/>\n   - <code>${username}</code>：用户名",
                 "name": "mountpoint",
                 "raw_default": "",
                 "type": {
@@ -10715,161 +9475,6 @@
                     "kind": "struct",
                     "name": "gateway:clientinfo_override"
                 }
-            },
-            {
-                "aliases": [],
-                "desc": "网关的认证器配置，对该网关下所以的监听器生效。如果每个监听器需要配置不同的认证器，需要配置监听器下的 <code>authentication</code> 字段。",
-                "examples": {
-                    "jwt": {
-                        "summary": "JWT authentication",
-                        "value": {
-                            "algorithm": "hmac-based",
-                            "mechanism": "jwt",
-                            "secret": "mysecret",
-                            "secret_base64_encoded": false,
-                            "use_jwks": false,
-                            "verify_claims": {
-                                "username": "${username}"
-                            }
-                        }
-                    },
-                    "password_based:built_in_database": {
-                        "summary": "Built-in password_based authentication",
-                        "value": {
-                            "backend": "built_in_database",
-                            "mechanism": "password_based",
-                            "password_hash_algorithm": {
-                                "name": "sha256",
-                                "salt_position": "suffix"
-                            },
-                            "user_id_type": "username"
-                        }
-                    },
-                    "password_based:http": {
-                        "summary": "password_based authentication through external HTTP API",
-                        "value": {
-                            "backend": "http",
-                            "body": {
-                                "password": "${password}",
-                                "username": "${username}"
-                            },
-                            "connect_timeout": 5000,
-                            "enable_pipelining": 100,
-                            "headers": {
-                                "content-type": "application/json"
-                            },
-                            "mechanism": "password_based",
-                            "method": "post",
-                            "pool_size": 8,
-                            "request_timeout": 5000,
-                            "ssl": {
-                                "enable": false
-                            },
-                            "url": "http://127.0.0.1:18083"
-                        }
-                    },
-                    "password_based:mongodb": {
-                        "summary": "password_based authentication with MongoDB backend",
-                        "value": {
-                            "backend": "mongodb",
-                            "collection": "users",
-                            "database": "example",
-                            "filter": {
-                                "username": "${username}"
-                            },
-                            "is_superuser_field": "is_superuser",
-                            "mechanism": "password_based",
-                            "password_hash_algorithm": {
-                                "name": "sha256",
-                                "salt_position": "suffix"
-                            },
-                            "password_hash_field": "password_hash",
-                            "salt_field": "salt",
-                            "server": "127.0.0.1:27017"
-                        }
-                    },
-                    "password_based:redis": {
-                        "summary": "password_based authentication with Redis backend",
-                        "value": {
-                            "backend": "redis",
-                            "cmd": "HMGET ${username} password_hash salt",
-                            "database": 0,
-                            "mechanism": "password_based",
-                            "password_hash_algorithm": {
-                                "name": "sha256",
-                                "salt_position": "suffix"
-                            },
-                            "redis_type": "single",
-                            "server": "127.0.0.1:6379"
-                        }
-                    }
-                },
-                "name": "authentication",
-                "type": {
-                    "kind": "union",
-                    "members": [
-                        {
-                            "kind": "struct",
-                            "name": "authn-builtin_db:authentication"
-                        },
-                        {
-                            "kind": "struct",
-                            "name": "authn-mysql:authentication"
-                        },
-                        {
-                            "kind": "struct",
-                            "name": "authn-postgresql:authentication"
-                        },
-                        {
-                            "kind": "struct",
-                            "name": "authn-mongodb:standalone"
-                        },
-                        {
-                            "kind": "struct",
-                            "name": "authn-mongodb:replica-set"
-                        },
-                        {
-                            "kind": "struct",
-                            "name": "authn-mongodb:sharded-cluster"
-                        },
-                        {
-                            "kind": "struct",
-                            "name": "authn-redis:standalone"
-                        },
-                        {
-                            "kind": "struct",
-                            "name": "authn-redis:cluster"
-                        },
-                        {
-                            "kind": "struct",
-                            "name": "authn-redis:sentinel"
-                        },
-                        {
-                            "kind": "struct",
-                            "name": "authn-http:get"
-                        },
-                        {
-                            "kind": "struct",
-                            "name": "authn-http:post"
-                        },
-                        {
-                            "kind": "struct",
-                            "name": "authn-jwt:hmac-based"
-                        },
-                        {
-                            "kind": "struct",
-                            "name": "authn-jwt:public-key"
-                        },
-                        {
-                            "kind": "struct",
-                            "name": "authn-jwt:jwks"
-                        },
-                        {
-                            "kind": "struct",
-                            "name": "authn-scram-builtin_db:authentication"
-                        }
-                    ]
-                }
             }
         ],
         "full_name": "gateway:stomp",
@@ -10935,7 +9540,7 @@
         ]
     },
     {
-        "desc": "Settings for the TCP listener.",
+        "desc": "Settings for TCP listener.",
         "fields": [
             {
                 "aliases": [],
@@ -11050,161 +9655,6 @@
             },
             {
                 "aliases": [],
-                "desc": "网关的认证器配置，对该网关下所以的监听器生效。如果每个监听器需要配置不同的认证器，需要配置监听器下的 <code>authentication</code> 字段。",
-                "examples": {
-                    "jwt": {
-                        "summary": "JWT authentication",
-                        "value": {
-                            "algorithm": "hmac-based",
-                            "mechanism": "jwt",
-                            "secret": "mysecret",
-                            "secret_base64_encoded": false,
-                            "use_jwks": false,
-                            "verify_claims": {
-                                "username": "${username}"
-                            }
-                        }
-                    },
-                    "password_based:built_in_database": {
-                        "summary": "Built-in password_based authentication",
-                        "value": {
-                            "backend": "built_in_database",
-                            "mechanism": "password_based",
-                            "password_hash_algorithm": {
-                                "name": "sha256",
-                                "salt_position": "suffix"
-                            },
-                            "user_id_type": "username"
-                        }
-                    },
-                    "password_based:http": {
-                        "summary": "password_based authentication through external HTTP API",
-                        "value": {
-                            "backend": "http",
-                            "body": {
-                                "password": "${password}",
-                                "username": "${username}"
-                            },
-                            "connect_timeout": 5000,
-                            "enable_pipelining": 100,
-                            "headers": {
-                                "content-type": "application/json"
-                            },
-                            "mechanism": "password_based",
-                            "method": "post",
-                            "pool_size": 8,
-                            "request_timeout": 5000,
-                            "ssl": {
-                                "enable": false
-                            },
-                            "url": "http://127.0.0.1:18083"
-                        }
-                    },
-                    "password_based:mongodb": {
-                        "summary": "password_based authentication with MongoDB backend",
-                        "value": {
-                            "backend": "mongodb",
-                            "collection": "users",
-                            "database": "example",
-                            "filter": {
-                                "username": "${username}"
-                            },
-                            "is_superuser_field": "is_superuser",
-                            "mechanism": "password_based",
-                            "password_hash_algorithm": {
-                                "name": "sha256",
-                                "salt_position": "suffix"
-                            },
-                            "password_hash_field": "password_hash",
-                            "salt_field": "salt",
-                            "server": "127.0.0.1:27017"
-                        }
-                    },
-                    "password_based:redis": {
-                        "summary": "password_based authentication with Redis backend",
-                        "value": {
-                            "backend": "redis",
-                            "cmd": "HMGET ${username} password_hash salt",
-                            "database": 0,
-                            "mechanism": "password_based",
-                            "password_hash_algorithm": {
-                                "name": "sha256",
-                                "salt_position": "suffix"
-                            },
-                            "redis_type": "single",
-                            "server": "127.0.0.1:6379"
-                        }
-                    }
-                },
-                "name": "authentication",
-                "type": {
-                    "kind": "union",
-                    "members": [
-                        {
-                            "kind": "struct",
-                            "name": "authn-builtin_db:authentication"
-                        },
-                        {
-                            "kind": "struct",
-                            "name": "authn-mysql:authentication"
-                        },
-                        {
-                            "kind": "struct",
-                            "name": "authn-postgresql:authentication"
-                        },
-                        {
-                            "kind": "struct",
-                            "name": "authn-mongodb:standalone"
-                        },
-                        {
-                            "kind": "struct",
-                            "name": "authn-mongodb:replica-set"
-                        },
-                        {
-                            "kind": "struct",
-                            "name": "authn-mongodb:sharded-cluster"
-                        },
-                        {
-                            "kind": "struct",
-                            "name": "authn-redis:standalone"
-                        },
-                        {
-                            "kind": "struct",
-                            "name": "authn-redis:cluster"
-                        },
-                        {
-                            "kind": "struct",
-                            "name": "authn-redis:sentinel"
-                        },
-                        {
-                            "kind": "struct",
-                            "name": "authn-http:get"
-                        },
-                        {
-                            "kind": "struct",
-                            "name": "authn-http:post"
-                        },
-                        {
-                            "kind": "struct",
-                            "name": "authn-jwt:hmac-based"
-                        },
-                        {
-                            "kind": "struct",
-                            "name": "authn-jwt:public-key"
-                        },
-                        {
-                            "kind": "struct",
-                            "name": "authn-jwt:jwks"
-                        },
-                        {
-                            "kind": "struct",
-                            "name": "authn-scram-builtin_db:authentication"
-                        }
-                    ]
-                }
-            },
-            {
-                "aliases": [],
                 "default": {
                     "hocon": "true",
                     "oneliner": true
@@ -11258,7 +9708,7 @@
         "fields": [
             {
                 "aliases": [],
-                "desc": "",
+                "desc": "从监听器名称到配置参数的映射。",
                 "name": "tcp",
                 "type": {
                     "kind": "map",
@@ -11271,7 +9721,7 @@
             },
             {
                 "aliases": [],
-                "desc": "",
+                "desc": "从监听器名称到配置参数的映射。",
                 "name": "ssl",
                 "type": {
                     "kind": "map",
@@ -11292,11 +9742,11 @@
         ]
     },
     {
-        "desc": "Settings for the listeners.",
+        "desc": "Settings for TCP and UDP listeners.",
         "fields": [
             {
                 "aliases": [],
-                "desc": "",
+                "desc": "从监听器名称到配置参数的映射。",
                 "name": "tcp",
                 "type": {
                     "kind": "map",
@@ -11309,7 +9759,7 @@
             },
             {
                 "aliases": [],
-                "desc": "",
+                "desc": "从监听器名称到配置参数的映射。",
                 "name": "ssl",
                 "type": {
                     "kind": "map",
@@ -11322,7 +9772,7 @@
             },
             {
                 "aliases": [],
-                "desc": "",
+                "desc": "从监听器名称到配置参数的映射。",
                 "name": "udp",
                 "type": {
                     "kind": "map",
@@ -11335,7 +9785,7 @@
             },
             {
                 "aliases": [],
-                "desc": "",
+                "desc": "从监听器名称到配置参数的映射。",
                 "name": "dtls",
                 "type": {
                     "kind": "map",
@@ -11395,7 +9845,7 @@
         ]
     },
     {
-        "desc": "Settings for the UDP listener.",
+        "desc": "Settings for UDP listener.",
         "fields": [
             {
                 "aliases": [],
@@ -11467,161 +9917,6 @@
             },
             {
                 "aliases": [],
-                "desc": "网关的认证器配置，对该网关下所以的监听器生效。如果每个监听器需要配置不同的认证器，需要配置监听器下的 <code>authentication</code> 字段。",
-                "examples": {
-                    "jwt": {
-                        "summary": "JWT authentication",
-                        "value": {
-                            "algorithm": "hmac-based",
-                            "mechanism": "jwt",
-                            "secret": "mysecret",
-                            "secret_base64_encoded": false,
-                            "use_jwks": false,
-                            "verify_claims": {
-                                "username": "${username}"
-                            }
-                        }
-                    },
-                    "password_based:built_in_database": {
-                        "summary": "Built-in password_based authentication",
-                        "value": {
-                            "backend": "built_in_database",
-                            "mechanism": "password_based",
-                            "password_hash_algorithm": {
-                                "name": "sha256",
-                                "salt_position": "suffix"
-                            },
-                            "user_id_type": "username"
-                        }
-                    },
-                    "password_based:http": {
-                        "summary": "password_based authentication through external HTTP API",
-                        "value": {
-                            "backend": "http",
-                            "body": {
-                                "password": "${password}",
-                                "username": "${username}"
-                            },
-                            "connect_timeout": 5000,
-                            "enable_pipelining": 100,
-                            "headers": {
-                                "content-type": "application/json"
-                            },
-                            "mechanism": "password_based",
-                            "method": "post",
-                            "pool_size": 8,
-                            "request_timeout": 5000,
-                            "ssl": {
-                                "enable": false
-                            },
-                            "url": "http://127.0.0.1:18083"
-                        }
-                    },
-                    "password_based:mongodb": {
-                        "summary": "password_based authentication with MongoDB backend",
-                        "value": {
-                            "backend": "mongodb",
-                            "collection": "users",
-                            "database": "example",
-                            "filter": {
-                                "username": "${username}"
-                            },
-                            "is_superuser_field": "is_superuser",
-                            "mechanism": "password_based",
-                            "password_hash_algorithm": {
-                                "name": "sha256",
-                                "salt_position": "suffix"
-                            },
-                            "password_hash_field": "password_hash",
-                            "salt_field": "salt",
-                            "server": "127.0.0.1:27017"
-                        }
-                    },
-                    "password_based:redis": {
-                        "summary": "password_based authentication with Redis backend",
-                        "value": {
-                            "backend": "redis",
-                            "cmd": "HMGET ${username} password_hash salt",
-                            "database": 0,
-                            "mechanism": "password_based",
-                            "password_hash_algorithm": {
-                                "name": "sha256",
-                                "salt_position": "suffix"
-                            },
-                            "redis_type": "single",
-                            "server": "127.0.0.1:6379"
-                        }
-                    }
-                },
-                "name": "authentication",
-                "type": {
-                    "kind": "union",
-                    "members": [
-                        {
-                            "kind": "struct",
-                            "name": "authn-builtin_db:authentication"
-                        },
-                        {
-                            "kind": "struct",
-                            "name": "authn-mysql:authentication"
-                        },
-                        {
-                            "kind": "struct",
-                            "name": "authn-postgresql:authentication"
-                        },
-                        {
-                            "kind": "struct",
-                            "name": "authn-mongodb:standalone"
-                        },
-                        {
-                            "kind": "struct",
-                            "name": "authn-mongodb:replica-set"
-                        },
-                        {
-                            "kind": "struct",
-                            "name": "authn-mongodb:sharded-cluster"
-                        },
-                        {
-                            "kind": "struct",
-                            "name": "authn-redis:standalone"
-                        },
-                        {
-                            "kind": "struct",
-                            "name": "authn-redis:cluster"
-                        },
-                        {
-                            "kind": "struct",
-                            "name": "authn-redis:sentinel"
-                        },
-                        {
-                            "kind": "struct",
-                            "name": "authn-http:get"
-                        },
-                        {
-                            "kind": "struct",
-                            "name": "authn-http:post"
-                        },
-                        {
-                            "kind": "struct",
-                            "name": "authn-jwt:hmac-based"
-                        },
-                        {
-                            "kind": "struct",
-                            "name": "authn-jwt:public-key"
-                        },
-                        {
-                            "kind": "struct",
-                            "name": "authn-jwt:jwks"
-                        },
-                        {
-                            "kind": "struct",
-                            "name": "authn-scram-builtin_db:authentication"
-                        }
-                    ]
-                }
-            },
-            {
-                "aliases": [],
                 "default": {
                     "hocon": "true",
                     "oneliner": true
@@ -11677,7 +9972,7 @@
         "fields": [
             {
                 "aliases": [],
-                "desc": "",
+                "desc": "从监听器名称到配置参数的映射。",
                 "name": "udp",
                 "type": {
                     "kind": "map",
@@ -11690,7 +9985,7 @@
             },
             {
                 "aliases": [],
-                "desc": "",
+                "desc": "从监听器名称到配置参数的映射。",
                 "name": "dtls",
                 "type": {
                     "kind": "map",
@@ -11713,7 +10008,7 @@
         ]
     },
     {
-        "desc": "Settings for the UDP sockets.",
+        "desc": "Settings for UDP sockets.",
         "fields": [
             {
                 "aliases": [],
@@ -13488,6 +11783,9 @@
                     "oneliner": true
                 },
                 "desc": "授权数据源。<br/>\n授权（ACL）数据源的列表。\n它被设计为一个数组，而不是一个散列映射，\n所以可以作为链式访问控制。<br/>\n\n当授权一个 'publish' 或 'subscribe' 行为时，\n该配置列表中的所有数据源将按顺序进行检查。\n如果在某个客户端未找到时(使用 ClientID 或 Username)。\n将会移动到下一个数据源。直至得到 'allow' 或 'deny' 的结果。<br/>\n\n如果在任何数据源中都未找到对应的客户端信息。\n配置的默认行为 ('authorization.no_match') 将生效。<br/>\n\n注意：\n数据源使用 'type' 进行标识。\n使用同一类型的数据源多于一次不被允许。",
+                "extra": {
+                    "doc_lift": true
+                },
                 "name": "sources",
                 "raw_default": [],
                 "type": {
@@ -15102,28 +13400,7 @@
         "full_name": "topology",
         "paths": [
             "authentication.$INDEX.topology",
-            "authorization.sources.$INDEX.topology",
-            "gateway.coap.authentication.topology",
-            "gateway.coap.listeners.dtls.$name.authentication.topology",
-            "gateway.coap.listeners.udp.$name.authentication.topology",
-            "gateway.exproto.authentication.topology",
-            "gateway.exproto.listeners.dtls.$name.authentication.topology",
-            "gateway.exproto.listeners.ssl.$name.authentication.topology",
-            "gateway.exproto.listeners.tcp.$name.authentication.topology",
-            "gateway.exproto.listeners.udp.$name.authentication.topology",
-            "gateway.lwm2m.authentication.topology",
-            "gateway.lwm2m.listeners.dtls.$name.authentication.topology",
-            "gateway.lwm2m.listeners.udp.$name.authentication.topology",
-            "gateway.mqttsn.authentication.topology",
-            "gateway.mqttsn.listeners.dtls.$name.authentication.topology",
-            "gateway.mqttsn.listeners.udp.$name.authentication.topology",
-            "gateway.stomp.authentication.topology",
-            "gateway.stomp.listeners.ssl.$name.authentication.topology",
-            "gateway.stomp.listeners.tcp.$name.authentication.topology",
-            "listeners.ssl.$name.authentication.$INDEX.topology",
-            "listeners.tcp.$name.authentication.$INDEX.topology",
-            "listeners.ws.$name.authentication.$INDEX.topology",
-            "listeners.wss.$name.authentication.$INDEX.topology"
+            "authorization.sources.$INDEX.topology"
         ],
         "tags": []
     },
@@ -15280,7 +13557,7 @@
         "fields": [
             {
                 "aliases": [],
-                "desc": "TCP 连接建立后，如果在 <code>idle_timeout</code> 指定的时间内未收到客户端的 MQTT CONNECT 报文，则连接将被断开。\n如果连接在 CONNECT 报文被 EMQX 接受之后空闲超过该时长，那么服务这个连接的 Erlang 进程会进入休眠以节省系统资源。\n注意，该配置值如果设置过大的情况下，如果大量恶意客户端只连接，但不发任何数据，可能会导致系统资源被恶意消耗。",
+                "desc": "设置连接被断开或进入休眠状态前的等待时间，空闲超时后，\n  - 如暂未收到客户端的 CONNECT 报文，连接将断开；\n  - 如已收到客户端的 CONNECT 报文，连接将进入休眠模式以节省系统资源。\n\n注意：请合理设置该参数值，如等待时间设置过长，可能造成系统资源的浪费。",
                 "name": "idle_timeout",
                 "type": {
                     "kind": "union",
@@ -15379,7 +13656,7 @@
             },
             {
                 "aliases": [],
-                "desc": "是否为 MQTT v3.1.1/v3.1.0 客户端忽略投递自己发布的消息，类似于 MQTT 5.0 中的 <code>No Local</code> 订阅选项。",
+                "desc": "设置由 MQTT v3.1.1/v3.1.0 客户端发布的消息是否将转发给其本身；类似 MQTT 5.0 协议中的 <code>No Local</code> 选项。",
                 "name": "ignore_loop_deliver",
                 "type": {
                     "kind": "primitive",
@@ -15388,7 +13665,7 @@
             },
             {
                 "aliases": [],
-                "desc": "是否以严格模式解析 MQTT 消息。\n当设置为 true 时，例如客户端 ID、主题名称等中的无效 utf8 字符串将导致客户端断开连接。",
+                "desc": "是否以严格模式解析 MQTT 消息。\n严格模式下，如客户端 ID、主题名称等中包含无效 utf8 字符串，连接将被断开。",
                 "name": "strict_mode",
                 "type": {
                     "kind": "primitive",
@@ -15397,7 +13674,7 @@
             },
             {
                 "aliases": [],
-                "desc": "指定返回给客户端的响应信息。如果设置为 \"\"，则禁用此功能。仅适用于使用 MQTT 5.0 协议的客户端。",
+                "desc": "UTF-8 字符串，用于指定返回给客户端的响应主题，如 <code>reqrsp/</code>，此时请求和应答客户端都需要使用 <code>reqrsp/</code> 前缀的主题来完成通讯。\n如希望禁用此功能，请在下方的文字框中输入<code>\"\"</code>；仅适用于 MQTT 5.0 客户端。",
                 "name": "response_information",
                 "type": {
                     "kind": "primitive",
@@ -15406,7 +13683,7 @@
             },
             {
                 "aliases": [],
-                "desc": "EMQX 要求客户端使用的保活时间，配置为 <code>disabled</code> 表示将使用客户端指定的保活时间。需要用到 MQTT 5.0 中的 <code>Server Keep Alive</code>，因此仅适用于使用 MQTT 5.0 协议的客户端。",
+                "desc": "EMQX 要求的保活时间，如设为 disabled，则将使用客户端指定的保持连接时间；仅适用于 MQTT 5.0 客户端。",
                 "name": "server_keepalive",
                 "type": {
                     "kind": "union",
@@ -15424,7 +13701,7 @@
             },
             {
                 "aliases": [],
-                "desc": "Broker 判定客户端保活超时使用的退避乘数。如果 EMQX 在 <code>Keep Alive * Backoff * 2</code> 秒内未收到任何报文，EMQX 将关闭当前连接。",
+                "desc": "EMQX 判定客户端保活超时使用的阈值系数。计算公式为：Keep Alive * Backoff * 2",
                 "name": "keepalive_backoff",
                 "type": {
                     "kind": "primitive",
@@ -15571,7 +13848,7 @@
             },
             {
                 "aliases": [],
-                "desc": "是否使用用户名作为客户端 ID。\n此设置的作用时间晚于 <code>使用对端证书作为用户名</code>（<code>peer_cert_as_username</code>） 和 <code>使用对端证书作为客户端 ID</code>（<code>peer_cert_as_clientid</code>）。",
+                "desc": "是否使用用户名作为客户端 ID。\n此设置的作用时间晚于 <code>对端证书作为用户名</code> 和 <code>对端证书作为客户端 ID</code>。",
                 "name": "use_username_as_clientid",
                 "type": {
                     "kind": "primitive",
@@ -15580,7 +13857,7 @@
             },
             {
                 "aliases": [],
-                "desc": "使用对端证书中的 CN、DN 字段或整个证书内容来作为用户名。仅适用于 TLS 连接。\n目前支持配置为以下内容：\n- <code>cn</code>: 取证书的 CN 字段作为 Username\n- <code>dn</code>: 取证书的 DN 字段作为 Username\n- <code>crt</code>: 取 <code>DER</code> 或 <code>PEM</code> 证书的内容作为 Username\n- <code>pem</code>: 将 <code>DER</code> 证书内容转换为 <code>PEM</code> 格式后作为 Username\n- <code>md5</code>: 取 <code>DER</code> 或 <code>PEM</code> 证书的内容的 MD5 值作为 Username",
+                "desc": "使用对端证书中的 CN、DN 字段或整个证书内容来作为用户名；仅适用于 TLS 连接。\n目前支持：\n- <code>cn</code>: 取证书的 CN 字段\n- <code>dn</code>: 取证书的 DN 字段\n- <code>crt</code>: 取 <code>DER</code> 或 <code>PEM</code> 的证书内容\n- <code>pem</code>: 将 <code>DER</code> 证书转换为 <code>PEM</code> 格式作为用户名\n- <code>md5</code>: 取 <code>DER</code> 或 <code>PEM</code> 证书内容的 MD5 值",
                 "name": "peer_cert_as_username",
                 "type": {
                     "kind": "enum",
@@ -15596,7 +13873,7 @@
             },
             {
                 "aliases": [],
-                "desc": "使用对端证书中的 CN、DN 字段或整个证书内容来作为客户端 ID。仅适用于 TLS 连接。\n目前支持配置为以下内容：\n- <code>cn</code>: 取证书的 CN 字段作为 Client ID\n- <code>dn</code>: 取证书的 DN 字段作为 Client ID\n- <code>crt</code>: 取 <code>DER</code> 或 <code>PEM</code> 证书的内容作为 Client ID\n- <code>pem</code>: 将 <code>DER</code> 证书内容转换为 <code>PEM</code> 格式后作为 Client ID\n- <code>md5</code>: 取 <code>DER</code> 或 <code>PEM</code> 证书的内容的 MD5 值作为 Client ID",
+                "desc": "使用对端证书中的 CN、DN 字段或整个证书内容来作为客户端 ID。仅适用于 TLS 连接；\n目前支持：\n- <code>cn</code>: 取证书的 CN 字段\n- <code>dn</code>: 取证书的 DN 字段\n- <code>crt</code>: 取 <code>DER</code> 或 <code>PEM</code> 证书的内容\n- <code>pem</code>: 将 <code>DER</code> 证书内容转换为 <code>PEM</code> 格式作为客户端 ID\n- <code>md5</code>: 取 <code>DER</code> 或 <code>PEM</code> 证书内容的 MD5 值",
                 "name": "peer_cert_as_clientid",
                 "type": {
                     "kind": "enum",
@@ -15776,28 +14053,7 @@
         ],
         "full_name": "authn-builtin_db:authentication",
         "paths": [
-            "authentication.$INDEX",
-            "gateway.coap.authentication",
-            "gateway.coap.listeners.dtls.$name.authentication",
-            "gateway.coap.listeners.udp.$name.authentication",
-            "gateway.exproto.authentication",
-            "gateway.exproto.listeners.dtls.$name.authentication",
-            "gateway.exproto.listeners.ssl.$name.authentication",
-            "gateway.exproto.listeners.tcp.$name.authentication",
-            "gateway.exproto.listeners.udp.$name.authentication",
-            "gateway.lwm2m.authentication",
-            "gateway.lwm2m.listeners.dtls.$name.authentication",
-            "gateway.lwm2m.listeners.udp.$name.authentication",
-            "gateway.mqttsn.authentication",
-            "gateway.mqttsn.listeners.dtls.$name.authentication",
-            "gateway.mqttsn.listeners.udp.$name.authentication",
-            "gateway.stomp.authentication",
-            "gateway.stomp.listeners.ssl.$name.authentication",
-            "gateway.stomp.listeners.tcp.$name.authentication",
-            "listeners.ssl.$name.authentication.$INDEX",
-            "listeners.tcp.$name.authentication.$INDEX",
-            "listeners.ws.$name.authentication.$INDEX",
-            "listeners.wss.$name.authentication.$INDEX"
+            "authentication.$INDEX"
         ],
         "tags": [
             "Authentication"
@@ -15818,28 +14074,7 @@
         ],
         "full_name": "authn-hash:bcrypt",
         "paths": [
-            "authentication.$INDEX.password_hash_algorithm",
-            "gateway.coap.authentication.password_hash_algorithm",
-            "gateway.coap.listeners.dtls.$name.authentication.password_hash_algorithm",
-            "gateway.coap.listeners.udp.$name.authentication.password_hash_algorithm",
-            "gateway.exproto.authentication.password_hash_algorithm",
-            "gateway.exproto.listeners.dtls.$name.authentication.password_hash_algorithm",
-            "gateway.exproto.listeners.ssl.$name.authentication.password_hash_algorithm",
-            "gateway.exproto.listeners.tcp.$name.authentication.password_hash_algorithm",
-            "gateway.exproto.listeners.udp.$name.authentication.password_hash_algorithm",
-            "gateway.lwm2m.authentication.password_hash_algorithm",
-            "gateway.lwm2m.listeners.dtls.$name.authentication.password_hash_algorithm",
-            "gateway.lwm2m.listeners.udp.$name.authentication.password_hash_algorithm",
-            "gateway.mqttsn.authentication.password_hash_algorithm",
-            "gateway.mqttsn.listeners.dtls.$name.authentication.password_hash_algorithm",
-            "gateway.mqttsn.listeners.udp.$name.authentication.password_hash_algorithm",
-            "gateway.stomp.authentication.password_hash_algorithm",
-            "gateway.stomp.listeners.ssl.$name.authentication.password_hash_algorithm",
-            "gateway.stomp.listeners.tcp.$name.authentication.password_hash_algorithm",
-            "listeners.ssl.$name.authentication.$INDEX.password_hash_algorithm",
-            "listeners.tcp.$name.authentication.$INDEX.password_hash_algorithm",
-            "listeners.ws.$name.authentication.$INDEX.password_hash_algorithm",
-            "listeners.wss.$name.authentication.$INDEX.password_hash_algorithm"
+            "authentication.$INDEX.password_hash_algorithm"
         ],
         "tags": []
     },
@@ -15875,28 +14110,7 @@
         ],
         "full_name": "authn-hash:bcrypt_rw",
         "paths": [
-            "authentication.$INDEX.password_hash_algorithm",
-            "gateway.coap.authentication.password_hash_algorithm",
-            "gateway.coap.listeners.dtls.$name.authentication.password_hash_algorithm",
-            "gateway.coap.listeners.udp.$name.authentication.password_hash_algorithm",
-            "gateway.exproto.authentication.password_hash_algorithm",
-            "gateway.exproto.listeners.dtls.$name.authentication.password_hash_algorithm",
-            "gateway.exproto.listeners.ssl.$name.authentication.password_hash_algorithm",
-            "gateway.exproto.listeners.tcp.$name.authentication.password_hash_algorithm",
-            "gateway.exproto.listeners.udp.$name.authentication.password_hash_algorithm",
-            "gateway.lwm2m.authentication.password_hash_algorithm",
-            "gateway.lwm2m.listeners.dtls.$name.authentication.password_hash_algorithm",
-            "gateway.lwm2m.listeners.udp.$name.authentication.password_hash_algorithm",
-            "gateway.mqttsn.authentication.password_hash_algorithm",
-            "gateway.mqttsn.listeners.dtls.$name.authentication.password_hash_algorithm",
-            "gateway.mqttsn.listeners.udp.$name.authentication.password_hash_algorithm",
-            "gateway.stomp.authentication.password_hash_algorithm",
-            "gateway.stomp.listeners.ssl.$name.authentication.password_hash_algorithm",
-            "gateway.stomp.listeners.tcp.$name.authentication.password_hash_algorithm",
-            "listeners.ssl.$name.authentication.$INDEX.password_hash_algorithm",
-            "listeners.tcp.$name.authentication.$INDEX.password_hash_algorithm",
-            "listeners.ws.$name.authentication.$INDEX.password_hash_algorithm",
-            "listeners.wss.$name.authentication.$INDEX.password_hash_algorithm"
+            "authentication.$INDEX.password_hash_algorithm"
         ],
         "tags": []
     },
@@ -15951,28 +14165,7 @@
         ],
         "full_name": "authn-hash:pbkdf2",
         "paths": [
-            "authentication.$INDEX.password_hash_algorithm",
-            "gateway.coap.authentication.password_hash_algorithm",
-            "gateway.coap.listeners.dtls.$name.authentication.password_hash_algorithm",
-            "gateway.coap.listeners.udp.$name.authentication.password_hash_algorithm",
-            "gateway.exproto.authentication.password_hash_algorithm",
-            "gateway.exproto.listeners.dtls.$name.authentication.password_hash_algorithm",
-            "gateway.exproto.listeners.ssl.$name.authentication.password_hash_algorithm",
-            "gateway.exproto.listeners.tcp.$name.authentication.password_hash_algorithm",
-            "gateway.exproto.listeners.udp.$name.authentication.password_hash_algorithm",
-            "gateway.lwm2m.authentication.password_hash_algorithm",
-            "gateway.lwm2m.listeners.dtls.$name.authentication.password_hash_algorithm",
-            "gateway.lwm2m.listeners.udp.$name.authentication.password_hash_algorithm",
-            "gateway.mqttsn.authentication.password_hash_algorithm",
-            "gateway.mqttsn.listeners.dtls.$name.authentication.password_hash_algorithm",
-            "gateway.mqttsn.listeners.udp.$name.authentication.password_hash_algorithm",
-            "gateway.stomp.authentication.password_hash_algorithm",
-            "gateway.stomp.listeners.ssl.$name.authentication.password_hash_algorithm",
-            "gateway.stomp.listeners.tcp.$name.authentication.password_hash_algorithm",
-            "listeners.ssl.$name.authentication.$INDEX.password_hash_algorithm",
-            "listeners.tcp.$name.authentication.$INDEX.password_hash_algorithm",
-            "listeners.ws.$name.authentication.$INDEX.password_hash_algorithm",
-            "listeners.wss.$name.authentication.$INDEX.password_hash_algorithm"
+            "authentication.$INDEX.password_hash_algorithm"
         ],
         "tags": []
     },
@@ -16015,28 +14208,7 @@
         ],
         "full_name": "authn-hash:simple",
         "paths": [
-            "authentication.$INDEX.password_hash_algorithm",
-            "gateway.coap.authentication.password_hash_algorithm",
-            "gateway.coap.listeners.dtls.$name.authentication.password_hash_algorithm",
-            "gateway.coap.listeners.udp.$name.authentication.password_hash_algorithm",
-            "gateway.exproto.authentication.password_hash_algorithm",
-            "gateway.exproto.listeners.dtls.$name.authentication.password_hash_algorithm",
-            "gateway.exproto.listeners.ssl.$name.authentication.password_hash_algorithm",
-            "gateway.exproto.listeners.tcp.$name.authentication.password_hash_algorithm",
-            "gateway.exproto.listeners.udp.$name.authentication.password_hash_algorithm",
-            "gateway.lwm2m.authentication.password_hash_algorithm",
-            "gateway.lwm2m.listeners.dtls.$name.authentication.password_hash_algorithm",
-            "gateway.lwm2m.listeners.udp.$name.authentication.password_hash_algorithm",
-            "gateway.mqttsn.authentication.password_hash_algorithm",
-            "gateway.mqttsn.listeners.dtls.$name.authentication.password_hash_algorithm",
-            "gateway.mqttsn.listeners.udp.$name.authentication.password_hash_algorithm",
-            "gateway.stomp.authentication.password_hash_algorithm",
-            "gateway.stomp.listeners.ssl.$name.authentication.password_hash_algorithm",
-            "gateway.stomp.listeners.tcp.$name.authentication.password_hash_algorithm",
-            "listeners.ssl.$name.authentication.$INDEX.password_hash_algorithm",
-            "listeners.tcp.$name.authentication.$INDEX.password_hash_algorithm",
-            "listeners.ws.$name.authentication.$INDEX.password_hash_algorithm",
-            "listeners.wss.$name.authentication.$INDEX.password_hash_algorithm"
+            "authentication.$INDEX.password_hash_algorithm"
         ],
         "tags": []
     },
@@ -16223,28 +14395,7 @@
         ],
         "full_name": "authn-http:get",
         "paths": [
-            "authentication.$INDEX",
-            "gateway.coap.authentication",
-            "gateway.coap.listeners.dtls.$name.authentication",
-            "gateway.coap.listeners.udp.$name.authentication",
-            "gateway.exproto.authentication",
-            "gateway.exproto.listeners.dtls.$name.authentication",
-            "gateway.exproto.listeners.ssl.$name.authentication",
-            "gateway.exproto.listeners.tcp.$name.authentication",
-            "gateway.exproto.listeners.udp.$name.authentication",
-            "gateway.lwm2m.authentication",
-            "gateway.lwm2m.listeners.dtls.$name.authentication",
-            "gateway.lwm2m.listeners.udp.$name.authentication",
-            "gateway.mqttsn.authentication",
-            "gateway.mqttsn.listeners.dtls.$name.authentication",
-            "gateway.mqttsn.listeners.udp.$name.authentication",
-            "gateway.stomp.authentication",
-            "gateway.stomp.listeners.ssl.$name.authentication",
-            "gateway.stomp.listeners.tcp.$name.authentication",
-            "listeners.ssl.$name.authentication.$INDEX",
-            "listeners.tcp.$name.authentication.$INDEX",
-            "listeners.ws.$name.authentication.$INDEX",
-            "listeners.wss.$name.authentication.$INDEX"
+            "authentication.$INDEX"
         ],
         "tags": [
             "Authentication"
@@ -16434,28 +14585,7 @@
         ],
         "full_name": "authn-http:post",
         "paths": [
-            "authentication.$INDEX",
-            "gateway.coap.authentication",
-            "gateway.coap.listeners.dtls.$name.authentication",
-            "gateway.coap.listeners.udp.$name.authentication",
-            "gateway.exproto.authentication",
-            "gateway.exproto.listeners.dtls.$name.authentication",
-            "gateway.exproto.listeners.ssl.$name.authentication",
-            "gateway.exproto.listeners.tcp.$name.authentication",
-            "gateway.exproto.listeners.udp.$name.authentication",
-            "gateway.lwm2m.authentication",
-            "gateway.lwm2m.listeners.dtls.$name.authentication",
-            "gateway.lwm2m.listeners.udp.$name.authentication",
-            "gateway.mqttsn.authentication",
-            "gateway.mqttsn.listeners.dtls.$name.authentication",
-            "gateway.mqttsn.listeners.udp.$name.authentication",
-            "gateway.stomp.authentication",
-            "gateway.stomp.listeners.ssl.$name.authentication",
-            "gateway.stomp.listeners.tcp.$name.authentication",
-            "listeners.ssl.$name.authentication.$INDEX",
-            "listeners.tcp.$name.authentication.$INDEX",
-            "listeners.ws.$name.authentication.$INDEX",
-            "listeners.wss.$name.authentication.$INDEX"
+            "authentication.$INDEX"
         ],
         "tags": [
             "Authentication"
@@ -16580,28 +14710,7 @@
         ],
         "full_name": "authn-jwt:hmac-based",
         "paths": [
-            "authentication.$INDEX",
-            "gateway.coap.authentication",
-            "gateway.coap.listeners.dtls.$name.authentication",
-            "gateway.coap.listeners.udp.$name.authentication",
-            "gateway.exproto.authentication",
-            "gateway.exproto.listeners.dtls.$name.authentication",
-            "gateway.exproto.listeners.ssl.$name.authentication",
-            "gateway.exproto.listeners.tcp.$name.authentication",
-            "gateway.exproto.listeners.udp.$name.authentication",
-            "gateway.lwm2m.authentication",
-            "gateway.lwm2m.listeners.dtls.$name.authentication",
-            "gateway.lwm2m.listeners.udp.$name.authentication",
-            "gateway.mqttsn.authentication",
-            "gateway.mqttsn.listeners.dtls.$name.authentication",
-            "gateway.mqttsn.listeners.udp.$name.authentication",
-            "gateway.stomp.authentication",
-            "gateway.stomp.listeners.ssl.$name.authentication",
-            "gateway.stomp.listeners.tcp.$name.authentication",
-            "listeners.ssl.$name.authentication.$INDEX",
-            "listeners.tcp.$name.authentication.$INDEX",
-            "listeners.ws.$name.authentication.$INDEX",
-            "listeners.wss.$name.authentication.$INDEX"
+            "authentication.$INDEX"
         ],
         "tags": [
             "Authentication"
@@ -16745,28 +14854,7 @@
         ],
         "full_name": "authn-jwt:jwks",
         "paths": [
-            "authentication.$INDEX",
-            "gateway.coap.authentication",
-            "gateway.coap.listeners.dtls.$name.authentication",
-            "gateway.coap.listeners.udp.$name.authentication",
-            "gateway.exproto.authentication",
-            "gateway.exproto.listeners.dtls.$name.authentication",
-            "gateway.exproto.listeners.ssl.$name.authentication",
-            "gateway.exproto.listeners.tcp.$name.authentication",
-            "gateway.exproto.listeners.udp.$name.authentication",
-            "gateway.lwm2m.authentication",
-            "gateway.lwm2m.listeners.dtls.$name.authentication",
-            "gateway.lwm2m.listeners.udp.$name.authentication",
-            "gateway.mqttsn.authentication",
-            "gateway.mqttsn.listeners.dtls.$name.authentication",
-            "gateway.mqttsn.listeners.udp.$name.authentication",
-            "gateway.stomp.authentication",
-            "gateway.stomp.listeners.ssl.$name.authentication",
-            "gateway.stomp.listeners.tcp.$name.authentication",
-            "listeners.ssl.$name.authentication.$INDEX",
-            "listeners.tcp.$name.authentication.$INDEX",
-            "listeners.ws.$name.authentication.$INDEX",
-            "listeners.wss.$name.authentication.$INDEX"
+            "authentication.$INDEX"
         ],
         "tags": [
             "Authentication"
@@ -16877,28 +14965,7 @@
         ],
         "full_name": "authn-jwt:public-key",
         "paths": [
-            "authentication.$INDEX",
-            "gateway.coap.authentication",
-            "gateway.coap.listeners.dtls.$name.authentication",
-            "gateway.coap.listeners.udp.$name.authentication",
-            "gateway.exproto.authentication",
-            "gateway.exproto.listeners.dtls.$name.authentication",
-            "gateway.exproto.listeners.ssl.$name.authentication",
-            "gateway.exproto.listeners.tcp.$name.authentication",
-            "gateway.exproto.listeners.udp.$name.authentication",
-            "gateway.lwm2m.authentication",
-            "gateway.lwm2m.listeners.dtls.$name.authentication",
-            "gateway.lwm2m.listeners.udp.$name.authentication",
-            "gateway.mqttsn.authentication",
-            "gateway.mqttsn.listeners.dtls.$name.authentication",
-            "gateway.mqttsn.listeners.udp.$name.authentication",
-            "gateway.stomp.authentication",
-            "gateway.stomp.listeners.ssl.$name.authentication",
-            "gateway.stomp.listeners.tcp.$name.authentication",
-            "listeners.ssl.$name.authentication.$INDEX",
-            "listeners.tcp.$name.authentication.$INDEX",
-            "listeners.ws.$name.authentication.$INDEX",
-            "listeners.wss.$name.authentication.$INDEX"
+            "authentication.$INDEX"
         ],
         "tags": [
             "Authentication"
@@ -17191,28 +15258,7 @@
         ],
         "full_name": "authn-mongodb:replica-set",
         "paths": [
-            "authentication.$INDEX",
-            "gateway.coap.authentication",
-            "gateway.coap.listeners.dtls.$name.authentication",
-            "gateway.coap.listeners.udp.$name.authentication",
-            "gateway.exproto.authentication",
-            "gateway.exproto.listeners.dtls.$name.authentication",
-            "gateway.exproto.listeners.ssl.$name.authentication",
-            "gateway.exproto.listeners.tcp.$name.authentication",
-            "gateway.exproto.listeners.udp.$name.authentication",
-            "gateway.lwm2m.authentication",
-            "gateway.lwm2m.listeners.dtls.$name.authentication",
-            "gateway.lwm2m.listeners.udp.$name.authentication",
-            "gateway.mqttsn.authentication",
-            "gateway.mqttsn.listeners.dtls.$name.authentication",
-            "gateway.mqttsn.listeners.udp.$name.authentication",
-            "gateway.stomp.authentication",
-            "gateway.stomp.listeners.ssl.$name.authentication",
-            "gateway.stomp.listeners.tcp.$name.authentication",
-            "listeners.ssl.$name.authentication.$INDEX",
-            "listeners.tcp.$name.authentication.$INDEX",
-            "listeners.ws.$name.authentication.$INDEX",
-            "listeners.wss.$name.authentication.$INDEX"
+            "authentication.$INDEX"
         ],
         "tags": [
             "Authentication"
@@ -17479,28 +15525,7 @@
         ],
         "full_name": "authn-mongodb:sharded-cluster",
         "paths": [
-            "authentication.$INDEX",
-            "gateway.coap.authentication",
-            "gateway.coap.listeners.dtls.$name.authentication",
-            "gateway.coap.listeners.udp.$name.authentication",
-            "gateway.exproto.authentication",
-            "gateway.exproto.listeners.dtls.$name.authentication",
-            "gateway.exproto.listeners.ssl.$name.authentication",
-            "gateway.exproto.listeners.tcp.$name.authentication",
-            "gateway.exproto.listeners.udp.$name.authentication",
-            "gateway.lwm2m.authentication",
-            "gateway.lwm2m.listeners.dtls.$name.authentication",
-            "gateway.lwm2m.listeners.udp.$name.authentication",
-            "gateway.mqttsn.authentication",
-            "gateway.mqttsn.listeners.dtls.$name.authentication",
-            "gateway.mqttsn.listeners.udp.$name.authentication",
-            "gateway.stomp.authentication",
-            "gateway.stomp.listeners.ssl.$name.authentication",
-            "gateway.stomp.listeners.tcp.$name.authentication",
-            "listeners.ssl.$name.authentication.$INDEX",
-            "listeners.tcp.$name.authentication.$INDEX",
-            "listeners.ws.$name.authentication.$INDEX",
-            "listeners.wss.$name.authentication.$INDEX"
+            "authentication.$INDEX"
         ],
         "tags": [
             "Authentication"
@@ -17767,28 +15792,7 @@
         ],
         "full_name": "authn-mongodb:standalone",
         "paths": [
-            "authentication.$INDEX",
-            "gateway.coap.authentication",
-            "gateway.coap.listeners.dtls.$name.authentication",
-            "gateway.coap.listeners.udp.$name.authentication",
-            "gateway.exproto.authentication",
-            "gateway.exproto.listeners.dtls.$name.authentication",
-            "gateway.exproto.listeners.ssl.$name.authentication",
-            "gateway.exproto.listeners.tcp.$name.authentication",
-            "gateway.exproto.listeners.udp.$name.authentication",
-            "gateway.lwm2m.authentication",
-            "gateway.lwm2m.listeners.dtls.$name.authentication",
-            "gateway.lwm2m.listeners.udp.$name.authentication",
-            "gateway.mqttsn.authentication",
-            "gateway.mqttsn.listeners.dtls.$name.authentication",
-            "gateway.mqttsn.listeners.udp.$name.authentication",
-            "gateway.stomp.authentication",
-            "gateway.stomp.listeners.ssl.$name.authentication",
-            "gateway.stomp.listeners.tcp.$name.authentication",
-            "listeners.ssl.$name.authentication.$INDEX",
-            "listeners.tcp.$name.authentication.$INDEX",
-            "listeners.ws.$name.authentication.$INDEX",
-            "listeners.wss.$name.authentication.$INDEX"
+            "authentication.$INDEX"
         ],
         "tags": [
             "Authentication"
@@ -17965,28 +15969,7 @@
         ],
         "full_name": "authn-mysql:authentication",
         "paths": [
-            "authentication.$INDEX",
-            "gateway.coap.authentication",
-            "gateway.coap.listeners.dtls.$name.authentication",
-            "gateway.coap.listeners.udp.$name.authentication",
-            "gateway.exproto.authentication",
-            "gateway.exproto.listeners.dtls.$name.authentication",
-            "gateway.exproto.listeners.ssl.$name.authentication",
-            "gateway.exproto.listeners.tcp.$name.authentication",
-            "gateway.exproto.listeners.udp.$name.authentication",
-            "gateway.lwm2m.authentication",
-            "gateway.lwm2m.listeners.dtls.$name.authentication",
-            "gateway.lwm2m.listeners.udp.$name.authentication",
-            "gateway.mqttsn.authentication",
-            "gateway.mqttsn.listeners.dtls.$name.authentication",
-            "gateway.mqttsn.listeners.udp.$name.authentication",
-            "gateway.stomp.authentication",
-            "gateway.stomp.listeners.ssl.$name.authentication",
-            "gateway.stomp.listeners.tcp.$name.authentication",
-            "listeners.ssl.$name.authentication.$INDEX",
-            "listeners.tcp.$name.authentication.$INDEX",
-            "listeners.ws.$name.authentication.$INDEX",
-            "listeners.wss.$name.authentication.$INDEX"
+            "authentication.$INDEX"
         ],
         "tags": [
             "Authentication"
@@ -18144,28 +16127,7 @@
         ],
         "full_name": "authn-postgresql:authentication",
         "paths": [
-            "authentication.$INDEX",
-            "gateway.coap.authentication",
-            "gateway.coap.listeners.dtls.$name.authentication",
-            "gateway.coap.listeners.udp.$name.authentication",
-            "gateway.exproto.authentication",
-            "gateway.exproto.listeners.dtls.$name.authentication",
-            "gateway.exproto.listeners.ssl.$name.authentication",
-            "gateway.exproto.listeners.tcp.$name.authentication",
-            "gateway.exproto.listeners.udp.$name.authentication",
-            "gateway.lwm2m.authentication",
-            "gateway.lwm2m.listeners.dtls.$name.authentication",
-            "gateway.lwm2m.listeners.udp.$name.authentication",
-            "gateway.mqttsn.authentication",
-            "gateway.mqttsn.listeners.dtls.$name.authentication",
-            "gateway.mqttsn.listeners.udp.$name.authentication",
-            "gateway.stomp.authentication",
-            "gateway.stomp.listeners.ssl.$name.authentication",
-            "gateway.stomp.listeners.tcp.$name.authentication",
-            "listeners.ssl.$name.authentication.$INDEX",
-            "listeners.tcp.$name.authentication.$INDEX",
-            "listeners.ws.$name.authentication.$INDEX",
-            "listeners.wss.$name.authentication.$INDEX"
+            "authentication.$INDEX"
         ],
         "tags": [
             "Authentication"
@@ -18380,28 +16342,7 @@
         ],
         "full_name": "authn-redis:cluster",
         "paths": [
-            "authentication.$INDEX",
-            "gateway.coap.authentication",
-            "gateway.coap.listeners.dtls.$name.authentication",
-            "gateway.coap.listeners.udp.$name.authentication",
-            "gateway.exproto.authentication",
-            "gateway.exproto.listeners.dtls.$name.authentication",
-            "gateway.exproto.listeners.ssl.$name.authentication",
-            "gateway.exproto.listeners.tcp.$name.authentication",
-            "gateway.exproto.listeners.udp.$name.authentication",
-            "gateway.lwm2m.authentication",
-            "gateway.lwm2m.listeners.dtls.$name.authentication",
-            "gateway.lwm2m.listeners.udp.$name.authentication",
-            "gateway.mqttsn.authentication",
-            "gateway.mqttsn.listeners.dtls.$name.authentication",
-            "gateway.mqttsn.listeners.udp.$name.authentication",
-            "gateway.stomp.authentication",
-            "gateway.stomp.listeners.ssl.$name.authentication",
-            "gateway.stomp.listeners.tcp.$name.authentication",
-            "listeners.ssl.$name.authentication.$INDEX",
-            "listeners.tcp.$name.authentication.$INDEX",
-            "listeners.ws.$name.authentication.$INDEX",
-            "listeners.wss.$name.authentication.$INDEX"
+            "authentication.$INDEX"
         ],
         "tags": [
             "Authentication"
@@ -18578,28 +16519,7 @@
         ],
         "full_name": "authn-redis:sentinel",
         "paths": [
-            "authentication.$INDEX",
-            "gateway.coap.authentication",
-            "gateway.coap.listeners.dtls.$name.authentication",
-            "gateway.coap.listeners.udp.$name.authentication",
-            "gateway.exproto.authentication",
-            "gateway.exproto.listeners.dtls.$name.authentication",
-            "gateway.exproto.listeners.ssl.$name.authentication",
-            "gateway.exproto.listeners.tcp.$name.authentication",
-            "gateway.exproto.listeners.udp.$name.authentication",
-            "gateway.lwm2m.authentication",
-            "gateway.lwm2m.listeners.dtls.$name.authentication",
-            "gateway.lwm2m.listeners.udp.$name.authentication",
-            "gateway.mqttsn.authentication",
-            "gateway.mqttsn.listeners.dtls.$name.authentication",
-            "gateway.mqttsn.listeners.udp.$name.authentication",
-            "gateway.stomp.authentication",
-            "gateway.stomp.listeners.ssl.$name.authentication",
-            "gateway.stomp.listeners.tcp.$name.authentication",
-            "listeners.ssl.$name.authentication.$INDEX",
-            "listeners.tcp.$name.authentication.$INDEX",
-            "listeners.ws.$name.authentication.$INDEX",
-            "listeners.wss.$name.authentication.$INDEX"
+            "authentication.$INDEX"
         ],
         "tags": [
             "Authentication"
@@ -18767,28 +16687,7 @@
         ],
         "full_name": "authn-redis:standalone",
         "paths": [
-            "authentication.$INDEX",
-            "gateway.coap.authentication",
-            "gateway.coap.listeners.dtls.$name.authentication",
-            "gateway.coap.listeners.udp.$name.authentication",
-            "gateway.exproto.authentication",
-            "gateway.exproto.listeners.dtls.$name.authentication",
-            "gateway.exproto.listeners.ssl.$name.authentication",
-            "gateway.exproto.listeners.tcp.$name.authentication",
-            "gateway.exproto.listeners.udp.$name.authentication",
-            "gateway.lwm2m.authentication",
-            "gateway.lwm2m.listeners.dtls.$name.authentication",
-            "gateway.lwm2m.listeners.udp.$name.authentication",
-            "gateway.mqttsn.authentication",
-            "gateway.mqttsn.listeners.dtls.$name.authentication",
-            "gateway.mqttsn.listeners.udp.$name.authentication",
-            "gateway.stomp.authentication",
-            "gateway.stomp.listeners.ssl.$name.authentication",
-            "gateway.stomp.listeners.tcp.$name.authentication",
-            "listeners.ssl.$name.authentication.$INDEX",
-            "listeners.tcp.$name.authentication.$INDEX",
-            "listeners.ws.$name.authentication.$INDEX",
-            "listeners.wss.$name.authentication.$INDEX"
+            "authentication.$INDEX"
         ],
         "tags": [
             "Authentication"
@@ -18863,28 +16762,7 @@
         ],
         "full_name": "authn-scram-builtin_db:authentication",
         "paths": [
-            "authentication.$INDEX",
-            "gateway.coap.authentication",
-            "gateway.coap.listeners.dtls.$name.authentication",
-            "gateway.coap.listeners.udp.$name.authentication",
-            "gateway.exproto.authentication",
-            "gateway.exproto.listeners.dtls.$name.authentication",
-            "gateway.exproto.listeners.ssl.$name.authentication",
-            "gateway.exproto.listeners.tcp.$name.authentication",
-            "gateway.exproto.listeners.udp.$name.authentication",
-            "gateway.lwm2m.authentication",
-            "gateway.lwm2m.listeners.dtls.$name.authentication",
-            "gateway.lwm2m.listeners.udp.$name.authentication",
-            "gateway.mqttsn.authentication",
-            "gateway.mqttsn.listeners.dtls.$name.authentication",
-            "gateway.mqttsn.listeners.udp.$name.authentication",
-            "gateway.stomp.authentication",
-            "gateway.stomp.listeners.ssl.$name.authentication",
-            "gateway.stomp.listeners.tcp.$name.authentication",
-            "listeners.ssl.$name.authentication.$INDEX",
-            "listeners.tcp.$name.authentication.$INDEX",
-            "listeners.ws.$name.authentication.$INDEX",
-            "listeners.wss.$name.authentication.$INDEX"
+            "authentication.$INDEX"
         ],
         "tags": [
             "Authentication"
@@ -19883,28 +17761,7 @@
         "paths": [
             "authentication.$INDEX.request",
             "authorization.sources.$INDEX.request",
-            "bridges.webhook.$name.request",
-            "gateway.coap.authentication.request",
-            "gateway.coap.listeners.dtls.$name.authentication.request",
-            "gateway.coap.listeners.udp.$name.authentication.request",
-            "gateway.exproto.authentication.request",
-            "gateway.exproto.listeners.dtls.$name.authentication.request",
-            "gateway.exproto.listeners.ssl.$name.authentication.request",
-            "gateway.exproto.listeners.tcp.$name.authentication.request",
-            "gateway.exproto.listeners.udp.$name.authentication.request",
-            "gateway.lwm2m.authentication.request",
-            "gateway.lwm2m.listeners.dtls.$name.authentication.request",
-            "gateway.lwm2m.listeners.udp.$name.authentication.request",
-            "gateway.mqttsn.authentication.request",
-            "gateway.mqttsn.listeners.dtls.$name.authentication.request",
-            "gateway.mqttsn.listeners.udp.$name.authentication.request",
-            "gateway.stomp.authentication.request",
-            "gateway.stomp.listeners.ssl.$name.authentication.request",
-            "gateway.stomp.listeners.tcp.$name.authentication.request",
-            "listeners.ssl.$name.authentication.$INDEX.request",
-            "listeners.tcp.$name.authentication.$INDEX.request",
-            "listeners.ws.$name.authentication.$INDEX.request",
-            "listeners.wss.$name.authentication.$INDEX.request"
+            "bridges.webhook.$name.request"
         ],
         "tags": []
     },
