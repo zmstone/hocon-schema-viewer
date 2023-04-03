@@ -45,7 +45,7 @@ export default defineComponent({
 <template>
   <div class="struct-view">
     <br/>
-    <span class='struct-fullname'> {{ struct.full_name }}</span><span>></span>
+    <span class='struct-fullname'> {{ struct.full_name }}</span>
     <ul class="field-list">
       <li v-for="(field, index) in visibleFields(struct)" class="field-item">
         <div class="fieldname">{{ field.name }}</div>
@@ -118,6 +118,8 @@ table td {
 
 table td:first-child {
   text-align: right;
+  font-size: 0.67em;
+  line-height: 2.2em;
 }
 
 table tr:nth-child(even) {
@@ -141,8 +143,8 @@ table th {
 .struct-fullname {
   padding: 8px;
   background-color: #e4f5ea;
-  font-weight: bold;
   border-radius: 4px;
+  font-size: 0.67em;
 }
 
 /* Dark mode styles */

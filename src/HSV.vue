@@ -186,11 +186,11 @@ const liftedStructs = computed(() => {
 }
 
 .nav-list li {
-  padding: 1px 0;
+  padding: 2px 0;
 }
 
 .sub-buttons li {
-  padding: 1px 0;
+  padding: 2px 0;
 }
 
 .nav-list li span {
