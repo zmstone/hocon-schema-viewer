@@ -1,5 +1,5 @@
 import { Struct, Field, visibleFields, isDocLift } from '../interfaces/schema'
-import jsonData from '../assets/schema-en.json'
+import jsonData from '../../public/schemas/latest-en.json'
 
 type StructMap = { [name: string]: number }
 const allStructs = jsonData as Struct[]

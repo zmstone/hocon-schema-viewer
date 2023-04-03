@@ -1,0 +1,11 @@
+[
+  {
+    "name": "Latest(English)",
+    "file": "latest-en.json"
+  },
+  {
+    "name": "Latest(Chinese)",
+    "file": "latest-zh.json"
+  }
+]
+
