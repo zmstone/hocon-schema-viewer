@@ -18,7 +18,7 @@
     "markdown-it-html5-embed": "^1.0.0",
     "pinia": "^2.0.32",
     "vue": "^3.2.47",
-    "vue-router": "^4.1.6"
+    "vue-router": "^4.0.13"
   },
   "devDependencies": {
     "@rushstack/eslint-patch": "^1.2.0",
