@@ -162,10 +162,8 @@ const liftedStructs = computed(() => {
 </script>
 
 <template>
-  <div class="app-container">
-    <div class="sidebar">
-      <SchemaList @select-schema="handleSelectSchema" />
-      <div class="nav-list-box">
+  <div class="sidebar">
+    <div class="nav-list-box">
       <ul class="nav-list" :currentSchema="currentSchema">
         <li v-for="(field, index) in Root.fields" :key="index">
           <span @click="selectTab(index)" :class="{ 'active-tab': selectedTabIndex === index }">
@@ -184,41 +182,35 @@ const liftedStructs = computed(() => {
           </ul>
         </li>
       </ul>
-      </div>
     </div>
-    <div class="content">
-      <div class="desc" v-if="displayType.desc" v-html="renderMarkdown(displayType.desc)"></div>
-      <br />
-      <div class="type_display">
-        <code>{{ displayType.type_display }}</code>
-      </div>
-      <struct-view
-        v-for="(st, i) in liftedStructs"
-        :key="i"
-        :struct="st"
-        :currentSchema="currentSchema"
-      />
+  </div>
+  <div class="content">
+    <div class="desc" v-if="displayType.desc" v-html="renderMarkdown(displayType.desc)"></div>
+    <br />
+    <div class="type_display">
+      <code>{{ displayType.type_display }}</code>
     </div>
+    <struct-view
+      v-for="(st, i) in liftedStructs"
+      :key="i"
+      :struct="st"
+      :currentSchema="currentSchema"
+    />
   </div>
 </template>
 
 <style scoped>
 /* Light mode styles (default) */
-.app-container {
-      display: flex;
-        height: 100vh;
-          overflow: hidden;
-}
 .nav-list-box {
-    display: flex;
-    height: 100vh;
-    overflow-y: scroll;
+  display: flex;
+  height: 100vh;
+  overflow-y: scroll;
 }
 
 .sidebar {
   width: 300px;
-    overflow-y: auto;
-      height: 100%;
+  overflow-y: auto;
+  height: 100%;
   background-color: #fff;
 }
 
@@ -249,8 +241,8 @@ const liftedStructs = computed(() => {
 
 .content {
   flex: 1;
-    overflow-y: auto;
-      height: 100%;
+  overflow-y: auto;
+  height: 100%;
   background-color: #fff;
 }
 
