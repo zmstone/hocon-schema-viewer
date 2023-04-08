@@ -162,9 +162,10 @@ const liftedStructs = computed(() => {
 </script>
 
 <template>
-  <div class="split-view">
+  <div class="app-container">
     <div class="sidebar">
       <SchemaList @select-schema="handleSelectSchema" />
+      <div class="nav-list-box">
       <ul class="nav-list" :currentSchema="currentSchema">
         <li v-for="(field, index) in Root.fields" :key="index">
           <span @click="selectTab(index)" :class="{ 'active-tab': selectedTabIndex === index }">
@@ -183,6 +184,7 @@ const liftedStructs = computed(() => {
           </ul>
         </li>
       </ul>
+      </div>
     </div>
     <div class="content">
       <div class="desc" v-if="displayType.desc" v-html="renderMarkdown(displayType.desc)"></div>
@@ -202,15 +204,21 @@ const liftedStructs = computed(() => {
 
 <style scoped>
 /* Light mode styles (default) */
-.split-view {
-  display: grid;
-  grid-template-columns: min-content 1fr;
-  grid-gap: 20px;
+.app-container {
+      display: flex;
+        height: 100vh;
+          overflow: hidden;
+}
+.nav-list-box {
+    display: flex;
+    height: 100vh;
+    overflow-y: scroll;
 }
 
 .sidebar {
-  border-right: 1px solid #ccc;
-  padding: 10px;
+  width: 300px;
+    overflow-y: auto;
+      height: 100%;
   background-color: #fff;
 }
 
@@ -218,7 +226,6 @@ const liftedStructs = computed(() => {
   list-style-type: none;
   padding: 0;
   margin: 0;
-  display: contents;
 }
 
 .nav-list li {
@@ -242,7 +249,8 @@ const liftedStructs = computed(() => {
 
 .content {
   flex: 1;
-  padding: 10px;
+    overflow-y: auto;
+      height: 100%;
   background-color: #fff;
 }
 
