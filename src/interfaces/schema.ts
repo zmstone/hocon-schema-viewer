@@ -19,6 +19,9 @@ export interface Field {
   raw_default?: string
   type: FieldType
   extra?: Extra
+  // only possible for root fields
+  expands?: DisplayType[]
+  deprecated?: string
 }
 
 export interface DefaultValue {
@@ -70,10 +73,30 @@ export interface UnionFieldType {
   members: FieldType[]
 }
 
+// the type to be displayed with detail
 export interface DisplayType {
-  type_display: string
-  desc: string
+  // the name used in sidebar list, only used for expanded
+  // root level fields
+  list_display?: string
+  // only used for union, map, array
+  type_display?: string
+  // the document of a type
+  // if a type has no doc, then the parent field's doc is used
+  parent_field_doc?: string
+  // the type for detailed fields resolution
   type: FieldType
+}
+
+export function fieldToDisplayType(f: Field) {
+    let res = {
+        list_display: f.name,
+        parent_field_doc: f.desc,
+        type: f.type
+    };
+    if(f.type.kind != 'struct') {
+        res.type_display = typeDisplay(f.type);
+    }
+    return res;
 }
 
 // Dig up all the fist-level structs of a given type
@@ -153,6 +176,10 @@ export function visibleFields(struct) {
     if (field.importance) {
       return field.importance !== 'hidden'
     }
+    // TODO: make user to choose if they want to see deprecated fields
+    if(field.desc && field.desc.startsWith("Deprecated since")) {
+        return false
+    }
     return true
   })
 }
@@ -162,6 +189,84 @@ export function isDocLift(field: Field): boolean {
 }
 
 // remove the module:type() prefix from a type name
-function short(typeName: string, isShort: boolean): string {
+function short(typeName: string): string {
   return typeName.replace(/.*:/, '').replace(/.*\./, '')
+}
+
+// lift structs to root level a field has doc_lift => true annotation.
+// The second arg is a function to help resolving struct from its name.
+// NOTE: this function only goes one level down the struct stack.
+// but does not walk the full type tree.
+export function initialize(root: Struct, findStruct: Function): Field[] {
+  const updatedFields: Field[] = []
+  visibleFields(root).forEach((field) => {
+    updatedFields.push(field) // Keep the parent field
+    const parentName = field.name
+    if (field.type.kind === 'struct') {
+      const subStruct = findStruct(field.type.name)
+      if (subStruct) {
+        subStruct.fields.forEach((subField) => {
+          if (isDocLift(subField)) {
+            subField.name = `${parentName}.${subField.name}` // Update the sub-field name
+            updatedFields.push(subField) // Add the sub-field next to the parent field if doc_lift is true
+          }
+        })
+      }
+    }
+  })
+  // now expand the first level children
+  updatedFields.forEach((f) => {
+    f.expands = getExpands(f.type, findStruct)
+  })
+  return updatedFields
+}
+
+// TODO: fix EMQX authn schema.
+// After the fix, function 'short' should be enough for the same purpose.
+function tidyNames(strings: string[]): string[] {
+  // remove 'authn-' prefix
+  return strings
+    .map((s) => {
+      return s.replace('authn-', '')
+    })
+    .map((s) => {
+      // remove ':authentication' suffix
+      return s.replace(':authentication', '')
+    })
+    .map((s) => {
+      // remove 'authz:' prefix
+      return s.replace('authz:', '')
+    })
+}
+
+// Get one-level expansion for a root field.
+function getExpands(ft: FieldType, findStruct: Function) {
+  if (ft.kind === 'array') {
+    return getExpands(ft.elements, findStruct)
+  }
+  if (ft.kind === 'struct') {
+    const struct = findStruct(ft.name)
+    if (allFieldsAreComplex(struct)) {
+      return visibleFields(struct).map((f) => {
+        return fieldToDisplayType(f);
+      })
+    }
+    return []
+  }
+  if (ft.kind === 'union') {
+    const displayNames = ft.members.map((m) => {
+      return typeDisplay(m)
+    })
+    return tidyNames(displayNames).map((tidyName, i) => {
+      return {
+        list_display: tidyName,
+        type: ft.members[i]
+      }
+    })
+  }
+  return []
+}
+
+function allFieldsAreComplex(t: Struct) {
+  return visibleFields(t).every(isComplexField)
 }

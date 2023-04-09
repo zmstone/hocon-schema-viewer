@@ -5,6 +5,7 @@ import * as schema from '../interfaces/schema'
 export default defineComponent({
   name: 'StructView',
   props: {
+    // the current struct to expand
     currentStruct: {
       type: schema.Struct,
       required: true
@@ -12,41 +13,43 @@ export default defineComponent({
     // render markdown to HTML
     markdownProvider: {
       type: Function,
-        required: true
+      required: true
     },
     // resolve Struct from struct name
     structResolver: {
-        type: Function,
-        required: true
+      type: Function,
+      required: true
     }
+  },
+  setup(props) {
   },
   components: {
     StructView: () => import('./StructView.vue')
   },
   methods: {
     isComplexType(type: schema.FieldType): boolean {
-      return schema.isComplexType(type);
+      return schema.isComplexType(type)
     },
     subStructs(field: schema.Field): schema.FieldType[] {
-      if (field.doc_lift === true) {
-        return [];
+      if (field.extra?.doc_lift === true) {
+        return []
       }
-      return schema.liftStructs(field.type);
+      return schema.liftStructs(field.type)
     },
     typeDisplay(type: schema.FieldType): string {
-      return schema.shortTypeDisplay(type);
+      return schema.shortTypeDisplay(type)
     },
     findStruct(name) {
-        return this.structResolver(name);
+      return this.structResolver(name)
     },
     visibleFields(struct) {
-      return schema.visibleFields(struct);
+      return schema.visibleFields(struct)
     },
     aliasesDisplay(field) {
-      return '[' + field.aliases.join(',') + ']';
+      return '[' + field.aliases.join(',') + ']'
     },
     markdownToHtml(str: string): string {
-      return this.markdownProvider(str);
+      return this.markdownProvider(str)
     }
   }
 })
@@ -54,8 +57,8 @@ export default defineComponent({
 
 <template>
   <div class="struct-view">
-    <br />
-    <span class="struct-fullname"> {{ currentStruct.full_name }}</span>
+
+    <span class="struct-fullname"><code>{{ currentStruct.full_name }}</code></span>
     <ul class="field-list">
       <li v-for="(field, index) in visibleFields(currentStruct)" class="field-item">
         <div class="fieldname">{{ field.name }}</div>
@@ -90,10 +93,10 @@ export default defineComponent({
           v-for="(st, index) in subStructs(field)"
           class="sub-struct"
         >
-          <struct-view
-          :currentStruct="findStruct(st.name)"
-          :markdownProvider="markdownProvider"
-          :structResolver="structResolver"
+          <StructView
+            :currentStruct="findStruct(st.name)"
+            :markdownProvider="markdownProvider"
+            :structResolver="structResolver"
           />
         </div>
       </li>
@@ -102,6 +105,7 @@ export default defineComponent({
 </template>
 
 <style scoped>
+
 .field-list {
   list-style-type: none;
   padding-left: 20px;
@@ -163,6 +167,10 @@ table th {
   background-color: #e4f5ea;
   border-radius: 4px;
   font-size: 0.67em;
+}
+
+.struct-view {
+  padding-top: 10px;
 }
 
 /* Dark mode styles */

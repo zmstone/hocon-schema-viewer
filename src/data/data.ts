@@ -5,6 +5,7 @@ type StructMap = { [name: string]: number }
 let allStructs = jsonData as Struct[]
 let nameIndex: StructMap = {}
 export let Root: Struct = {}
+export let DefaultAllStructs = allStructs
 
 // find a struct by name
 // making use of the index
@@ -15,29 +16,6 @@ export function findStruct(name: string): Struct | undefined {
   console.log('Struct not found: ' + name)
 }
 
-function updateRootFields(root: Struct) {
-  const updatedFields: Field[] = []
-
-  visibleFields(root).forEach((field) => {
-    updatedFields.push(field) // Keep the parent field
-    const parentName = field.name
-    if (field.type.kind === 'struct') {
-      const subStruct = findStruct(field.type.name)
-
-      if (subStruct) {
-        subStruct.fields.forEach((subField) => {
-          if (isDocLift(subField)) {
-            subField.name = `${parentName}.${subField.name}` // Update the sub-field name
-            updatedFields.push(subField) // Add the sub-field next to the parent field if doc_lift is true
-          }
-        })
-      }
-    }
-  })
-
-  root.fields = updatedFields
-}
-
 export function updateSchema(data) {
   allStructs = data as Struct[]
   // index all structs by name
@@ -46,8 +24,6 @@ export function updateSchema(data) {
   }
   // now populate the Root
   Root = allStructs[0]
-  // Update the Root fields
-  updateRootFields(Root)
 }
 
 // initialize
