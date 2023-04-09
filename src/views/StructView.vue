@@ -1,7 +1,6 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 import * as schema from '../interfaces/schema'
-import { findStruct } from '../data/data'
 
 export default defineComponent({
   name: 'StructView',
@@ -10,8 +9,15 @@ export default defineComponent({
       type: schema.Struct,
       required: true
     },
+    // render markdown to HTML
     markdownProvider: {
-      type: Function
+      type: Function,
+        required: true
+    },
+    // resolve Struct from struct name
+    structResolver: {
+        type: Function,
+        required: true
     }
   },
   components: {
@@ -19,26 +25,28 @@ export default defineComponent({
   },
   methods: {
     isComplexType(type: schema.FieldType): boolean {
-      return schema.isComplexType(type)
+      return schema.isComplexType(type);
     },
     subStructs(field: schema.Field): schema.FieldType[] {
       if (field.doc_lift === true) {
-        return []
+        return [];
       }
-      return schema.liftStructs(field.type)
+      return schema.liftStructs(field.type);
     },
     typeDisplay(type: schema.FieldType): string {
-      return schema.shortTypeDisplay(type)
+      return schema.shortTypeDisplay(type);
     },
-    findStruct,
+    findStruct(name) {
+        return this.structResolver(name);
+    },
     visibleFields(struct) {
-      return schema.visibleFields(struct)
+      return schema.visibleFields(struct);
     },
     aliasesDisplay(field) {
-      return '[' + field.aliases.join(',') + ']'
+      return '[' + field.aliases.join(',') + ']';
     },
     markdownToHtml(str: string): string {
-      return this.markdownProvider(str)
+      return this.markdownProvider(str);
     }
   }
 })
@@ -85,6 +93,7 @@ export default defineComponent({
           <struct-view
           :currentStruct="findStruct(st.name)"
           :markdownProvider="markdownProvider"
+          :structResolver="structResolver"
           />
         </div>
       </li>

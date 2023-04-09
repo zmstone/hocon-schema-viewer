@@ -193,6 +193,7 @@ const liftedStructs = computed(() => {
       v-for="(st, i) in liftedStructs"
       :currentStruct="st"
       :markdownProvider="renderMarkdown"
+      :structResolver="findStruct"
       :currentSchema="currentSchema"
       :key="i"
     />
