@@ -2,14 +2,16 @@
 import { defineComponent } from 'vue'
 import * as schema from '../interfaces/schema'
 import { findStruct } from '../data/data'
-import * as markdown from '../markdown'
 
 export default defineComponent({
   name: 'StructView',
   props: {
-    struct: {
+    currentStruct: {
       type: schema.Struct,
       required: true
+    },
+    markdownProvider: {
+      type: Function
     }
   },
   components: {
@@ -29,14 +31,14 @@ export default defineComponent({
       return schema.shortTypeDisplay(type)
     },
     findStruct,
-    renderMarkdown(desc) {
-      return markdown.render(desc)
-    },
     visibleFields(struct) {
       return schema.visibleFields(struct)
     },
     aliasesDisplay(field) {
       return '[' + field.aliases.join(',') + ']'
+    },
+    markdownToHtml(str: string): string {
+      return this.markdownProvider(str)
     }
   }
 })
@@ -45,9 +47,9 @@ export default defineComponent({
 <template>
   <div class="struct-view">
     <br />
-    <span class="struct-fullname"> {{ struct.full_name }}</span>
+    <span class="struct-fullname"> {{ currentStruct.full_name }}</span>
     <ul class="field-list">
-      <li v-for="(field, index) in visibleFields(struct)" class="field-item">
+      <li v-for="(field, index) in visibleFields(currentStruct)" class="field-item">
         <div class="fieldname">{{ field.name }}</div>
         <table>
           <tr v-if="field.aliases.length > 0">
@@ -72,7 +74,7 @@ export default defineComponent({
           </tr>
           <tr v-if="field.desc">
             <td>Description</td>
-            <td><div v-html="renderMarkdown(field.desc)"></div></td>
+            <td><div v-html="markdownToHtml(field.desc)"></div></td>
           </tr>
         </table>
         <div
@@ -80,7 +82,10 @@ export default defineComponent({
           v-for="(st, index) in subStructs(field)"
           class="sub-struct"
         >
-          <struct-view :struct="findStruct(st.name)" />
+          <struct-view
+          :currentStruct="findStruct(st.name)"
+          :markdownProvider="markdownProvider"
+          />
         </div>
       </li>
     </ul>

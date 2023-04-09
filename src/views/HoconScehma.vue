@@ -4,7 +4,6 @@ import StructView from './StructView.vue'
 import { Root, findStruct, updateSchema } from '../data/data'
 import * as schema from '../interfaces/schema'
 import * as markdown from '../markdown'
-import SchemaList from './SchemaList.vue'
 
 const currentSchema = ref(null)
 const selectedSchema = ref(null)
@@ -63,10 +62,6 @@ const toggleExpand = (index) => {
   expanded.value[index] = !expanded.value[index]
 }
 
-const renderMarkdown = (desc) => {
-  return markdown.render(desc)
-}
-
 const annotate = (type: schema.FieldType) => {
   if (type.kind === 'array') {
     return '[...]'
@@ -107,6 +102,10 @@ const getExpands = (type: schema.FieldType) => {
     })
   }
   return []
+}
+
+function renderMarkdown(desc: string): string {
+  return markdown.render(desc)
 }
 
 function allFieldsAreComplex(type: schema.Struct) {
@@ -192,9 +191,10 @@ const liftedStructs = computed(() => {
     </div>
     <struct-view
       v-for="(st, i) in liftedStructs"
-      :key="i"
-      :struct="st"
+      :currentStruct="st"
+      :markdownProvider="renderMarkdown"
       :currentSchema="currentSchema"
+      :key="i"
     />
   </div>
 </template>
