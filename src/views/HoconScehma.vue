@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { defineComponent, ref, computed, watch } from 'vue'
-import StructView from './views/StructView.vue'
-import { Root, findStruct, updateSchema } from './data/data'
-import * as schema from './interfaces/schema'
-import * as markdown from './markdown'
-import SchemaList from './views/SchemaList.vue'
+import StructView from './StructView.vue'
+import { Root, findStruct, updateSchema } from '../data/data'
+import * as schema from '../interfaces/schema'
+import * as markdown from '../markdown'
+import SchemaList from './SchemaList.vue'
 
 const currentSchema = ref(null)
 const selectedSchema = ref(null)

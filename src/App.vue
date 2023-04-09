@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import HSV from './HSV.vue'
+import HoconSchema from './views/HoconScehma.vue'
 import SchemaList from './views/SchemaList.vue'
 </script>
 
 <template>
   <div>
     <SchemaList @select-schema="handleSelectSchema" />
-    <HSV />
+    <HoconSchema />
   </div>
 </template>
