@@ -1,5 +1,5 @@
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, ref } from 'vue'
 import * as schema from '../interfaces/schema'
 
 export default defineComponent({
@@ -19,9 +19,22 @@ export default defineComponent({
     structResolver: {
       type: Function,
       required: true
+    },
+    expandByDefault: {
+      type: Boolean,
+      required: true
     }
   },
-  setup(props) {},
+  setup(props) {
+    const isExpanded = ref<boolean>(props.expandByDefault)
+    const toggleExpand = () => {
+      isExpanded.value = !isExpanded.value
+    }
+    return {
+      isExpanded,
+      toggleExpand,
+    }
+  },
   components: {
     StructView: () => import('./StructView.vue')
   },
@@ -56,10 +69,10 @@ export default defineComponent({
 
 <template>
   <div class="struct-view">
-    <span class="struct-fullname"
+    <span class="struct-fullname" @click="toggleExpand()"
       ><code>{{ currentStruct.full_name }}</code></span
     >
-    <ul class="field-list">
+    <ul class="field-list" v-if="isExpanded">
       <li v-for="(field, index) in visibleFields(currentStruct)" class="field-item">
         <div class="fieldname">{{ field.name }}</div>
         <table>
@@ -97,6 +110,7 @@ export default defineComponent({
             :currentStruct="findStruct(st.name)"
             :markdownProvider="markdownProvider"
             :structResolver="structResolver"
+            :expandByDefault="false"
           />
         </div>
       </li>

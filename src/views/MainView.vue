@@ -87,6 +87,7 @@ export default defineComponent({
         :currentStruct="st"
         :markdownProvider="markdownToHtml"
         :structResolver="structResolver"
+        :expandByDefault="true"
         :key="i"
       />
     </div>
