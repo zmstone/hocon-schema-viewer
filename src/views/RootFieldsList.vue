@@ -36,13 +36,13 @@ export default defineComponent({
 </script>
 
 <template>
-  <div class="root-fields-list">
-    <ul>
+  <div>
+    <ul class="root-fields-list">
       <li v-for="(field, index) in rootFields" :key="index">
         <span @click="fieldClicked(fieldToDisplayType(field))">
           {{ field.name }}{{ annotate(field.type) }}
         </span>
-        <ul class="root-fiels-list">
+        <ul class="root-fields-sub-list">
           <li v-for="(expand, expIndex) in field.expands" :key="expIndex">
             <span @click="fieldClicked(expand)">
               {{ expand.list_display }}
@@ -55,11 +55,16 @@ export default defineComponent({
 </template>
 
 <style scoped>
-.root-fields-list ul {
-  padding-left: 20px;
+.root-fields-list {
+  padding-left: 0;
+  margin: 0;
   list-style-type: none;
 }
-.root-fields-list li {
-  padding: 2px 0;
+
+.root-fields-sub-list {
+  padding-left: 20px;
+  margin: 0;
+  list-style-type: none;
 }
+
 </style>
