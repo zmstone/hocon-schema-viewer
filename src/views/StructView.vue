@@ -176,6 +176,7 @@ table th {
 }
 
 .struct-fullname {
+  cursor: pointer;
   padding: 8px;
   background-color: #e4f5ea;
   border-radius: 4px;
