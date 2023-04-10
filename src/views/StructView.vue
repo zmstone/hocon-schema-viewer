@@ -84,7 +84,7 @@ export default defineComponent({
               </span>
             </td>
           </tr>
-          <tr>
+          <tr v-if="field.type.kind !== 'struct'">
             <td>Type</td>
             <td>
               <code>{{ typeDisplay(field.type) }}</code>
