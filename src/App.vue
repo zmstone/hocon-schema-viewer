@@ -24,29 +24,24 @@ const fetchSchema = async (path) => {
     const response = await fetch(path)
     if (response.ok) {
       const newSchema = await response.json()
-      allStructs.value = newSchema;
+      allStructs.value = newSchema
     } else {
-      console.error('Failed to fetch schema');
+      console.error('Failed to fetch schema')
     }
   } catch (error) {
-    console.error('Error fetching schema:', error);
+    console.error('Error fetching schema:', error)
   }
 }
 
 function handleSelectSchema(selected) {
-  selectedSchema.value = selected;
+  selectedSchema.value = selected
 }
-
 </script>
 
 <template>
   <div class="container">
     <SchemaList class="schema-list" @select-schema="handleSelectSchema" />
-    <MainView
-      class="main-view"
-      :allStructs="allStructs"
-      :markdownProvider="renderMarkdown"
-    />
+    <MainView class="main-view" :allStructs="allStructs" :markdownProvider="renderMarkdown" />
   </div>
 </template>
 

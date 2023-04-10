@@ -88,15 +88,15 @@ export interface DisplayType {
 }
 
 export function fieldToDisplayType(f: Field) {
-    let res = {
-        list_display: f.name,
-        parent_field_doc: f.desc,
-        type: f.type
-    };
-    if(f.type.kind != 'struct') {
-        res.type_display = typeDisplay(f.type);
-    }
-    return res;
+  let res = {
+    list_display: f.name,
+    parent_field_doc: f.desc,
+    type: f.type
+  }
+  if (f.type.kind != 'struct') {
+    res.type_display = typeDisplay(f.type)
+  }
+  return res
 }
 
 // Dig up all the fist-level structs of a given type
@@ -177,8 +177,8 @@ export function visibleFields(struct) {
       return field.importance !== 'hidden'
     }
     // TODO: make user to choose if they want to see deprecated fields
-    if(field.desc && field.desc.startsWith("Deprecated since")) {
-        return false
+    if (field.desc && field.desc.startsWith('Deprecated since')) {
+      return false
     }
     return true
   })
@@ -248,7 +248,7 @@ function getExpands(ft: FieldType, findStruct: Function) {
     const struct = findStruct(ft.name)
     if (allFieldsAreComplex(struct)) {
       return visibleFields(struct).map((f) => {
-        return fieldToDisplayType(f);
+        return fieldToDisplayType(f)
       })
     }
     return []

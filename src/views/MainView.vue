@@ -21,7 +21,6 @@ export default defineComponent({
     }
   },
   setup(props) {
-    const displayType = ref<schema.DisplayType | null>(null)
     let index: StructsIndex = {}
     // build name -> Struct index
     for (let i = 0; i < props.allStructs.length; i++) {
@@ -38,6 +37,8 @@ export default defineComponent({
     rootStruct = props.allStructs[0]
     rootStruct.fields = schema.initialize(rootStruct, structResolver)
 
+    // initialize the default display type to be the first root level field
+    const displayType = ref<schema.DisplayType>(schema.fieldToDisplayType(rootStruct.fields[0]))
     function handleSelectedStruct(clicked) {
       displayType.value = clicked
     }
@@ -73,13 +74,14 @@ export default defineComponent({
       <RootFieldsList :rootFields="rootStruct.fields" @selected="handleSelectedStruct" />
     </div>
     <div class="struct-view-box" v-if="displayType">
-
-    <div v-if="displayType.parent_field_doc" class="root-doc">
-        <div v-html="markdownToHtml(displayType.parent_field_doc)"/>
-    </div>
-    <div v-if="displayType.type_display" class="root-doc">
-        <span class="root-field-type"><code>{{ displayType.type_display }}</code></span>
-    </div>
+      <div v-if="displayType.parent_field_doc" class="root-doc">
+        <div v-html="markdownToHtml(displayType.parent_field_doc)" />
+      </div>
+      <div v-if="displayType.type_display" class="root-doc">
+        <span class="root-field-type"
+          ><code>{{ displayType.type_display }}</code></span
+        >
+      </div>
       <StructView
         v-for="(st, i) in resolveDisplayStructs()"
         :currentStruct="st"
@@ -111,7 +113,7 @@ export default defineComponent({
 }
 
 .root-doc {
-    padding-bottom: 10px;
+  padding-bottom: 10px;
 }
 
 .root-field-type {
@@ -126,6 +128,4 @@ export default defineComponent({
     color: #d9e9d9;
   }
 }
-
-
 </style>

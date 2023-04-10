@@ -21,8 +21,7 @@ export default defineComponent({
       required: true
     }
   },
-  setup(props) {
-  },
+  setup(props) {},
   components: {
     StructView: () => import('./StructView.vue')
   },
@@ -57,8 +56,9 @@ export default defineComponent({
 
 <template>
   <div class="struct-view">
-
-    <span class="struct-fullname"><code>{{ currentStruct.full_name }}</code></span>
+    <span class="struct-fullname"
+      ><code>{{ currentStruct.full_name }}</code></span
+    >
     <ul class="field-list">
       <li v-for="(field, index) in visibleFields(currentStruct)" class="field-item">
         <div class="fieldname">{{ field.name }}</div>
@@ -105,7 +105,6 @@ export default defineComponent({
 </template>
 
 <style scoped>
-
 .field-list {
   list-style-type: none;
   padding-left: 20px;
