@@ -148,13 +148,6 @@ export default defineComponent({
   padding-bottom: 8px;
 }
 
-.type_display {
-  padding: 2px 4px;
-  background-color: #e4f5ea;
-  font-size: 0.9em;
-  border-radius: 4px;
-}
-
 table td {
   vertical-align: top;
 }
@@ -197,10 +190,6 @@ table th {
 
 /* Dark mode styles */
 @media (prefers-color-scheme: dark) {
-  .type_display {
-    background-color: #2d2d2d;
-    color: #ccc;
-  }
   table tr:nth-child(even) {
     background-color: #2a2a2a;
   }
