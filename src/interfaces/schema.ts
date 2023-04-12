@@ -78,7 +78,7 @@ export interface UnionFieldType {
 export interface DisplayType {
   // the name used in sidebar list, only used for expanded
   // root level fields
-  list_display?: string
+  list_display: string
   // only used for union, map, array
   type_display?: string
   // the document of a type
@@ -86,13 +86,55 @@ export interface DisplayType {
   parent_field_doc?: string
   // the type for detailed fields resolution
   type: FieldType
+  // parent node's type path
+  tpath?: string
+  // true if i'm a union member
+  is_union_member?: boolean
 }
 
-export function fieldToDisplayType(f: Field) {
+function full_tpath(t: DisplayType): string {
+  if (t.tpath) {
+    if (t.is_union_member) {
+      return t.tpath + '/' + t.list_display
+    }
+    return t.tpath + '.' + t.list_display
+  }
+  return t.list_display
+}
+
+// find the root display type of a given tpath
+export function resolveRootDisplay(fields: Field[], tpath: string): DisplayType | null {
+  if (tpath === '') {
+    return null
+  }
+  for (let f of fields) {
+    if (f.name === tpath) {
+      return fieldToDisplayType('', f)
+    }
+    for (let alias of f.aliases) {
+      if (alias === tpath) {
+        return fieldToDisplayType('', f)
+      }
+    }
+    for (let expand of f.expands || []) {
+      if (full_tpath(expand) === tpath) {
+        return expand
+      }
+    }
+  }
+  return null
+}
+
+export function fieldToDisplayType(rootName: string, f: Field) {
+  let tpath = f.name
+  if (rootName !== '') {
+    tpath = rootName + '.' + tpath
+  }
   let res = {
     list_display: f.name,
     parent_field_doc: f.desc,
-    type: f.type
+    type: f.type,
+    tpath: rootName
   }
   if (f.type.kind != 'struct') {
     res.type_display = typeDisplay(f.type)
@@ -191,7 +233,7 @@ export function isDocLift(field: Field): boolean {
 
 // remove the module:type() prefix from a type name
 function short(typeName: string): string {
-  return typeName.replace(/.*:/, '');
+  return typeName.replace(/.*:/, '')
 }
 
 // lift structs to root level a field has doc_lift => true annotation.
@@ -217,7 +259,7 @@ export function initialize(root: Struct, findStruct: Function): Field[] {
   })
   // now expand the first level children
   updatedFields.forEach((f) => {
-    f.expands = getExpands(f.type, findStruct)
+    f.expands = getExpands(f.name, f.type, findStruct)
   })
   return updatedFields
 }
@@ -241,15 +283,15 @@ function tidyNames(strings: string[]): string[] {
 }
 
 // Get one-level expansion for a root field.
-function getExpands(ft: FieldType, findStruct: Function) {
+function getExpands(rootName: string, ft: FieldType, findStruct: Function) {
   if (ft.kind === 'array') {
-    return getExpands(ft.elements, findStruct)
+    return getExpands(rootName, ft.elements, findStruct)
   }
   if (ft.kind === 'struct') {
     const struct = findStruct(ft.name)
     if (allFieldsAreComplex(struct)) {
       return visibleFields(struct).map((f) => {
-        return fieldToDisplayType(f)
+        return fieldToDisplayType(rootName, f)
       })
     }
     return []
@@ -261,7 +303,9 @@ function getExpands(ft: FieldType, findStruct: Function) {
     return tidyNames(displayNames).map((tidyName, i) => {
       return {
         list_display: tidyName,
-        type: ft.members[i]
+        type: ft.members[i],
+        is_union_member: true,
+        tpath: rootName
       }
     })
   }

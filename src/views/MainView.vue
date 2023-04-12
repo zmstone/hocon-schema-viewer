@@ -22,6 +22,9 @@ export default defineComponent({
   },
   setup(props) {
     let index: StructsIndex = {}
+    const urlParams = new URLSearchParams(window.location.search)
+    const currentPath = urlParams.get('r') || ''
+
     // build name -> Struct index
     for (let i = 0; i < props.allStructs.length; i++) {
       index[props.allStructs[i].full_name] = i
@@ -40,8 +43,13 @@ export default defineComponent({
       rootStruct.initialized = true
     }
 
+    let defaultDisplay = schema.fieldToDisplayType('', rootStruct.fields[0])
+    let resolvedDisplay = schema.resolveRootDisplay(rootStruct.fields, currentPath)
+    if (resolvedDisplay) {
+      defaultDisplay = resolvedDisplay
+    }
     // initialize the default display type to be the first root level field
-    const displayType = ref<schema.DisplayType>(schema.fieldToDisplayType(rootStruct.fields[0]))
+    const displayType = ref<schema.DisplayType>(defaultDisplay)
     function handleSelectedStruct(clicked) {
       displayType.value = clicked
     }
@@ -74,7 +82,11 @@ export default defineComponent({
 <template>
   <div class="inner-container">
     <div class="sidebar">
-      <RootFieldsList :rootFields="rootStruct.fields" @selected="handleSelectedStruct" />
+      <RootFieldsList
+        :rootFields="rootStruct.fields"
+        :currentDisplay="displayType"
+        @selected="handleSelectedStruct"
+      />
     </div>
     <div class="struct-view-box" v-if="displayType">
       <div v-if="displayType.parent_field_doc" class="root-doc">

@@ -1,11 +1,9 @@
 <script setup lang="ts">
 import { defineComponent, ref, computed, watch } from 'vue'
-import HoconSchema from './views/HoconScehma.vue'
-import SchemaList from './views/SchemaList.vue'
 import MainView from './views/MainView.vue'
-import { DefaultAllStructs } from './data/data'
-
 import * as markdown from './markdown'
+import SchemaList from './views/SchemaList.vue'
+import { DefaultAllStructs } from "./data/data.ts"
 
 function renderMarkdown(desc: string): string {
   return markdown.render(desc)

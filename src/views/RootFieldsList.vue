@@ -10,21 +10,43 @@ export default defineComponent({
     rootFields: {
       type: Array,
       required: true
+    },
+    currentDisplay: {
+      type: Object,
+      required: true
     }
   },
   setup(props, { emit }) {
-    // initialize the current root name, Must be the same as displayType in MainView
-    // i.e. must be the first root level field
-    const currentRootSelected = ref<string>(props.rootFields[0].name)
-    const currentExpandSelected = ref<string>('')
+    let defaultRoot = props.rootFields[0].name
+    let defaultExpand = ''
+    if (props.currentDisplay) {
+      if (props.currentDisplay.tpath && props.currentDisplay.tpath !== '') {
+        defaultRoot = props.currentDisplay.tpath
+        defaultExpand = props.currentDisplay.list_display
+      } else {
+        defaultRoot = props.currentDisplay.list_display
+      }
+    }
+    const currentRootSelected = ref<string>(defaultRoot)
+    const currentExpandSelected = ref<string>(defaultExpand)
     const rootClicked = (displayType: schema.DisplayType) => {
-      currentRootSelected.value = displayType.list_display;
-      currentExpandSelected.value = '';
-      emit('selected', displayType);
+      currentRootSelected.value = displayType.list_display
+      currentExpandSelected.value = ''
+      window.history.pushState({}, '', `?r=${displayType.list_display}`)
+      emit('selected', displayType)
     }
     const expandClicked = (displayType: schema.DisplayType) => {
-      currentExpandSelected.value = displayType.list_display;
-      emit('selected', displayType);
+      currentExpandSelected.value = displayType.list_display
+      let sep = '.'
+      if (displayType.is_union_member) {
+        sep = '/'
+      }
+      window.history.pushState(
+        {},
+        '',
+        `?r=${currentRootSelected.value}${sep}${displayType.list_display}`
+      )
+      emit('selected', displayType)
     }
 
     return {
@@ -45,7 +67,7 @@ export default defineComponent({
       return ''
     },
     fieldToDisplayType(f: Field) {
-      return schema.fieldToDisplayType(f)
+      return schema.fieldToDisplayType('', f)
     },
     maybeFold(isExpand, expands) {
       if (expands.length === 0) {
@@ -77,9 +99,10 @@ export default defineComponent({
         <ul class="root-fields-sub-list" v-if="currentRootSelected === field.name">
           <li v-for="(expand, expIndex) in field.expands" :key="expIndex">
             <div class="root-field-display" @click="expandClicked(expand)">
-              <span :class="{ 'selected-root-field': currentExpandSelected === expand.list_display}">{{
-                expand.list_display
-              }}</span>
+              <span
+                :class="{ 'selected-root-field': currentExpandSelected === expand.list_display }"
+                >{{ expand.is_union_member ? '/' : '.' }}{{ expand.list_display }}</span
+              >
             </div>
           </li>
         </ul>
@@ -131,5 +154,4 @@ export default defineComponent({
     color: #d9e9d9;
   }
 }
-
 </style>
