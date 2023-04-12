@@ -190,7 +190,7 @@ export function isDocLift(field: Field): boolean {
 
 // remove the module:type() prefix from a type name
 function short(typeName: string): string {
-  return typeName.replace(/.*:/, '').replace(/.*\./, '')
+  return typeName.replace(/.*:/, '');
 }
 
 // lift structs to root level a field has doc_lift => true annotation.
