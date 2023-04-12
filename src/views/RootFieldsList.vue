@@ -65,27 +65,22 @@ export default defineComponent({
 <template>
   <div>
     <ul class="root-fields-list">
-      <li
-        v-for="(field, index) in rootFields"
-        :key="index"
-      >
-        <div class="root-field-display"
-            :class="{ selected: currentRootSelected === index }"
-        @click="rootClicked(index, fieldToDisplayType(field))">
-          <span> {{ field.name }}{{ annotate(field.type) }} </span>
+      <li v-for="(field, index) in rootFields" :key="index">
+        <div class="root-field-display" @click="rootClicked(index, fieldToDisplayType(field))">
+          <span :class="{ 'selected-root-field': currentRootSelected === index }">
+            {{ field.name }}{{ annotate(field.type) }}
+          </span>
           <span class="root-field-fold-state">
             <code>{{ maybeFold(currentRootSelected === index, field.expands) }}</code>
           </span>
         </div>
         <ul class="root-fields-sub-list" v-if="currentRootSelected === index">
-          <li
-            v-for="(expand, expIndex) in field.expands"
-            :key="expIndex"
-            :class="{ selected: currentExpandSelected === expIndex }"
-          >
-            <span @click="expandClicked(expIndex, expand)">
-              {{ expand.list_display }}
-            </span>
+          <li v-for="(expand, expIndex) in field.expands" :key="expIndex">
+            <div class="root-field-display" @click="expandClicked(expIndex, expand)">
+              <span :class="{ 'selected-root-field': currentExpandSelected === expIndex }">{{
+                expand.list_display
+              }}</span>
+            </div>
           </li>
         </ul>
       </li>
@@ -94,6 +89,12 @@ export default defineComponent({
 </template>
 
 <style scoped>
+.selected-root-field {
+  color: #fff;
+  background-color: #5a8dd6;
+  border-radius: 4px;
+}
+
 .root-field-fold-state {
   font-size: 0.9em;
   margin: 0;
@@ -101,7 +102,7 @@ export default defineComponent({
 
 .root-field-display {
   display: flex;
-  margin: 0;
+  margin: 4px;
   padding-left: 0;
 }
 
@@ -120,9 +121,8 @@ export default defineComponent({
 .root-fields-list li span {
   cursor: pointer;
   display: block;
-  padding: 4px 8px;
-  border-radius: 4px;
+  padding: 2px 6px;
+  border-radius: 6px;
   transition: background-color 0.2s;
 }
-
 </style>
