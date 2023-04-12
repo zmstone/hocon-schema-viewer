@@ -15,16 +15,16 @@ export default defineComponent({
   setup(props, { emit }) {
     // initialize the current root name, Must be the same as displayType in MainView
     // i.e. must be the first root level field
-    const currentRootSelected = ref<number>(0)
-    const currentExpandSelected = ref<number>(-1)
-    const rootClicked = (index: number, displayType: schema.DisplayType) => {
-      currentRootSelected.value = index
-      currentExpandSelected.value = -1
-      emit('selected', displayType)
+    const currentRootSelected = ref<string>(props.rootFields[0].name)
+    const currentExpandSelected = ref<string>('')
+    const rootClicked = (displayType: schema.DisplayType) => {
+      currentRootSelected.value = displayType.list_display;
+      currentExpandSelected.value = '';
+      emit('selected', displayType);
     }
-    const expandClicked = (index: number, displayType: schema.DisplayType) => {
-      currentExpandSelected.value = index
-      emit('selected', displayType)
+    const expandClicked = (displayType: schema.DisplayType) => {
+      currentExpandSelected.value = displayType.list_display;
+      emit('selected', displayType);
     }
 
     return {
@@ -66,18 +66,18 @@ export default defineComponent({
   <div>
     <ul class="root-fields-list">
       <li v-for="(field, index) in rootFields" :key="index">
-        <div class="root-field-display" @click="rootClicked(index, fieldToDisplayType(field))">
-          <span :class="{ 'selected-root-field': currentRootSelected === index }">
+        <div class="root-field-display" @click="rootClicked(fieldToDisplayType(field))">
+          <span :class="{ 'selected-root-field': currentRootSelected === field.name }">
             {{ field.name }} {{ annotate(field.type) }}
           </span>
           <span class="root-field-fold-state">
-            <code>{{ maybeFold(currentRootSelected === index, field.expands) }}</code>
+            <code>{{ maybeFold(currentRootSelected === field.name, field.expands) }}</code>
           </span>
         </div>
-        <ul class="root-fields-sub-list" v-if="currentRootSelected === index">
+        <ul class="root-fields-sub-list" v-if="currentRootSelected === field.name">
           <li v-for="(expand, expIndex) in field.expands" :key="expIndex">
-            <div class="root-field-display" @click="expandClicked(expIndex, expand)">
-              <span :class="{ 'selected-root-field': currentExpandSelected === expIndex }">{{
+            <div class="root-field-display" @click="expandClicked(expand)">
+              <span :class="{ 'selected-root-field': currentExpandSelected === expand.list_display}">{{
                 expand.list_display
               }}</span>
             </div>
