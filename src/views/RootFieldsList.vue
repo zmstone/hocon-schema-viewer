@@ -68,7 +68,7 @@ export default defineComponent({
       <li v-for="(field, index) in rootFields" :key="index">
         <div class="root-field-display" @click="rootClicked(index, fieldToDisplayType(field))">
           <span :class="{ 'selected-root-field': currentRootSelected === index }">
-            {{ field.name }}{{ annotate(field.type) }}
+            {{ field.name }} {{ annotate(field.type) }}
           </span>
           <span class="root-field-fold-state">
             <code>{{ maybeFold(currentRootSelected === index, field.expands) }}</code>
