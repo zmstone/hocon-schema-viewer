@@ -90,8 +90,7 @@ export default defineComponent({
 
 <style scoped>
 .selected-root-field {
-  color: #fff;
-  background-color: #5a8dd6;
+  background-color: #e4f5ea;
   border-radius: 4px;
 }
 
@@ -123,6 +122,14 @@ export default defineComponent({
   display: block;
   padding: 2px 6px;
   border-radius: 6px;
-  transition: background-color 0.2s;
 }
+
+/* Dark mode styles */
+@media (prefers-color-scheme: dark) {
+  .selected-root-field {
+    background-color: #2e5742;
+    color: #d9e9d9;
+  }
+}
+
 </style>
