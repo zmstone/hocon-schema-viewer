@@ -32,7 +32,7 @@ export default defineComponent({
     }
     return {
       isExpanded,
-      toggleExpand,
+      toggleExpand
     }
   },
   components: {
@@ -62,6 +62,14 @@ export default defineComponent({
     },
     markdownToHtml(str: string): string {
       return this.markdownProvider(str)
+    },
+    maybeFold() {
+      const expandChar = ' \u25B6' // Right-pointing triangle (▶)
+      const collapseChar = ' \u25BC' // Down-pointing triangle (▼)
+      if (this.isExpanded) {
+        return collapseChar
+      }
+      return expandChar
     }
   }
 })
@@ -69,9 +77,9 @@ export default defineComponent({
 
 <template>
   <div class="struct-view">
-    <span class="struct-fullname" @click="toggleExpand()"
-      ><code>{{ currentStruct.full_name }}</code></span
-    >
+    <span class="struct-fullname" @click="toggleExpand()">
+      <code>{{ currentStruct.full_name }} {{ maybeFold() }}</code>
+    </span>
     <ul class="field-list" v-if="isExpanded">
       <li v-for="(field, index) in visibleFields(currentStruct)" class="field-item">
         <div class="fieldname">{{ field.name }}</div>

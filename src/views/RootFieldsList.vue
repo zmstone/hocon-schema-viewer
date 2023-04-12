@@ -46,6 +46,17 @@ export default defineComponent({
     },
     fieldToDisplayType(f: Field) {
       return schema.fieldToDisplayType(f)
+    },
+    maybeFold(isExpand, expands) {
+      if (expands.length === 0) {
+        return ''
+      }
+      const expandChar = '\u25B6' // Right-pointing triangle (▶)
+      const collapseChar = '\u25BC' // Down-pointing triangle (▼)
+      if (isExpand) {
+        return collapseChar
+      }
+      return expandChar
     }
   }
 })
@@ -57,11 +68,15 @@ export default defineComponent({
       <li
         v-for="(field, index) in rootFields"
         :key="index"
-        :class="{ selected: currentRootSelected === index }"
       >
-        <span @click="rootClicked(index, fieldToDisplayType(field))">
-          {{ field.name }}{{ annotate(field.type) }}
-        </span>
+        <div class="root-field-display"
+            :class="{ selected: currentRootSelected === index }"
+        @click="rootClicked(index, fieldToDisplayType(field))">
+          <span> {{ field.name }}{{ annotate(field.type) }} </span>
+          <span class="root-field-fold-state">
+            <code>{{ maybeFold(currentRootSelected === index, field.expands) }}</code>
+          </span>
+        </div>
         <ul class="root-fields-sub-list" v-if="currentRootSelected === index">
           <li
             v-for="(expand, expIndex) in field.expands"
@@ -79,6 +94,17 @@ export default defineComponent({
 </template>
 
 <style scoped>
+.root-field-fold-state {
+  font-size: 0.9em;
+  margin: 0;
+}
+
+.root-field-display {
+  display: flex;
+  margin: 0;
+  padding-left: 0;
+}
+
 .root-fields-list {
   padding-left: 0;
   margin: 0;
@@ -99,41 +125,4 @@ export default defineComponent({
   transition: background-color 0.2s;
 }
 
-.root-fields-list li span:hover {
-  background-color: var(--hover-bg-light);
-}
-
-.root-fields-list li.selected > span {
-  background-color: var(--highlight-bg-light);
-  font-weight: bold;
-}
-
-.root-fields-sub-list li span {
-  cursor: pointer;
-  display: block;
-  padding: 4px 8px;
-  border-radius: 4px;
-  transition: background-color 0.2s;
-}
-
-.root-fields-sub-list li span:hover {
-  background-color: var(--hover-bg-light);
-}
-
-.root-fields-sub-list li.selected > span {
-  background-color: var(--highlight-bg-light);
-  font-weight: bold;
-}
-
-@media (prefers-color-scheme: dark) {
-  .root-fields-list li span:hover,
-  .root-fields-sub-list li span:hover {
-    background-color: var(--hover-bg-dark);
-  }
-
-  .root-fields-list li.selected > span,
-  .root-fields-sub-list li.selected > span {
-    background-color: var(--highlight-bg-dark);
-  }
-}
 </style>
