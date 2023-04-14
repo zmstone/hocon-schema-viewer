@@ -1,5 +1,5 @@
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
+import { defineComponent, ref, watch } from 'vue'
 import * as schema from '../interfaces/schema'
 
 type StructsIndex = { [name: string]: number }
@@ -19,24 +19,25 @@ export default defineComponent({
   setup(props, { emit }) {
     let defaultRoot = props.rootFields[0].name
     let defaultExpand = ''
-    if (props.currentDisplay) {
-      if (props.currentDisplay.tpath && props.currentDisplay.tpath !== '') {
-        defaultRoot = props.currentDisplay.tpath
-        defaultExpand = props.currentDisplay.list_display
-      } else {
-        defaultRoot = props.currentDisplay.list_display
-      }
-    }
     const currentRootSelected = ref<string>(defaultRoot)
     const currentExpandSelected = ref<string>(defaultExpand)
+    function updateSelected(display) {
+      if (display) {
+        if (display.tpath && display.tpath !== '') {
+          currentRootSelected.value = display.tpath
+          currentExpandSelected.value = display.list_display
+        } else {
+          currentRootSelected.value = display.list_display
+          currentExpandSelected.value = ''
+        }
+      }
+    }
+    updateSelected(props.currentDisplay)
     const rootClicked = (displayType: schema.DisplayType) => {
-      currentRootSelected.value = displayType.list_display
-      currentExpandSelected.value = ''
       window.history.pushState({}, '', `?r=${displayType.list_display}`)
       emit('selected', displayType)
     }
     const expandClicked = (displayType: schema.DisplayType) => {
-      currentExpandSelected.value = displayType.list_display
       let sep = '.'
       if (displayType.is_union_member) {
         sep = '/'
@@ -48,6 +49,14 @@ export default defineComponent({
       )
       emit('selected', displayType)
     }
+    watch(
+      () => props.currentDisplay,
+      (newDisplay) => {
+        if (newDisplay) {
+          updateSelected(newDisplay)
+        }
+      }
+    )
 
     return {
       currentRootSelected,

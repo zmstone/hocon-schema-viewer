@@ -3,7 +3,7 @@ import { defineComponent, ref, computed, watch } from 'vue'
 import MainView from './views/MainView.vue'
 import * as markdown from './markdown'
 import SchemaList from './views/SchemaList.vue'
-import { DefaultAllStructs } from "./data/data.ts"
+import { DefaultAllStructs } from './data/data.ts'
 
 function renderMarkdown(desc: string): string {
   return markdown.render(desc)
@@ -39,7 +39,11 @@ function handleSelectSchema(selected) {
 <template>
   <div class="container">
     <SchemaList class="schema-list" @select-schema="handleSelectSchema" />
-    <MainView class="main-view" :allStructs="allStructs" :markdownProvider="renderMarkdown" />
+    <MainView
+      class="main-view"
+      :allStructs="DefaultAllStructs"
+      :markdownProvider="renderMarkdown"
+    />
   </div>
 </template>
 

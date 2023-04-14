@@ -1,5 +1,5 @@
 <script lang="ts">
-import { defineComponent, ref, computed } from 'vue'
+import { defineComponent, ref, onMounted, onUnmounted, watch } from 'vue'
 import * as schema from '../interfaces/schema'
 import StructView from './StructView.vue'
 import RootFieldsList from './RootFieldsList.vue'
@@ -58,6 +58,20 @@ export default defineComponent({
       let res = types.map((t) => structResolver(t.name))
       return res
     }
+    const handleUrlChange = () => {
+      const urlParams = new URLSearchParams(window.location.search)
+      const currentPath = urlParams.get('r') || ''
+      let resolvedDisplay = schema.resolveRootDisplay(rootStruct.fields, currentPath)
+      if (resolvedDisplay) {
+        displayType.value = resolvedDisplay
+      }
+    }
+    onMounted(() => {
+      window.addEventListener('popstate', handleUrlChange)
+    })
+    onUnmounted(() => {
+      window.removeEventListener('popstate', handleUrlChange)
+    })
 
     return {
       rootStruct,
