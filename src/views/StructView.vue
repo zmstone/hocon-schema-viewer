@@ -1,5 +1,6 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
+import type { PropType } from 'vue'
 import * as schema from '../interfaces/schema'
 
 export default defineComponent({
@@ -7,7 +8,7 @@ export default defineComponent({
   props: {
     // the current struct to expand
     currentStruct: {
-      type: schema.Struct,
+      type: Object as PropType<schema.Struct>,
       required: true
     },
     // render markdown to HTML
@@ -42,7 +43,7 @@ export default defineComponent({
     isComplexType(type: schema.FieldType): boolean {
       return schema.isComplexType(type)
     },
-    subStructs(field: schema.Field): schema.FieldType[] {
+    subStructs(field: schema.Field): schema.StructReference[] {
       if (field.extra?.doc_lift === true) {
         return []
       }
@@ -51,13 +52,13 @@ export default defineComponent({
     typeDisplay(type: schema.FieldType): string {
       return schema.shortTypeDisplay(type)
     },
-    findStruct(name) {
+    findStruct(name: string) {
       return this.structResolver(name)
     },
-    visibleFields(struct) {
+    visibleFields(struct: schema.Struct) {
       return schema.visibleFields(struct)
     },
-    aliasesDisplay(field) {
+    aliasesDisplay(field: schema.Field) {
       return '[' + field.aliases.join(',') + ']'
     },
     markdownToHtml(str: string): string {

@@ -1,28 +1,33 @@
 <script setup lang="ts">
-import { defineComponent, ref, computed, watch } from 'vue'
+import { ref, watch } from 'vue'
 import MainView from './views/MainView.vue'
 import * as markdown from './markdown'
 import SchemaList from './views/SchemaList.vue'
-import { DefaultAllStructs } from './data/data.ts'
+import { DefaultAllStructs } from './data/data'
+import type { SchemaFile } from './data/data'
+import type { Struct } from './interfaces/schema'
 
 function renderMarkdown(desc: string): string {
   return markdown.render(desc)
 }
 
-const selectedSchema = ref(null)
-const allStructs = ref(DefaultAllStructs)
-watch(selectedSchema, async (newSchema) => {
-  if (newSchema) {
-    await fetchSchema('schemas/' + newSchema.file)
+const selectedSchema = ref<SchemaFile | null>(null)
+const fetchedStructs = ref<Struct[]>(DefaultAllStructs)
+watch(
+  () => selectedSchema.value,
+  async (newSchema: SchemaFile | null) => {
+    if (newSchema) {
+      await fetchSchema('schemas/' + newSchema.file)
+    }
   }
-})
+)
 
-const fetchSchema = async (path) => {
+const fetchSchema = async (path: string) => {
   try {
     const response = await fetch(path)
     if (response.ok) {
       const newSchema = await response.json()
-      allStructs.value = newSchema
+      fetchedStructs.value = newSchema
     } else {
       console.error('Failed to fetch schema')
     }
@@ -31,7 +36,7 @@ const fetchSchema = async (path) => {
   }
 }
 
-function handleSelectSchema(selected) {
+function handleSelectSchema(selected: SchemaFile) {
   selectedSchema.value = selected
 }
 </script>
@@ -41,7 +46,7 @@ function handleSelectSchema(selected) {
     <SchemaList class="schema-list" @select-schema="handleSelectSchema" />
     <MainView
       class="main-view"
-      :allStructs="DefaultAllStructs"
+      :allStructs="fetchedStructs"
       :markdownProvider="renderMarkdown"
     />
   </div>

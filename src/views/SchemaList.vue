@@ -9,12 +9,13 @@
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
+import type { SchemaFile } from '../data/data'
 
 export default defineComponent({
   emits: ['select-schema'],
   setup(_, { emit }) {
-    const schemaList = ref([])
-    const selectedSchema = ref(null)
+    const schemaList = ref<SchemaFile[]>([])
+    const selectedSchema = ref<SchemaFile | null>(null)
 
     const fetchSchemaList = async () => {
       try {

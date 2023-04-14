@@ -1,5 +1,6 @@
 <script lang="ts">
 import { defineComponent, ref, watch } from 'vue'
+import type { PropType } from 'vue'
 import * as schema from '../interfaces/schema'
 
 type StructsIndex = { [name: string]: number }
@@ -8,11 +9,11 @@ export default defineComponent({
   name: 'RootFieldsList',
   props: {
     rootFields: {
-      type: Array,
+      type: Array as PropType<schema.Field[]>,
       required: true
     },
     currentDisplay: {
-      type: Object,
+      type: Object as PropType<schema.DisplayType>,
       required: true
     }
   },
@@ -21,7 +22,7 @@ export default defineComponent({
     let defaultExpand = ''
     const currentRootSelected = ref<string>(defaultRoot)
     const currentExpandSelected = ref<string>(defaultExpand)
-    function updateSelected(display) {
+    function updateSelected(display: schema.DisplayType | undefined) {
       if (display) {
         if (display.tpath && display.tpath !== '') {
           currentRootSelected.value = display.tpath
@@ -66,7 +67,7 @@ export default defineComponent({
     }
   },
   methods: {
-    annotate(type: schema.FieldType) {
+    annotate(type: schema.FieldType): string {
       if (type.kind === 'array') {
         return '[...]'
       }
@@ -75,11 +76,13 @@ export default defineComponent({
       }
       return ''
     },
-    fieldToDisplayType(f: Field) {
+    fieldToDisplayType(f: schema.Field): schema.DisplayType {
       return schema.fieldToDisplayType('', f)
     },
-    maybeFold(isExpand, expands) {
-      if (expands.length === 0) {
+    maybeFold(f: schema.Field): string {
+      const isExpand = f.name === this.currentExpandSelected
+      const expands = f.expands
+      if (!expands || expands.length === 0) {
         return ''
       }
       const expandChar = '\u25B6' // Right-pointing triangle (▶)
@@ -102,11 +105,11 @@ export default defineComponent({
             {{ field.name }} {{ annotate(field.type) }}
           </span>
           <span class="root-field-fold-state">
-            <code>{{ maybeFold(currentRootSelected === field.name, field.expands) }}</code>
+            <code>{{ maybeFold(field) }}</code>
           </span>
         </div>
         <ul class="root-fields-sub-list" v-if="currentRootSelected === field.name">
-          <li v-for="(expand, expIndex) in field.expands" :key="expIndex">
+          <li v-for="(expand, expIndex) in field.expands || []" :key="expIndex">
             <div class="root-field-display" @click="expandClicked(expand)">
               <span
                 :class="{ 'selected-root-field': currentExpandSelected === expand.list_display }"

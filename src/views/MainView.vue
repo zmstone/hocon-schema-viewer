@@ -1,5 +1,6 @@
 <script lang="ts">
-import { defineComponent, ref, onMounted, onUnmounted, watch } from 'vue'
+import { defineComponent, ref, onMounted, onUnmounted } from 'vue'
+import type { PropType } from 'vue'
 import * as schema from '../interfaces/schema'
 import StructView from './StructView.vue'
 import RootFieldsList from './RootFieldsList.vue'
@@ -11,7 +12,7 @@ export default defineComponent({
   props: {
     // All the structs, first one must be the root.
     allStructs: {
-      type: Array,
+      type: Array as PropType<schema.Struct[]>,
       required: true
     },
     // render markdown to HTML
@@ -36,7 +37,7 @@ export default defineComponent({
       }
       console.log('Struct not found: ' + name)
     }
-    let rootStruct: schema.Struct = {}
+    let rootStruct: schema.Struct
     rootStruct = props.allStructs[0]
     if (!rootStruct.initialized) {
       rootStruct.fields = schema.initialize(rootStruct, structResolver)
@@ -50,13 +51,17 @@ export default defineComponent({
     }
     // initialize the default display type to be the first root level field
     const displayType = ref<schema.DisplayType>(defaultDisplay)
-    function handleSelectedStruct(clicked) {
+    function handleSelectedStruct(clicked: schema.DisplayType) {
       displayType.value = clicked
     }
-    function resolveDisplayStructs() {
-      let types = schema.liftStructs(displayType.value.type)
-      let res = types.map((t) => structResolver(t.name))
-      return res
+    function resolveDisplayStructs(): schema.Struct[] {
+      const types = schema.liftStructs(displayType.value.type)
+      return types
+        .map((t: schema.StructReference) => {
+          const s = structResolver(t.name)
+          return s ? s : null
+        })
+        .filter((s: schema.Struct | null) => s !== null) as schema.Struct[]
     }
     const handleUrlChange = () => {
       const urlParams = new URLSearchParams(window.location.search)

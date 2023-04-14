@@ -37,6 +37,7 @@ export type FieldType =
   | ArrayFieldType
   | EnumFieldType
   | UnionFieldType
+  | SingletonFieldType
 
 export interface EnumFieldType {
   kind: 'enum'
@@ -53,7 +54,7 @@ export interface PrimitiveFieldType {
   name: string
 }
 
-export interface SingletonType {
+export interface SingletonFieldType {
   kind: 'singleton'
   name: string
 }
@@ -125,12 +126,12 @@ export function resolveRootDisplay(fields: Field[], tpath: string): DisplayType 
   return null
 }
 
-export function fieldToDisplayType(rootName: string, f: Field) {
+export function fieldToDisplayType(rootName: string, f: Field): DisplayType {
   let tpath = f.name
   if (rootName !== '') {
     tpath = rootName + '.' + tpath
   }
-  let res = {
+  let res: DisplayType = {
     list_display: f.name,
     parent_field_doc: f.desc,
     type: f.type,
@@ -148,7 +149,7 @@ export function fieldToDisplayType(rootName: string, f: Field) {
 // * array of arrays
 // * map of maps
 // the situation so far: assume thereis no such cases
-export function liftStructs(t: FieldType): FieldType[] {
+export function liftStructs(t: FieldType): StructReference[] {
   if (t.kind === 'struct') {
     return [t]
   }
@@ -177,33 +178,38 @@ export function isComplexField(field: Field): boolean {
 }
 
 function maybeShortTypeDisplay(type: FieldType, shortener: (typeName: string) => string): string {
-  if (type.kind === 'primitive') {
-    return shortener(type.name)
+  const kind = (type as Record<string, any>).kind
+  if (kind === 'primitive') {
+    return shortener((type as PrimitiveFieldType).name)
   }
-  if (type.kind === 'enum') {
-    return type.symbols.join(' | ')
+  if (kind === 'enum') {
+    return (type as EnumFieldType).symbols.join(' | ')
   }
-  if (type.kind === 'union') {
-    const union = type.members.map((elem: FieldType) => {
+  if (kind === 'union') {
+    const union = (type as UnionFieldType).members.map((elem: FieldType) => {
       return maybeShortTypeDisplay(elem, shortener)
     })
     return union.join(' | ')
   }
-  if (type.kind === 'array') {
-    return '[' + maybeShortTypeDisplay(type.elements, shortener) + ']'
+  if (kind === 'array') {
+    return '[' + maybeShortTypeDisplay((type as ArrayFieldType).elements, shortener) + ']'
   }
-  if (type.kind === 'struct') {
-    return shortener(type.name)
+  if (kind === 'struct') {
+    return shortener((type as StructReference).name)
   }
-  if (type.kind === 'singleton') {
-    return shortener(type.name)
+  if (kind === 'singleton') {
+    return shortener((type as SingletonFieldType).name)
   }
-  if (type.kind === 'map') {
+  if (kind === 'map') {
     return (
-      '{$' + shortener(type.name) + ' => ' + maybeShortTypeDisplay(type.values, shortener) + '}'
+      '{$' +
+      shortener((type as MapFieldType).name) +
+      ' => ' +
+      maybeShortTypeDisplay((type as MapFieldType).values, shortener) +
+      '}'
     )
   }
-  return shortener(type.kind)
+  return shortener(kind)
 }
 
 export function typeDisplay(type: FieldType): string {
@@ -214,8 +220,8 @@ export function shortTypeDisplay(type: FieldType): string {
   return maybeShortTypeDisplay(type, short)
 }
 
-export function visibleFields(struct) {
-  return struct.fields.filter((field) => {
+export function visibleFields(struct: Struct) {
+  return struct.fields.filter((field: Field) => {
     if (field.importance) {
       return field.importance !== 'hidden'
     }
@@ -242,13 +248,13 @@ function short(typeName: string): string {
 // but does not walk the full type tree.
 export function initialize(root: Struct, findStruct: Function): Field[] {
   const updatedFields: Field[] = []
-  visibleFields(root).forEach((field) => {
+  visibleFields(root).forEach((field: Field) => {
     updatedFields.push(field) // Keep the parent field
     const parentName = field.name
     if (field.type.kind === 'struct') {
       const subStruct = findStruct(field.type.name)
       if (subStruct) {
-        subStruct.fields.forEach((subField) => {
+        subStruct.fields.forEach((subField: Field) => {
           if (isDocLift(subField)) {
             subField.name = `${parentName}.${subField.name}` // Update the sub-field name
             updatedFields.push(subField) // Add the sub-field next to the parent field if doc_lift is true
@@ -283,14 +289,14 @@ function tidyNames(strings: string[]): string[] {
 }
 
 // Get one-level expansion for a root field.
-function getExpands(rootName: string, ft: FieldType, findStruct: Function) {
+function getExpands(rootName: string, ft: FieldType, findStruct: Function): DisplayType[] {
   if (ft.kind === 'array') {
     return getExpands(rootName, ft.elements, findStruct)
   }
   if (ft.kind === 'struct') {
     const struct = findStruct(ft.name)
     if (allFieldsAreComplex(struct)) {
-      return visibleFields(struct).map((f) => {
+      return visibleFields(struct).map((f: Field) => {
         return fieldToDisplayType(rootName, f)
       })
     }
