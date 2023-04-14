@@ -35,7 +35,10 @@ export default defineComponent({
     }
     let rootStruct: schema.Struct = {}
     rootStruct = props.allStructs[0]
-    rootStruct.fields = schema.initialize(rootStruct, structResolver)
+    if (!rootStruct.initialized) {
+      rootStruct.fields = schema.initialize(rootStruct, structResolver)
+      rootStruct.initialized = true
+    }
 
     // initialize the default display type to be the first root level field
     const displayType = ref<schema.DisplayType>(schema.fieldToDisplayType(rootStruct.fields[0]))

@@ -4,6 +4,7 @@ export interface Struct {
   full_name: string
   paths: string[]
   tags: string[]
+  initialized?: boolean
 }
 
 export interface Extra {
