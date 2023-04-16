@@ -3,16 +3,17 @@ import { ref, watch } from 'vue'
 import MainView from './views/MainView.vue'
 import * as markdown from './markdown'
 import SchemaList from './views/SchemaList.vue'
-import { DefaultAllStructs } from './data/data'
-import type { SchemaFile } from './data/data'
+import type { SchemaFile } from './views/SchemaList.vue'
 import type { Struct } from './interfaces/schema'
+// default data
+import defaultAllStructs from '../public/schemas/latest-en.json'
 
 function renderMarkdown(desc: string): string {
   return markdown.render(desc)
 }
 
 const selectedSchema = ref<SchemaFile | null>(null)
-const fetchedStructs = ref<Struct[]>(DefaultAllStructs)
+const fetchedStructs = ref<Struct[]>(defaultAllStructs as Struct[])
 watch(
   () => selectedSchema.value,
   async (newSchema: SchemaFile | null) => {

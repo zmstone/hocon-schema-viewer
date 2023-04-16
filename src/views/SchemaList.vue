@@ -9,7 +9,11 @@
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
-import type { SchemaFile } from '../data/data'
+
+export interface SchemaFile {
+  name: string
+  file: string
+}
 
 export default defineComponent({
   emits: ['select-schema'],
