@@ -6,7 +6,7 @@ import SchemaList from './views/SchemaList.vue'
 import type { SchemaFile } from './views/SchemaList.vue'
 import type { Struct } from './interfaces/schema'
 // default data
-import defaultAllStructs from '../public/schemas/latest-en.json'
+import defaultAllStructs from '../public/schemas/default.json'
 
 function renderMarkdown(desc: string): string {
   return markdown.render(desc)
