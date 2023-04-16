@@ -39,9 +39,9 @@ export default defineComponent({
       emit('selected', displayType)
     }
     const expandClicked = (displayType: schema.DisplayType) => {
-      let sep = '.'
+      let sep = schema.fieldSelectorSymbol
       if (displayType.is_union_member) {
-        sep = '/'
+        sep = schema.unionMemberSelectorSymbol
       }
       window.history.pushState(
         {},
@@ -91,6 +91,14 @@ export default defineComponent({
         return collapseChar
       }
       return expandChar
+    },
+    selectorSymbol(exp: schema.DisplayType): string {
+      if(exp.is_union_member){
+        return schema.unionMemberSelectorSymbol
+      }
+    else {
+        return schema.fieldSelectorSymbol
+    }
     }
   }
 })
@@ -113,7 +121,7 @@ export default defineComponent({
             <div class="root-field-display" @click="expandClicked(expand)">
               <span
                 :class="{ 'selected-root-field': currentExpandSelected === expand.list_display }"
-                >{{ expand.is_union_member ? '/' : '.' }}{{ expand.list_display }}</span
+                >{{ selectorSymbol(expand) }}{{ expand.list_display }}</span
               >
             </div>
           </li>

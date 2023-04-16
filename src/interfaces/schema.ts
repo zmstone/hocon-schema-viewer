@@ -93,12 +93,15 @@ export interface DisplayType {
   is_union_member?: boolean
 }
 
+export const unionMemberSelectorSymbol='@'
+export const fieldSelectorSymbol='.'
+
 function full_tpath(t: DisplayType): string {
   if (t.tpath) {
     if (t.is_union_member) {
-      return t.tpath + '/' + t.list_display
+      return t.tpath + unionMemberSelectorSymbol + t.list_display
     }
-    return t.tpath + '.' + t.list_display
+    return t.tpath + fieldSelectorSymbol + t.list_display
   }
   return t.list_display
 }
