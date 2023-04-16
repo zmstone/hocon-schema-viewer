@@ -12,7 +12,7 @@ export interface Extra {
 }
 
 export interface Field {
-  aliases: string[]
+  aliases?: string[]
   default?: DefaultValue
   importance?: string
   desc?: string
@@ -115,7 +115,7 @@ export function resolveRootDisplay(fields: Field[], tpath: string): DisplayType 
     if (f.name === tpath) {
       return fieldToDisplayType('', f)
     }
-    for (let alias of f.aliases) {
+    for (let alias of f.aliases || []) {
       if (alias === tpath) {
         return fieldToDisplayType('', f)
       }

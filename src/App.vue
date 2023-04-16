@@ -13,7 +13,9 @@ function renderMarkdown(desc: string): string {
 }
 
 const selectedSchema = ref<SchemaFile | null>(null)
-const fetchedStructs = ref<Struct[]>(defaultAllStructs as Struct[])
+const fetchedStructs = ref<Struct[]>([])
+fetchedStructs.value = defaultAllStructs as Struct[]
+
 watch(
   () => selectedSchema.value,
   async (newSchema: SchemaFile | null) => {

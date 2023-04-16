@@ -58,9 +58,6 @@ export default defineComponent({
     visibleFields(struct: schema.Struct) {
       return schema.visibleFields(struct)
     },
-    aliasesDisplay(field: schema.Field) {
-      return '[' + field.aliases.join(',') + ']'
-    },
     markdownToHtml(str: string): string {
       return this.markdownProvider(str)
     },
@@ -85,7 +82,7 @@ export default defineComponent({
       <li v-for="(field, index) in visibleFields(currentStruct)" class="field-item">
         <div class="fieldname">{{ field.name }}</div>
         <table>
-          <tr v-if="field.aliases.length > 0">
+          <tr v-if="field.aliases && field.aliases.length > 0">
             <td>Aliases:</td>
             <td>
               <span v-for="(alias, index) in field.aliases">
