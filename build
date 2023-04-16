@@ -4,10 +4,14 @@ set -euo pipefail
 
 cd -P -- "$(dirname -- "$0")"
 
+output="${OUTPUT_FILE:-dist/conf-docs-out.html}"
+
 npm run build
 npm run inline
 
 ## html-inline fails on resolving links
 ## there is no way to turn it off either
 ## so we have to do this in a hack-ish way
-sed -i 's/<!--INJECT_FONT_LINK_HERE-->/<link rel="stylesheet" href="https:\/\/fonts.googleapis.com\/css?family=Roboto:100,300,400,500,700,900"\/>/' dist/conf-docs.html
+sed 's/<!--INJECT_FONT_LINK_HERE-->/<link rel="stylesheet" href="https:\/\/fonts.googleapis.com\/css?family=Roboto:100,300,400,500,700,900"\/>/' dist/conf-docs.html > $output
+
+echo "built $output"
