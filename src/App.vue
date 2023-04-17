@@ -1,10 +1,29 @@
 <script setup lang="ts">
+import { ref, onMounted } from 'vue'
 import MainView from './views/MainView.vue'
 import * as markdown from './markdown'
 import type { Struct } from './interfaces/schema'
-// default data
-import defaultAllStructs from '../public/schemas/default.json'
-const fetchedStructs = defaultAllStructs as Struct[]
+
+const fetchedStructs = ref<Struct[]>([])
+
+const fetchStructs = async () => {
+  const params = new URLSearchParams(window.location.search)
+  const url = params.get('s')
+  if (url) {
+    try {
+      const response = await fetch(url)
+      if (response.ok) {
+        fetchedStructs.value = await response.json()
+      } else {
+        console.error('Failed to fetch JSON file:', response.status)
+      }
+    } catch (error) {
+      console.error('Error fetching JSON file:', error)
+    }
+  }
+}
+
+fetchStructs()
 
 function renderMarkdown(desc: string): string {
   return markdown.render(desc)
@@ -15,6 +34,7 @@ function renderMarkdown(desc: string): string {
   <div class="container">
     <MainView
       class="main-view"
+      v-if="fetchedStructs.length > 0"
       :allStructs="fetchedStructs"
       :markdownProvider="renderMarkdown"
     />

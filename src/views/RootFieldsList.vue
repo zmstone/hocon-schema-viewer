@@ -34,8 +34,16 @@ export default defineComponent({
       }
     }
     updateSelected(props.currentDisplay)
+    const pushState = (newRoot: string) => {
+        // Get the current URL
+        const currentURL = new URL(window.location.href)
+        // Update the 'r' parameter while preserving other parameters
+        const params = currentURL.searchParams
+        params.set('r', newRoot)
+        window.history.pushState({}, '', `${currentURL.pathname}?${params}`);
+    }
     const rootClicked = (displayType: schema.DisplayType) => {
-      window.history.pushState({}, '', `?r=${displayType.list_display}`)
+      pushState(displayType.list_display)
       emit('selected', displayType)
     }
     const expandClicked = (displayType: schema.DisplayType) => {
@@ -43,11 +51,7 @@ export default defineComponent({
       if (displayType.is_union_member) {
         sep = schema.unionMemberSelectorSymbol
       }
-      window.history.pushState(
-        {},
-        '',
-        `?r=${currentRootSelected.value}${sep}${displayType.list_display}`
-      )
+      pushState(`${currentRootSelected.value}${sep}${displayType.list_display}`)
       emit('selected', displayType)
     }
     watch(

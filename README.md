@@ -8,15 +8,6 @@ The struct fields are annotated with additional information, such as the type of
 
 You can find more information about HOCON schema [here](https://github.com/emqx/hocon/blob/master/SCHEMA.md)
 
-## Single page HTML doc
-
-The `./build` script can produce a single page HTML doc `dist/conf-docs.html`.
-The input has to be `public/schemas/default.json`.
-
-### Build in docker
-
-`docker run --rm -it -v path/to/schema.json:/hsv/public/scehmas/default.json -v path/to/ouput-dir:/hsv/dist zmstone/hocon-schema-viewer:0.4.0`
-
 ## Features
 
 - Visual representation of the HOCON schema
@@ -42,6 +33,6 @@ npm install
 3. Run the development server:
 ```bash
 npm start
-The application will be available at http://localhost:5173.
+The application will be available at http://localhost:5173?s=<url-to-schema-json>.
 ```
 
