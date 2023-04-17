@@ -21,6 +21,11 @@ const fetchStructs = async () => {
       console.error('Error fetching JSON file:', error)
     }
   }
+  else {
+    // Redirect to a default URL with the ?s parameter
+    const defaultURL = 'https://zmstone.github.io/emqx-docgen'
+    window.location.replace(defaultURL);
+  }
 }
 
 fetchStructs()
