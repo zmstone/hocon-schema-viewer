@@ -15,7 +15,7 @@ You can find more information about HOCON schema [here](https://github.com/emqx/
 - [TODO] search
 - [TODO] interactive example generation
 
-## Installation
+## Develop
 
 1. Clone the repository:
 
@@ -32,7 +32,26 @@ npm install
 
 3. Run the development server:
 ```bash
-npm start
-The application will be available at http://localhost:5173?s=<url-to-schema-json>.
+npm run dev
+The application will be available at http://localhost:5173?s=schemas/default.json
 ```
+
+## Deploy
+
+1. Build the html
+
+```bash
+make
+```
+
+2. Host the html
+
+Copy the dist/conf-docs-out.html to your webserver,
+put the html together with schema json files.
+
+See hosted example here:
+https://zmstone.github.io/emqx-docgen
+
+And the hosting project here:
+https://github.com/zmstone/emqx-docgen
 
