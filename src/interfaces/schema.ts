@@ -223,10 +223,30 @@ export function shortTypeDisplay(type: FieldType): string {
   return maybeShortTypeDisplay(type, short)
 }
 
-export function visibleFields(struct: Struct) {
+// importance levels are: 'hidden', 'low', 'medium' and 'high'
+function importanceLevelToNumber(importance: string | undefined): number {
+  switch (importance?.toLowerCase()) {
+    case 'hidden':
+      return 0
+    case 'low':
+      return 1
+    case 'medium':
+      return 2
+    case 'high':
+      return 3
+    default:
+      return 3
+  }
+}
+// this function returns true if the field's importance is equal or higher than the expected importance level 
+function isVisible(field: Field, expImportance: string): boolean {
+  return importanceLevelToNumber(field.importance) >= importanceLevelToNumber(expImportance)
+}
+
+export function visibleFields(struct: Struct, importance: string) {
   return struct.fields.filter((field: Field) => {
     if (field.importance) {
-      return field.importance !== 'hidden'
+      return isVisible(field, importance)
     }
     // TODO: make user to choose if they want to see deprecated fields
     if (field.desc && field.desc.startsWith('Deprecated since')) {
@@ -249,16 +269,16 @@ function short(typeName: string): string {
 // The second arg is a function to help resolving struct from its name.
 // NOTE: this function only goes one level down the struct stack.
 // but does not walk the full type tree.
-export function initialize(root: Struct, findStruct: Function): Field[] {
+export function initialize(root: Struct, findStruct: Function, importance: string): Field[] {
   const updatedFields: Field[] = []
-  visibleFields(root).forEach((field: Field) => {
+  visibleFields(root, importance).forEach((field: Field) => {
     updatedFields.push(field) // Keep the parent field
     const parentName = field.name
     if (field.type.kind === 'struct') {
       const subStruct = findStruct(field.type.name)
       if (subStruct) {
         subStruct.fields.forEach((subField: Field) => {
-          if (isDocLift(subField)) {
+          if (isVisible(subField, importance) && isDocLift(subField)) {
             subField.name = `${parentName}.${subField.name}` // Update the sub-field name
             updatedFields.push(subField) // Add the sub-field next to the parent field if doc_lift is true
           }
@@ -268,38 +288,35 @@ export function initialize(root: Struct, findStruct: Function): Field[] {
   })
   // now expand the first level children
   updatedFields.forEach((f) => {
-    f.expands = getExpands(f.name, f.type, findStruct)
+    f.expands = getExpands(f.name, f.type, findStruct, importance)
   })
   return updatedFields
 }
 
-// TODO: fix EMQX authn schema.
-// After the fix, function 'short' should be enough for the same purpose.
 function tidyNames(strings: string[]): string[] {
   // remove 'authn-' prefix
   return strings
     .map((s) => {
+      // keep for older version emqx (before v5.0.23)
       return s.replace('authn-', '')
     })
     .map((s) => {
       // remove ':authentication' suffix
+      // keep for older version emqx (before v5.0.23)
       return s.replace(':authentication', '')
     })
-    .map((s) => {
-      // remove 'authz:' prefix
-      return s.replace('authz:', '')
-    })
+    .map(short)
 }
 
 // Get one-level expansion for a root field.
-function getExpands(rootName: string, ft: FieldType, findStruct: Function): DisplayType[] {
+function getExpands(rootName: string, ft: FieldType, findStruct: Function, importance: string): DisplayType[] {
   if (ft.kind === 'array') {
-    return getExpands(rootName, ft.elements, findStruct)
+    return getExpands(rootName, ft.elements, findStruct, importance)
   }
   if (ft.kind === 'struct') {
     const struct = findStruct(ft.name)
-    if (allFieldsAreComplex(struct)) {
-      return visibleFields(struct).map((f: Field) => {
+    if (allFieldsAreComplex(struct, importance)) {
+      return visibleFields(struct, importance).map((f: Field) => {
         return fieldToDisplayType(rootName, f)
       })
     }
@@ -321,6 +338,6 @@ function getExpands(rootName: string, ft: FieldType, findStruct: Function): Disp
   return []
 }
 
-function allFieldsAreComplex(t: Struct) {
-  return visibleFields(t).every(isComplexField)
+function allFieldsAreComplex(t: Struct, importance: string) {
+  return visibleFields(t, importance).every(isComplexField)
 }

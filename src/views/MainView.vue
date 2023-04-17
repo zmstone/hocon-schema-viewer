@@ -24,6 +24,7 @@ export default defineComponent({
   setup(props) {
     let index: StructsIndex = {}
     const urlParams = new URLSearchParams(window.location.search)
+    const importanceLevel = urlParams.get('importance') || 'medium'
     const currentPath = urlParams.get('r') || ''
 
     // build name -> Struct index
@@ -40,7 +41,7 @@ export default defineComponent({
     let rootStruct: schema.Struct
     rootStruct = props.allStructs[0]
     if (!rootStruct.initialized) {
-      rootStruct.fields = schema.initialize(rootStruct, structResolver)
+      rootStruct.fields = schema.initialize(rootStruct, structResolver, importanceLevel)
       rootStruct.initialized = true
     }
 
@@ -83,7 +84,8 @@ export default defineComponent({
       structResolver,
       displayType,
       handleSelectedStruct,
-      resolveDisplayStructs
+      resolveDisplayStructs,
+      importanceLevel
     }
   },
   components: {
@@ -122,6 +124,7 @@ export default defineComponent({
         :markdownProvider="markdownToHtml"
         :structResolver="structResolver"
         :expandByDefault="true"
+        :importanceLevel="importanceLevel"
         :key="i"
       />
     </div>

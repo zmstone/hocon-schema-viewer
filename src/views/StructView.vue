@@ -24,6 +24,10 @@ export default defineComponent({
     expandByDefault: {
       type: Boolean,
       required: true
+    },
+    importanceLevel: {
+      type: String,
+      required: true
     }
   },
   setup(props) {
@@ -56,7 +60,7 @@ export default defineComponent({
       return this.structResolver(name)
     },
     visibleFields(struct: schema.Struct) {
-      return schema.visibleFields(struct)
+      return schema.visibleFields(struct, this.importanceLevel)
     },
     markdownToHtml(str: string): string {
       return this.markdownProvider(str)
@@ -117,6 +121,7 @@ export default defineComponent({
             :markdownProvider="markdownProvider"
             :structResolver="structResolver"
             :expandByDefault="false"
+            :importanceLevel="importanceLevel"
           />
         </div>
       </li>
