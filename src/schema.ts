@@ -267,7 +267,7 @@ export function isDocLift(field: Field): boolean {
 
 // remove the module:type() prefix from a type name
 function short(typeName: string): string {
-  return typeName.replace(/.*:/, '')
+  return typeName.replace(/.?:/, '')
 }
 
 // lift structs to root level a field has doc_lift => true annotation.
@@ -300,18 +300,17 @@ export function initialize(root: Struct, findStruct: Function): Field[] {
 }
 
 function tidyNames(strings: string[]): string[] {
-  // remove 'authn-' prefix
-  return strings
-    .map((s) => {
-      // keep for older version emqx (before v5.0.23)
-      return s.replace('authn-', '')
-    })
-    .map((s) => {
-      // remove ':authentication' suffix
-      // keep for older version emqx (before v5.0.23)
-      return s.replace(':authentication', '')
-    })
-    .map(short)
+  if (strings.every((s) => s.startsWith('authn-'))) {
+    // special handling for EMQX before v5.0.23
+    return strings
+      .map((s) => {
+        return s.replace('authn-', '')
+      })
+      .map((s) => {
+        return s.replace(':authentication', '')
+      })
+  }
+  return strings.map(short)
 }
 
 // Get one-level expansion for a root field.
