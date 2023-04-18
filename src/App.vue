@@ -2,7 +2,7 @@
 import { ref, onMounted } from 'vue'
 import MainView from './views/MainView.vue'
 import * as markdown from './markdown'
-import type { Struct } from './interfaces/schema'
+import type { Struct } from './schema'
 
 const fetchedStructs = ref<Struct[]>([])
 
@@ -13,18 +13,18 @@ const fetchStructs = async () => {
     try {
       const response = await fetch(url)
       if (response.ok) {
-        fetchedStructs.value = await response.json()
+        const jsonData = await response.json()
+        fetchedStructs.value = jsonData as Struct[]
       } else {
         console.error('Failed to fetch JSON file:', response.status)
       }
     } catch (error) {
       console.error('Error fetching JSON file:', error)
     }
-  }
-  else {
+  } else {
     // Redirect to a default URL with the ?s parameter
     const defaultURL = 'https://zmstone.github.io/emqx-docgen'
-    window.location.replace(defaultURL);
+    window.location.replace(defaultURL)
   }
 }
 
@@ -61,7 +61,7 @@ function renderMarkdown(desc: string): string {
 .main-view {
   flex-grow: 1;
   overflow-y: auto;
-  padding: 10px;
+  padding: 0px;
 }
 
 #app {

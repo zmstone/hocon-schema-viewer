@@ -7,3 +7,7 @@ build:
 .PHONY: docker
 docker:
 	docker build -t zmstone/hocon-schema-viewer:$(VERSION) .
+
+.PHONY: fmt
+fmt:
+	npm run format

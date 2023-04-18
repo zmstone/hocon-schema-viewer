@@ -1,7 +1,7 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
 import type { PropType } from 'vue'
-import * as schema from '../interfaces/schema'
+import * as schema from '../schema'
 
 export default defineComponent({
   name: 'StructView',
@@ -35,9 +35,13 @@ export default defineComponent({
     const toggleExpand = () => {
       isExpanded.value = !isExpanded.value
     }
+    function isVisible(field: schema.Field): boolean {
+      return schema.isVisible(field, props.importanceLevel)
+    }
     return {
       isExpanded,
-      toggleExpand
+      toggleExpand,
+      isVisible
     }
   },
   components: {
@@ -60,7 +64,7 @@ export default defineComponent({
       return this.structResolver(name)
     },
     visibleFields(struct: schema.Struct) {
-      return schema.visibleFields(struct, this.importanceLevel)
+      return schema.visibleFields(struct)
     },
     markdownToHtml(str: string): string {
       return this.markdownProvider(str)
@@ -84,45 +88,47 @@ export default defineComponent({
     </span>
     <ul class="field-list" v-if="isExpanded">
       <li v-for="(field, index) in visibleFields(currentStruct)" class="field-item">
-        <div class="fieldname">{{ field.name }}</div>
-        <table>
-          <tr v-if="field.aliases && field.aliases.length > 0">
-            <td>Aliases:</td>
-            <td>
-              <span v-for="(alias, index) in field.aliases">
-                <span v-if="index > 0">, </span>{{ alias }}
-              </span>
-            </td>
-          </tr>
-          <tr v-if="field.type.kind !== 'struct'">
-            <td>Type</td>
-            <td>
-              <code>{{ typeDisplay(field.type) }}</code>
-            </td>
-          </tr>
-          <tr v-if="field.raw_default">
-            <td>Default</td>
-            <td>
-              <code>{{ field.raw_default }}</code>
-            </td>
-          </tr>
-          <tr v-if="field.desc">
-            <td>Description</td>
-            <td><div v-html="markdownToHtml(field.desc)"></div></td>
-          </tr>
-        </table>
-        <div
-          v-if="isComplexType(field.type)"
-          v-for="(st, index) in subStructs(field)"
-          class="sub-struct"
-        >
-          <StructView
-            :currentStruct="findStruct(st.name)"
-            :markdownProvider="markdownProvider"
-            :structResolver="structResolver"
-            :expandByDefault="false"
-            :importanceLevel="importanceLevel"
-          />
+        <div v-if="isVisible(field)">
+          <div class="fieldname">{{ field.name }}</div>
+          <table>
+            <tr v-if="field.aliases && field.aliases.length > 0">
+              <td>Aliases:</td>
+              <td>
+                <span v-for="(alias, index) in field.aliases">
+                  <span v-if="index > 0">, </span>{{ alias }}
+                </span>
+              </td>
+            </tr>
+            <tr v-if="field.type.kind !== 'struct'">
+              <td>Type</td>
+              <td>
+                <code>{{ typeDisplay(field.type) }}</code>
+              </td>
+            </tr>
+            <tr v-if="field.raw_default">
+              <td>Default</td>
+              <td>
+                <code>{{ field.raw_default }}</code>
+              </td>
+            </tr>
+            <tr v-if="field.desc">
+              <td>Description</td>
+              <td><div v-html="markdownToHtml(field.desc)"></div></td>
+            </tr>
+          </table>
+          <div
+            v-if="isComplexType(field.type)"
+            v-for="(st, index) in subStructs(field)"
+            class="sub-struct"
+          >
+            <StructView
+              :currentStruct="findStruct(st.name)"
+              :markdownProvider="markdownProvider"
+              :structResolver="structResolver"
+              :expandByDefault="false"
+              :importanceLevel="importanceLevel"
+            />
+          </div>
         </div>
       </li>
     </ul>

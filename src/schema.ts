@@ -91,10 +91,11 @@ export interface DisplayType {
   tpath?: string
   // true if i'm a union member
   is_union_member?: boolean
+  importance?: string
 }
 
-export const unionMemberSelectorSymbol='@'
-export const fieldSelectorSymbol='.'
+export const unionMemberSelectorSymbol = '@'
+export const fieldSelectorSymbol = '.'
 
 function full_tpath(t: DisplayType): string {
   if (t.tpath) {
@@ -142,6 +143,9 @@ export function fieldToDisplayType(rootName: string, f: Field): DisplayType {
   }
   if (f.type.kind != 'struct') {
     res.type_display = typeDisplay(f.type)
+  }
+  if (f.importance) {
+    res.importance = f.importance
   }
   return res
 }
@@ -238,16 +242,17 @@ function importanceLevelToNumber(importance: string | undefined): number {
       return 3
   }
 }
-// this function returns true if the field's importance is equal or higher than the expected importance level 
-function isVisible(field: Field, expImportance: string): boolean {
-  return importanceLevelToNumber(field.importance) >= importanceLevelToNumber(expImportance)
+// this function returns true if the field's importance is equal or higher than the expected importance level
+export type HasImportance = Field | DisplayType
+export function isVisible(item: HasImportance, expImportance: string): boolean {
+  if (expImportance.toLowerCase() == 'all') return true
+  return (
+    importanceLevelToNumber(item.importance || 'high') >= importanceLevelToNumber(expImportance)
+  )
 }
 
-export function visibleFields(struct: Struct, importance: string) {
+export function visibleFields(struct: Struct) {
   return struct.fields.filter((field: Field) => {
-    if (field.importance) {
-      return isVisible(field, importance)
-    }
     // TODO: make user to choose if they want to see deprecated fields
     if (field.desc && field.desc.startsWith('Deprecated since')) {
       return false
@@ -269,16 +274,16 @@ function short(typeName: string): string {
 // The second arg is a function to help resolving struct from its name.
 // NOTE: this function only goes one level down the struct stack.
 // but does not walk the full type tree.
-export function initialize(root: Struct, findStruct: Function, importance: string): Field[] {
+export function initialize(root: Struct, findStruct: Function): Field[] {
   const updatedFields: Field[] = []
-  visibleFields(root, importance).forEach((field: Field) => {
+  visibleFields(root).forEach((field: Field) => {
     updatedFields.push(field) // Keep the parent field
     const parentName = field.name
     if (field.type.kind === 'struct') {
       const subStruct = findStruct(field.type.name)
       if (subStruct) {
         subStruct.fields.forEach((subField: Field) => {
-          if (isVisible(subField, importance) && isDocLift(subField)) {
+          if (isDocLift(subField)) {
             subField.name = `${parentName}.${subField.name}` // Update the sub-field name
             updatedFields.push(subField) // Add the sub-field next to the parent field if doc_lift is true
           }
@@ -288,7 +293,8 @@ export function initialize(root: Struct, findStruct: Function, importance: strin
   })
   // now expand the first level children
   updatedFields.forEach((f) => {
-    f.expands = getExpands(f.name, f.type, findStruct, importance)
+    // default importance (when missing a 'importance') is 'high'
+    f.expands = getExpands(f.name, f.type, findStruct, f.importance || 'high')
   })
   return updatedFields
 }
@@ -309,14 +315,19 @@ function tidyNames(strings: string[]): string[] {
 }
 
 // Get one-level expansion for a root field.
-function getExpands(rootName: string, ft: FieldType, findStruct: Function, importance: string): DisplayType[] {
+function getExpands(
+  rootName: string,
+  ft: FieldType,
+  findStruct: Function,
+  fieldImportance: string
+): DisplayType[] {
   if (ft.kind === 'array') {
-    return getExpands(rootName, ft.elements, findStruct, importance)
+    return getExpands(rootName, ft.elements, findStruct, fieldImportance)
   }
   if (ft.kind === 'struct') {
     const struct = findStruct(ft.name)
-    if (allFieldsAreComplex(struct, importance)) {
-      return visibleFields(struct, importance).map((f: Field) => {
+    if (allFieldsAreComplex(struct)) {
+      return visibleFields(struct).map((f: Field) => {
         return fieldToDisplayType(rootName, f)
       })
     }
@@ -331,13 +342,14 @@ function getExpands(rootName: string, ft: FieldType, findStruct: Function, impor
         list_display: tidyName,
         type: ft.members[i],
         is_union_member: true,
-        tpath: rootName
+        tpath: rootName,
+        importance: fieldImportance
       }
     })
   }
   return []
 }
 
-function allFieldsAreComplex(t: Struct, importance: string) {
-  return visibleFields(t, importance).every(isComplexField)
+function allFieldsAreComplex(t: Struct) {
+  return visibleFields(t).every(isComplexField)
 }

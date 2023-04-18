@@ -1,8 +1,9 @@
 <script lang="ts">
 import { defineComponent, ref, onMounted, onUnmounted } from 'vue'
 import type { PropType } from 'vue'
-import * as schema from '../interfaces/schema'
+import * as schema from '../schema'
 import StructView from './StructView.vue'
+import ImportanceView from './ImportanceView.vue'
 import RootFieldsList from './RootFieldsList.vue'
 
 type StructsIndex = { [name: string]: number }
@@ -22,9 +23,10 @@ export default defineComponent({
     }
   },
   setup(props) {
+    const importanceArgName = 'min-importance'
     let index: StructsIndex = {}
     const urlParams = new URLSearchParams(window.location.search)
-    const importanceLevel = urlParams.get('importance') || 'medium'
+    const defaultImportanceLevel = urlParams.get(importanceArgName) || 'medium'
     const currentPath = urlParams.get('r') || ''
 
     // build name -> Struct index
@@ -41,7 +43,7 @@ export default defineComponent({
     let rootStruct: schema.Struct
     rootStruct = props.allStructs[0]
     if (!rootStruct.initialized) {
-      rootStruct.fields = schema.initialize(rootStruct, structResolver, importanceLevel)
+      rootStruct.fields = schema.initialize(rootStruct, structResolver)
       rootStruct.initialized = true
     }
 
@@ -55,6 +57,7 @@ export default defineComponent({
     function handleSelectedStruct(clicked: schema.DisplayType) {
       displayType.value = clicked
     }
+    const importanceLevel = ref<string>(defaultImportanceLevel)
     function resolveDisplayStructs(): schema.Struct[] {
       const types = schema.liftStructs(displayType.value.type)
       return types
@@ -64,12 +67,24 @@ export default defineComponent({
         })
         .filter((s: schema.Struct | null) => s !== null) as schema.Struct[]
     }
+    const handleImportanceLevelChanged = (newImportanceLevel: string) => {
+      importanceLevel.value = newImportanceLevel
+      const currentURL = new URL(window.location.href)
+      const params = currentURL.searchParams
+      params.set(importanceArgName, newImportanceLevel)
+      window.history.pushState({}, '', `${currentURL.pathname}?${params}`)
+    }
     const handleUrlChange = () => {
       const urlParams = new URLSearchParams(window.location.search)
       const currentPath = urlParams.get('r') || ''
+      const importanceLevelInUrl = urlParams.get(importanceArgName) || 'medium'
+      console.log(importanceLevelInUrl)
       let resolvedDisplay = schema.resolveRootDisplay(rootStruct.fields, currentPath)
       if (resolvedDisplay) {
         displayType.value = resolvedDisplay
+      }
+      if (importanceLevelInUrl.toLowerCase() !== importanceLevel.value.toLowerCase()) {
+        importanceLevel.value = importanceLevelInUrl
       }
     }
     onMounted(() => {
@@ -85,10 +100,12 @@ export default defineComponent({
       displayType,
       handleSelectedStruct,
       resolveDisplayStructs,
-      importanceLevel
+      importanceLevel,
+      handleImportanceLevelChanged
     }
   },
   components: {
+    ImportanceView,
     RootFieldsList,
     StructView
   },
@@ -101,40 +118,54 @@ export default defineComponent({
 </script>
 
 <template>
-  <div class="inner-container">
-    <div class="sidebar">
-      <RootFieldsList
-        :rootFields="rootStruct.fields"
-        :currentDisplay="displayType"
-        @selected="handleSelectedStruct"
-      />
-    </div>
-    <div class="struct-view-box" v-if="displayType">
-      <div v-if="displayType.parent_field_doc" class="root-doc">
-        <div v-html="markdownToHtml(displayType.parent_field_doc)" />
+  <div class="main-container">
+    <ImportanceView
+      :selectedInUri="importanceLevel"
+      @importanceLevelChanged="handleImportanceLevelChanged"
+    />
+    <div class="inner-container">
+      <div class="sidebar">
+        <RootFieldsList
+          :rootFields="rootStruct.fields"
+          :currentDisplay="displayType"
+          :importanceLevel="importanceLevel"
+          @selected="handleSelectedStruct"
+        />
       </div>
-      <div v-if="displayType.type_display" class="root-doc">
-        <span class="root-field-type"
-          ><code>{{ displayType.type_display }}</code></span
-        >
+      <div class="struct-view-box" v-if="displayType">
+        <div v-if="displayType.parent_field_doc" class="root-doc">
+          <div v-html="markdownToHtml(displayType.parent_field_doc)" />
+        </div>
+        <div v-if="displayType.type_display" class="root-doc">
+          <span class="root-field-type"
+            ><code>{{ displayType.type_display }}</code></span
+          >
+        </div>
+        <StructView
+          v-for="(st, i) in resolveDisplayStructs()"
+          :currentStruct="st"
+          :markdownProvider="markdownToHtml"
+          :structResolver="structResolver"
+          :expandByDefault="true"
+          :importanceLevel="importanceLevel"
+          :key="i"
+        />
       </div>
-      <StructView
-        v-for="(st, i) in resolveDisplayStructs()"
-        :currentStruct="st"
-        :markdownProvider="markdownToHtml"
-        :structResolver="structResolver"
-        :expandByDefault="true"
-        :importanceLevel="importanceLevel"
-        :key="i"
-      />
     </div>
   </div>
 </template>
 
 <style scoped>
-.inner-container {
+.main-container {
   display: flex;
+  flex-direction: column;
   height: 100%;
+}
+.inner-container {
+  margin-top: 10px;
+  display: flex;
+  flex-grow: 1;
+  overflow-y: auto;
 }
 
 .sidebar {

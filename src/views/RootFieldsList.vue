@@ -1,7 +1,7 @@
 <script lang="ts">
 import { defineComponent, ref, watch } from 'vue'
 import type { PropType } from 'vue'
-import * as schema from '../interfaces/schema'
+import * as schema from '../schema'
 
 type StructsIndex = { [name: string]: number }
 
@@ -14,6 +14,10 @@ export default defineComponent({
     },
     currentDisplay: {
       type: Object as PropType<schema.DisplayType>,
+      required: true
+    },
+    importanceLevel: {
+      trype: String,
       required: true
     }
   },
@@ -35,12 +39,12 @@ export default defineComponent({
     }
     updateSelected(props.currentDisplay)
     const pushState = (newRoot: string) => {
-        // Get the current URL
-        const currentURL = new URL(window.location.href)
-        // Update the 'r' parameter while preserving other parameters
-        const params = currentURL.searchParams
-        params.set('r', newRoot)
-        window.history.pushState({}, '', `${currentURL.pathname}?${params}`);
+      // Get the current URL
+      const currentURL = new URL(window.location.href)
+      // Update the 'r' parameter while preserving other parameters
+      const params = currentURL.searchParams
+      params.set('r', newRoot)
+      window.history.pushState({}, '', `${currentURL.pathname}?${params}`)
     }
     const rootClicked = (displayType: schema.DisplayType) => {
       pushState(displayType.list_display)
@@ -53,6 +57,10 @@ export default defineComponent({
       }
       pushState(`${currentRootSelected.value}${sep}${displayType.list_display}`)
       emit('selected', displayType)
+    }
+
+    const isVisible = (item: schema.HasImportance): boolean => {
+      return schema.isVisible(item, props.importanceLevel as string)
     }
     watch(
       () => props.currentDisplay,
@@ -67,7 +75,8 @@ export default defineComponent({
       currentRootSelected,
       currentExpandSelected,
       rootClicked,
-      expandClicked
+      expandClicked,
+      isVisible
     }
   },
   methods: {
@@ -97,12 +106,11 @@ export default defineComponent({
       return expandChar
     },
     selectorSymbol(exp: schema.DisplayType): string {
-      if(exp.is_union_member){
+      if (exp.is_union_member) {
         return schema.unionMemberSelectorSymbol
-      }
-    else {
+      } else {
         return schema.fieldSelectorSymbol
-    }
+      }
     }
   }
 })
@@ -112,7 +120,11 @@ export default defineComponent({
   <div>
     <ul class="root-fields-list">
       <li v-for="(field, index) in rootFields" :key="index">
-        <div class="root-field-display" @click="rootClicked(fieldToDisplayType(field))">
+        <div
+          v-if="isVisible(field)"
+          class="root-field-display"
+          @click="rootClicked(fieldToDisplayType(field))"
+        >
           <span :class="{ 'selected-root-field': currentRootSelected === field.name }">
             {{ field.name }} {{ annotate(field.type) }}
           </span>
@@ -122,7 +134,7 @@ export default defineComponent({
         </div>
         <ul class="root-fields-sub-list" v-if="currentRootSelected === field.name">
           <li v-for="(expand, expIndex) in field.expands || []" :key="expIndex">
-            <div class="root-field-display" @click="expandClicked(expand)">
+            <div v-if="isVisible(expand)" class="root-field-display" @click="expandClicked(expand)">
               <span
                 :class="{ 'selected-root-field': currentExpandSelected === expand.list_display }"
                 >{{ selectorSymbol(expand) }}{{ expand.list_display }}</span
