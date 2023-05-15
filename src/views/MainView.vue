@@ -16,6 +16,10 @@ export default defineComponent({
       type: Array as PropType<schema.Struct[]>,
       required: true
     },
+    rootDoc: {
+      type: String,
+      required: true
+    },
     // render markdown to HTML
     markdownProvider: {
       type: Function,
@@ -28,6 +32,14 @@ export default defineComponent({
     const urlParams = new URLSearchParams(window.location.search)
     const defaultImportanceLevel = urlParams.get(importanceArgName) || 'medium'
     const currentPath = urlParams.get('r') || ''
+    const rootDisplay = {
+        list_display: 'none',
+        parent_field_doc: props.rootDoc,
+        type: {kind: 'struct', name: 'THE_ROOT'},
+        tpath: 'ALL',
+        type_display: '',
+        importance: 'high'
+    }
 
     // build name -> Struct index
     for (let i = 0; i < props.allStructs.length; i++) {
@@ -35,6 +47,9 @@ export default defineComponent({
     }
     // find struct by name (using the index)
     function structResolver(name: string): schema.Struct | undefined {
+        if(name === 'THE_ROOT') {
+            return props.allStructs[0];
+        }
       if (typeof index[name] === 'number') {
         return props.allStructs[index[name]]
       }
@@ -47,7 +62,7 @@ export default defineComponent({
       rootStruct.initialized = true
     }
 
-    let defaultDisplay = schema.fieldToDisplayType('', rootStruct.fields[0])
+    let defaultDisplay = rootDisplay
     let resolvedDisplay = schema.resolveRootDisplay(rootStruct.fields, currentPath)
     if (resolvedDisplay) {
       defaultDisplay = resolvedDisplay
@@ -197,4 +212,5 @@ export default defineComponent({
     color: #d9e9d9;
   }
 }
+
 </style>

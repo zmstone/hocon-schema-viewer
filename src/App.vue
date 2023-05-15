@@ -5,6 +5,7 @@ import * as markdown from './markdown'
 import type { Struct } from './schema'
 
 const fetchedStructs = ref<Struct[]>([])
+const fetchedRootDoc = ref<string>('')
 
 const fetchStructs = async () => {
   const params = new URLSearchParams(window.location.search)
@@ -28,7 +29,22 @@ const fetchStructs = async () => {
   }
 }
 
+const fetchRootDoc = async () => {
+    try {
+      const response = await fetch('rootdoc.md')
+      if (response.ok) {
+        const textData = await response.text()
+        fetchedRootDoc.value = textData
+      } else {
+        console.error('Failed to fetch root doc:', response.status)
+      }
+    } catch (error) {
+      console.error('Error fetching root doc:', error)
+    }
+}
+
 fetchStructs()
+fetchRootDoc()
 
 function renderMarkdown(desc: string): string {
   return markdown.render(desc)
@@ -41,6 +57,7 @@ function renderMarkdown(desc: string): string {
       class="main-view"
       v-if="fetchedStructs.length > 0"
       :allStructs="fetchedStructs"
+      :rootDoc="fetchedRootDoc"
       :markdownProvider="renderMarkdown"
     />
   </div>
