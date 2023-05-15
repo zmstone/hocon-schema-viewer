@@ -4,6 +4,7 @@ import MainView from './views/MainView.vue'
 import * as markdown from './markdown'
 import type { Struct } from './schema'
 
+let isLoading = ref<boolean>(true)
 const fetchedStructs = ref<Struct[]>([])
 const fetchedRootDoc = ref<string>('')
 
@@ -30,21 +31,23 @@ const fetchStructs = async () => {
 }
 
 const fetchRootDoc = async () => {
-    try {
-      const response = await fetch('rootdoc.md')
-      if (response.ok) {
-        const textData = await response.text()
-        fetchedRootDoc.value = textData
-      } else {
-        console.error('Failed to fetch root doc:', response.status)
-      }
-    } catch (error) {
-      console.error('Error fetching root doc:', error)
+  try {
+    const response = await fetch('rootdoc.md')
+    if (response.ok) {
+      const textData = await response.text()
+      fetchedRootDoc.value = textData
+    } else {
+      console.error('Failed to fetch root doc:', response.status)
     }
+  } catch (error) {
+    console.error('Error fetching root doc:', error)
+  }
 }
 
-fetchStructs()
-fetchRootDoc()
+onMounted(async() => {
+  await Promise.all([fetchStructs(), fetchRootDoc()])
+  isLoading.value = false
+})
 
 function renderMarkdown(desc: string): string {
   return markdown.render(desc)
@@ -55,12 +58,13 @@ function renderMarkdown(desc: string): string {
   <div class="container">
     <MainView
       class="main-view"
-      v-if="fetchedStructs.length > 0"
+      v-if="!isLoading"
       :allStructs="fetchedStructs"
       :rootDoc="fetchedRootDoc"
       :markdownProvider="renderMarkdown"
     />
   </div>
+  <div v-if="isLoading">Loading...</div>
 </template>
 
 <style>
