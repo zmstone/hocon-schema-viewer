@@ -125,7 +125,7 @@ export default defineComponent({
               :currentStruct="findStruct(st.name)"
               :markdownProvider="markdownProvider"
               :structResolver="structResolver"
-              :expandByDefault="false"
+              :expandByDefault="true"
               :importanceLevel="importanceLevel"
             />
           </div>

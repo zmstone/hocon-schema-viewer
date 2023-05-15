@@ -44,7 +44,7 @@ const fetchRootDoc = async () => {
   }
 }
 
-onMounted(async() => {
+onMounted(async () => {
   await Promise.all([fetchStructs(), fetchRootDoc()])
   isLoading.value = false
 })

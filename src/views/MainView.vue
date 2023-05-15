@@ -32,13 +32,13 @@ export default defineComponent({
     const urlParams = new URLSearchParams(window.location.search)
     const defaultImportanceLevel = urlParams.get(importanceArgName) || 'medium'
     const currentPath = urlParams.get('r') || ''
-    const rootDisplay = {
-        list_display: 'none',
-        parent_field_doc: props.rootDoc,
-        type: {kind: 'struct', name: 'THE_ROOT'},
-        tpath: 'ALL',
-        type_display: '',
-        importance: 'high'
+    const rootDisplay: schema.DisplayType = {
+      list_display: 'none',
+      parent_field_doc: props.rootDoc,
+      type: { kind: 'struct', name: 'THE_ROOT' },
+      tpath: 'ALL',
+      type_display: '',
+      importance: 'high'
     }
 
     // build name -> Struct index
@@ -47,9 +47,9 @@ export default defineComponent({
     }
     // find struct by name (using the index)
     function structResolver(name: string): schema.Struct | undefined {
-        if(name === 'THE_ROOT') {
-            return props.allStructs[0];
-        }
+      if (name === 'THE_ROOT') {
+        return props.allStructs[0]
+      }
       if (typeof index[name] === 'number') {
         return props.allStructs[index[name]]
       }
@@ -108,15 +108,28 @@ export default defineComponent({
     onUnmounted(() => {
       window.removeEventListener('popstate', handleUrlChange)
     })
+    const toHome = () => {
+      // current URL
+      const url = new URL(window.location.href)
+      // the ?s param is the search query
+      const sParam = url.searchParams.get('s')
+      // Construct a new URL without search parameters
+      const newUrl = new URL(url.protocol + '//' + url.host + url.pathname)
+      if (sParam) {
+        newUrl.searchParams.set('s', sParam)
+      }
+      window.location.href = newUrl.toString()
+    }
 
     return {
       rootStruct,
-      structResolver,
       displayType,
+      importanceLevel,
+      structResolver,
       handleSelectedStruct,
       resolveDisplayStructs,
-      importanceLevel,
-      handleImportanceLevelChanged
+      handleImportanceLevelChanged,
+      toHome
     }
   },
   components: {
@@ -134,10 +147,13 @@ export default defineComponent({
 
 <template>
   <div class="main-container">
-    <ImportanceView
-      :selectedInUri="importanceLevel"
-      @importanceLevelChanged="handleImportanceLevelChanged"
-    />
+    <div class="top-bar">
+      <button @click="toHome">HOME</button>
+      <ImportanceView
+        :selectedInUri="importanceLevel"
+        @importanceLevelChanged="handleImportanceLevelChanged"
+      />
+    </div>
     <div class="inner-container">
       <div class="sidebar">
         <RootFieldsList
@@ -158,11 +174,11 @@ export default defineComponent({
         </div>
         <StructView
           v-for="(st, i) in resolveDisplayStructs()"
-          :currentStruct="st"
           :markdownProvider="markdownToHtml"
           :structResolver="structResolver"
-          :expandByDefault="true"
+          :currentStruct="st"
           :importanceLevel="importanceLevel"
+          :expandByDefault="true"
           :key="i"
         />
       </div>
@@ -205,6 +221,14 @@ export default defineComponent({
   border-radius: 4px;
 }
 
+.top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 5px;
+  border-bottom: 1px solid #ccc;
+}
+
 /* Dark mode styles */
 @media (prefers-color-scheme: dark) {
   .root-field-type {
@@ -212,5 +236,4 @@ export default defineComponent({
     color: #d9e9d9;
   }
 }
-
 </style>

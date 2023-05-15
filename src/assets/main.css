@@ -1,8 +1,8 @@
 @import './base.css';
 
 .tip {
-  border: 1px solid #00BFA5;
-  background-color: #E0F7FA;
+  border: 1px solid #00bfa5;
+  background-color: #e0f7fa;
   padding: 20px;
   margin: 20px 0;
 }
@@ -10,9 +10,9 @@
 /* Dark mode styles */
 @media (prefers-color-scheme: dark) {
   .tip {
-    border: 1px solid #2E7D32;
+    border: 1px solid #2e7d32;
     background-color: #2e5742;
-    color: #B2DFDB;
+    color: #b2dfdb;
     padding: 20px;
     margin: 20px 0;
   }
@@ -21,5 +21,5 @@
 #app {
   width: 100%;
   box-sizing: border-box;
-  padding: 10px;
+  padding: 5px;
 }

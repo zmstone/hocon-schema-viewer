@@ -1,6 +1,6 @@
 <template>
   <div class="top-banner">
-    <div class="importance-label">Display from importance level:</div>
+    <div class="importance-label">Importance level:</div>
     <div
       v-for="(level, index) in importanceLevels"
       :key="index"
@@ -61,7 +61,6 @@ export default defineComponent({
   justify-content: space-around;
   justify-content: flex-start;
   background-color: #f5f5f5;
-  padding: 6px;
   border-radius: 4px;
   font-size: 0.8em;
 }

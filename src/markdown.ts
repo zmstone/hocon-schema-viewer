@@ -4,16 +4,18 @@ import container from 'markdown-it-container'
 
 const md = new MarkdownIt({
   html: true // Enable HTML tags in source
-}).use(mdHtml5Embed, {
-  html5embed: {
-    useImageSyntax: true,
-    useLinkSyntax: true
-  }
-}).use(container, 'tip', {
-  validate: function (params: string) {
-    return params.trim().match(/^tip\s+(.*)$/)
-  }
 })
+  .use(mdHtml5Embed, {
+    html5embed: {
+      useImageSyntax: true,
+      useLinkSyntax: true
+    }
+  })
+  .use(container, 'tip', {
+    validate: function (params: string) {
+      return params.trim().match(/^tip\s+(.*)$/)
+    }
+  })
 
 export default md
 
