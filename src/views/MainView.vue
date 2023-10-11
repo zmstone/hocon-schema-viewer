@@ -30,7 +30,7 @@ export default defineComponent({
     const importanceArgName = 'min-importance'
     let index: StructsIndex = {}
     const urlParams = new URLSearchParams(window.location.search)
-    const defaultImportanceLevel = urlParams.get(importanceArgName) || 'medium'
+    const defaultImportanceLevel = urlParams.get(importanceArgName) || 'all'
     const currentPath = urlParams.get('r') || ''
     const rootDisplay: schema.DisplayType = {
       list_display: 'none',
@@ -92,7 +92,7 @@ export default defineComponent({
     const handleUrlChange = () => {
       const urlParams = new URLSearchParams(window.location.search)
       const currentPath = urlParams.get('r') || ''
-      const importanceLevelInUrl = urlParams.get(importanceArgName) || 'all'
+      const importanceLevelInUrl = urlParams.get(importanceArgName) || defaultImportanceLevel
       console.log(importanceLevelInUrl)
       let resolvedDisplay = schema.resolveRootDisplay(rootStruct.fields, currentPath)
       if (resolvedDisplay) {
