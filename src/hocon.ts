@@ -44,7 +44,7 @@ export interface StructField {
   // The display text of the field type
   type: string
   // The link target of the field's sub-types
-  references?: [{type: string, hash: string}]
+  references?: {type: string, hash: string}[]
   // More information about the field
   // default value, description, deprecation, importance
   info: {attribute: string, specification: string, markdown?: boolean}[]
@@ -96,16 +96,22 @@ const exampleData: Data = {
           name: 'field1',
           type: 'String',
           references: [],
-          info: [{ attribute: 'Description', specification: 'this is field 1'},
-                 { attribute: 'Default', specification: 'default value for field 1'}
+          info: [{ attribute: 'Description', specification: 'This is field 1'},
+                 { attribute: 'Default', specification: 'Default value for field 1'}
                 ]
         },
         {
           name: 'fieldB',
           aliases: ['field2'],
-          type: "oneOf: Struct2 StructB",
+          type: "oneOf(Struct2,StructB)",
           references: [{type: 'Struct2', hash: '#struct2'}, {type: 'StructB', hash: '#structb'}],
-          info: [{ attribute: 'Description', specification: 'this is field 2'}]
+          info: [{ attribute: 'Description', specification: 'This is field 2'}]
+        },
+        {
+          name: 'field3',
+          type: "arrayOf(Struct3)",
+          references: [{type: 'Struct3', hash: '#struct3'}],
+          info: [{ attribute: 'Description', specification: 'This is field 3'}]
         }
       ],
     }
