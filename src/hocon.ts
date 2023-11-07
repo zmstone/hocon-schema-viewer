@@ -41,61 +41,13 @@ export interface StructField {
   name: string
   // Added new names for the field
   aliases?: string[]
-  // Type of the field
-  type: FieldType
+  // The display text of the field type
+  type: string
+  // The link target of the field's sub-types
+  references?: [{type: string, hash: string}]
   // More information about the field
   // default value, description, deprecation, importance
   info: {attribute: string, specification: string, markdown?: boolean}[]
-}
-
-export type FieldType =
-  | StructReference
-  | PrimitiveFieldType
-  | MapFieldType
-  | ArrayFieldType
-  | EnumFieldType
-  | UnionFieldType
-  | SingletonFieldType
-
-export interface EnumFieldType {
-  kind: 'enum'
-  symbols: string[]
-}
-
-export interface StructReference {
-  kind: 'struct'
-  name: string
-}
-
-export interface PrimitiveFieldType {
-  kind: 'primitive'
-  name: string
-}
-
-export interface SingletonFieldType {
-  kind: 'singleton'
-  name: string
-}
-
-export interface MapFieldType {
-  kind: 'map'
-  name: string
-  values: FieldType
-}
-
-export interface ArrayFieldType {
-  kind: 'array'
-  elements: FieldType
-}
-
-export interface UnionFieldType {
-  kind: 'union'
-  members: FieldType[]
-}
-
-export interface Data {
-  sidebar: SidebarItem[]
-  structs: Struct[]
 }
 
 const exampleData: Data = {
@@ -142,7 +94,8 @@ const exampleData: Data = {
       fields: [
         {
           name: 'field1',
-          type: { kind: 'primitive', name: 'string' },
+          type: 'String',
+          references: [],
           info: [{ attribute: 'Description', specification: 'this is field 1'},
                  { attribute: 'Default', specification: 'default value for field 1'}
                 ]
@@ -150,8 +103,9 @@ const exampleData: Data = {
         {
           name: 'fieldB',
           aliases: ['field2'],
-          type: { kind: 'struct', name: 'Struct2' },
-          info: [{ attribute: 'Description', specification: 'this is field 1'}]
+          type: "oneOf: Struct2 StructB",
+          references: [{type: 'Struct2', hash: '#struct2'}, {type: 'StructB', hash: '#structb'}],
+          info: [{ attribute: 'Description', specification: 'this is field 2'}]
         }
       ],
     }
