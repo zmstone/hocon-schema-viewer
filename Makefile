@@ -11,3 +11,7 @@ docker:
 .PHONY: fmt
 fmt:
 	npm run format
+
+.PHONY: run
+run:
+	npm run dev
