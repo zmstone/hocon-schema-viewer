@@ -1,4 +1,9 @@
 :root {
+  /* color palette from Vue theme */
+  --vt-c-white: #ffffff;
+  --vt-c-white-soft: #f8f8f8;
+  --vt-c-white-mute: #f2f2f2;
+
   /* Colors */
   --primary: #2e5742;
   --primary-light: #e4f5ea;
@@ -35,10 +40,20 @@
   --radius-md: 6px;
 
   /* Font sizes */
-  --text-xs: 0.8em;
-  --text-sm: 0.9em;
-  --text-md: 1em;
-  --text-lg: 1.1em;
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-md: 1rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.25rem;
+
+  /* Font families */
+  --font-main: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', Consolas, Monaco, 'Andale Mono', monospace;
+
+  /* Font weights */
+  --font-normal: 400;
+  --font-medium: 500;
+  --font-semibold: 600;
 }
 
 /* Dark mode overrides */
@@ -135,3 +150,31 @@
     box-shadow: 0 0 0 2px rgba(228, 245, 234, 0.1);
   }
 }
+
+/* Base styles */
+body {
+  font-family: var(--font-main);
+  font-size: var(--text-md);
+  line-height: 1.5;
+  color: var(--text);
+  background: var(--color-background);
+}
+
+code, pre {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+}
+
+button {
+  font-family: var(--font-main);
+  font-size: var(--text-sm);
+}
+
+input, select, textarea {
+  font-family: var(--font-main);
+  font-size: var(--text-sm);
+}
+
+/* Import fonts */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap');
