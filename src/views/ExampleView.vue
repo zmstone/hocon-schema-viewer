@@ -14,7 +14,7 @@ export default defineComponent({
   setup(props) {
     const generatedExample = ref<string>('')
     const isLoading = ref(false)
-    const showingExample = ref(false)
+    const activeTab = ref('schema')  // 'schema' or 'example'
     const error = ref<string>('')
     const apiKey = ref(localStorage.getItem('openai_api_key') || '')
     const selectedModel = ref(localStorage.getItem('openai_model') || 'gpt-4o')
@@ -26,7 +26,7 @@ export default defineComponent({
 
     // Reset state when struct changes
     watch(() => props.currentStruct, () => {
-      showingExample.value = false
+      activeTab.value = 'schema'
       generatedExample.value = ''
       error.value = ''
     })
@@ -99,10 +99,10 @@ export default defineComponent({
         }
         const data = await response.json()
         generatedExample.value = data.choices[0].message.content
-        showingExample.value = true
+        activeTab.value = 'example'
       } catch (error) {
         generatedExample.value = 'Error generating example'
-        showingExample.value = true
+        activeTab.value = 'example'
       } finally {
         isLoading.value = false
       }
@@ -112,7 +112,7 @@ export default defineComponent({
       generatedExample,
       isLoading,
       generateExample,
-      showingExample,
+      activeTab,
       error,
       apiKey,
       selectedModel,
@@ -126,7 +126,6 @@ export default defineComponent({
 <template>
   <div class="example-view">
     <div class="example-header">
-      <h3>{{ showingExample ? 'Example' : 'Schema' }}</h3>
       <div class="controls">
         <button 
           @click="generateExample" 
@@ -159,13 +158,29 @@ export default defineComponent({
         </div>
       </div>
     </div>
+    <div class="tabs">
+      <button 
+        class="tab-button" 
+        :class="{ active: activeTab === 'schema' }"
+        @click="activeTab = 'schema'"
+      >
+        Schema
+      </button>
+      <button 
+        class="tab-button" 
+        :class="{ active: activeTab === 'example' }"
+        @click="activeTab = 'example'"
+      >
+        Example
+      </button>
+    </div>
     <div v-if="error" class="error">
       {{ error }}
     </div>
     <div v-else-if="isLoading" class="loading">
       Generating example...
     </div>
-    <pre v-else><code>{{ showingExample ? generatedExample : JSON.stringify(currentStruct, null, 2) }}</code></pre>
+    <pre v-else><code>{{ activeTab === 'example' ? generatedExample : JSON.stringify(currentStruct, null, 2) }}</code></pre>
   </div>
 </template>
 
@@ -183,10 +198,10 @@ export default defineComponent({
   margin-bottom: 12px;
 }
 
-h3 {
-  margin: 0;
-  font-size: 1.1em;
-  color: #333;
+.controls {
+  display: flex;
+  gap: 12px;
+  align-items: center;
 }
 
 .generate-button {
@@ -225,12 +240,6 @@ pre {
   border: 1px solid #faa;
   border-radius: 4px;
   color: #c00;
-}
-
-.controls {
-  display: flex;
-  gap: 12px;
-  align-items: center;
 }
 
 .input-group {
@@ -282,6 +291,27 @@ pre {
   to { opacity: 1; }
 }
 
+.tabs {
+  margin: 16px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.tab-button {
+  padding: 8px 16px;
+  border: none;
+  background: none;
+  font-size: 1.1em;
+  cursor: pointer;
+  color: #666;
+  border-bottom: 2px solid transparent;
+  margin-right: 16px;
+}
+
+.tab-button.active {
+  color: #2e5742;
+  border-bottom-color: #2e5742;
+}
+
 @media (prefers-color-scheme: dark) {
   .example-view {
     background: #2a2a2a;
@@ -330,6 +360,19 @@ pre {
     background: #1a1a1a;
     border-color: #444;
     color: #fff;
+  }
+
+  .tabs {
+    border-bottom-color: #444;
+  }
+
+  .tab-button {
+    color: #999;
+  }
+
+  .tab-button.active {
+    color: #e4f5ea;
+    border-bottom-color: #e4f5ea;
   }
 }
 </style>
