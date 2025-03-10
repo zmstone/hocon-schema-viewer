@@ -19,6 +19,8 @@ export default defineComponent({
     const apiKey = ref(localStorage.getItem('openai_api_key') || '')
     const selectedModel = ref(localStorage.getItem('openai_model') || 'gpt-4o')
     const showKeyStored = ref(false)
+    const showMorePrompts = ref(false)
+    const additionalPrompts = ref('')
 
     const models = [
       { value: 'gpt-4o', label: 'GPT-4' }
@@ -74,12 +76,20 @@ export default defineComponent({
             '- When generating the example, you should recursively go deep into the schema and generate an example for each field. ' +
             '- While colon is a valid delimiter for key-value pair, you should use "=" as the delimiter in the generated example. ' +
             '- I prefer to have clean examples, so no need to include comments in the generated example.' +
-            '- Do not quote the generated example in triple quotes.'
+            '- Do not quote the generated example in triple quotes.' +
+            '- If the path has $INDEX in it, it is an array, use array syntax like filed = [...] instead of using index number as key.' +
+            '- After generated, go through the requirements and make sure the generated example meets all the above requirements.'
+          }, {
+            role: 'user',
+            content: additionalPrompts.value
           }, {
             role: 'user',
             content: `Please generate a valid HOCON example for this schema:\n${JSON.stringify(props.currentStruct, null, 2)}`
           }]
         }
+
+        // Remove empty messages
+        requestBody.messages = requestBody.messages.filter(m => m.content.trim())
 
         // Only add temperature for GPT-4 model
         if (selectedModel.value === 'gpt-4o') {
@@ -117,7 +127,9 @@ export default defineComponent({
       apiKey,
       selectedModel,
       models,
-      showKeyStored
+      showKeyStored,
+      showMorePrompts,
+      additionalPrompts
     }
   }
 })
@@ -133,6 +145,12 @@ export default defineComponent({
           class="generate-button"
         >
           {{ isLoading ? 'Generating...' : 'Generate Example' }}
+        </button>
+        <button 
+          @click="showMorePrompts = !showMorePrompts"
+          class="more-prompts-button"
+        >
+          {{ showMorePrompts ? 'Hide Prompts' : 'More Prompts' }}
         </button>
         <div class="input-group">
           <label class="input-label">Model:</label>
@@ -180,7 +198,18 @@ export default defineComponent({
     <div v-else-if="isLoading" class="loading">
       Generating example...
     </div>
-    <pre v-else><code>{{ activeTab === 'example' ? generatedExample : JSON.stringify(currentStruct, null, 2) }}</code></pre>
+    <div v-else>
+      <div v-if="showMorePrompts" class="more-prompts">
+        <label class="input-label">Additional Prompts:</label>
+        <textarea
+          v-model="additionalPrompts"
+          class="prompts-input"
+          placeholder="Add additional instructions for example generation..."
+          rows="4"
+        ></textarea>
+      </div>
+      <pre><code>{{ activeTab === 'example' ? generatedExample : JSON.stringify(currentStruct, null, 2) }}</code></pre>
+    </div>
   </div>
 </template>
 
@@ -312,6 +341,33 @@ pre {
   border-bottom-color: #2e5742;
 }
 
+.more-prompts-button {
+  padding: 4px 12px;
+  border-radius: 4px;
+  background: #f5f5f5;
+  border: 1px solid #ccc;
+  cursor: pointer;
+  font-size: 0.9em;
+}
+
+.more-prompts {
+  margin: 12px 0;
+  padding: 12px;
+  background: #f5f5f5;
+  border-radius: 4px;
+}
+
+.prompts-input {
+  width: 100%;
+  margin-top: 8px;
+  padding: 8px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  font-family: monospace;
+  font-size: 0.9em;
+  resize: vertical;
+}
+
 @media (prefers-color-scheme: dark) {
   .example-view {
     background: #2a2a2a;
@@ -373,6 +429,22 @@ pre {
   .tab-button.active {
     color: #e4f5ea;
     border-bottom-color: #e4f5ea;
+  }
+
+  .more-prompts-button {
+    background: #333;
+    border-color: #444;
+    color: #fff;
+  }
+  
+  .more-prompts {
+    background: #333;
+  }
+  
+  .prompts-input {
+    background: #1a1a1a;
+    border-color: #444;
+    color: #fff;
   }
 }
 </style>
