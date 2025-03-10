@@ -16,6 +16,8 @@ export default defineComponent({
     const isLoading = ref(false)
     const showingExample = ref(false)
     const error = ref<string>('')
+    const apiKey = ref('')
+    const showApiInput = ref(false)
 
     // Reset state when struct changes
     watch(() => props.currentStruct, () => {
@@ -25,23 +27,36 @@ export default defineComponent({
     })
 
     async function generateExample() {
+      if (!apiKey.value) {
+        showApiInput.value = true
+        return
+      }
       isLoading.value = true
       error.value = ''
       try {
-        const response = await fetch('/api/generate-example', {
+        const response = await fetch('https://api.openai.com/v1/chat/completions', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
+            'Authorization': `Bearer ${apiKey.value}`
           },
           body: JSON.stringify({
-            schema: props.currentStruct
+            model: 'gpt-4o',
+            messages: [{
+              role: 'system',
+              content: 'You are a helpful assistant that generates HOCON format examples based the schema specification. In the schema, the "path" field is a dot-separated string that describes the path to the field from the root of the schema. The "type" field describes the type of the field. The "description" field describes the field in human-readable format. The "default" field is the default value of the field if it is not provided. The "required" field is a boolean that describes if the field is required. The "enum" field is an array of possible values for the field if it is an enum. The "properties" field is an object that describes the properties of the field if it is an object. The "items" field is an object that describes the items of the field if it is an array. When generating the example, you should recursively go deep into the schema and generate an example for each field. When it is a union type, you should generate an example based on my following description after the schema JSON section, if no description is provided, you should generate an example based on the first union member type.'
+            }, {
+              role: 'user',
+              content: `Please generate a valid HOCON example for this schema:\n${JSON.stringify(props.currentStruct, null, 2)}`
+            }],
+            temperature: 0.7
           })
         })
         if (!response.ok) {
-          throw new Error(`Failed to generate example: ${response.statusText}`)
+          throw new Error(`API error: ${response.statusText}`)
         }
         const data = await response.json()
-        generatedExample.value = JSON.stringify(data.example, null, 2)
+        generatedExample.value = data.choices[0].message.content
         showingExample.value = true
       } catch (error) {
         generatedExample.value = 'Error generating example'
@@ -56,7 +71,9 @@ export default defineComponent({
       isLoading,
       generateExample,
       showingExample,
-      error
+      error,
+      apiKey,
+      showApiInput
     }
   }
 })
@@ -66,6 +83,14 @@ export default defineComponent({
   <div class="example-view">
     <div class="example-header">
       <h3>{{ showingExample ? 'Example' : 'Schema' }}</h3>
+      <div class="api-input" v-if="showApiInput">
+        <input
+          type="password"
+          v-model="apiKey"
+          placeholder="Enter OpenAI API Key"
+          class="api-key-input"
+        />
+      </div>
       <button 
         @click="generateExample" 
         :disabled="isLoading"
@@ -142,6 +167,18 @@ pre {
   color: #c00;
 }
 
+.api-input {
+  margin-right: 12px;
+}
+
+.api-key-input {
+  padding: 4px 8px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  font-size: 0.9em;
+  width: 260px;
+}
+
 @media (prefers-color-scheme: dark) {
   .example-view {
     background: #2a2a2a;
@@ -169,6 +206,12 @@ pre {
     background: #422;
     border-color: #633;
     color: #faa;
+  }
+
+  .api-key-input {
+    background: #1a1a1a;
+    border-color: #444;
+    color: #fff;
   }
 }
 </style>
