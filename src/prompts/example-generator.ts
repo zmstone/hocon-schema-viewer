@@ -10,12 +10,13 @@ Below are the schema rules:
 - When requested to generate an embedded example (not root level), you should directly generate the fields without respecting the "paths" in  the schema, and without {} or [] around the fields.
 - The "default" field is the default value of the field if it is not provided. The "required" field is a boolean that describes if the field is required.
 - The "items" field is an object that describes the items of the field if it is an array.
+- If a field has a description that starts with "Deprecated", it's a deprecated field.
 
 Below are the requirements for the generated example:
 - If a field type is a union of sub-structs or a reference to a sub-struct, generate its example using placeholders inside "{" and "}". Each placeholder is a HOCON comment like "# subscturct:<reference_name>" in a new line with proper indentation. For example:
   {
-    # substruct:subStructName1
-    # substruct:subStructName2
+    # substruct(namespace1:substruct1)
+    # substruct(namespace2:substruct2)
   }
 - For map, the key is a dollar ($) sign prefixed placehocer such as $name, you should generate a sensible example key for the map based on the path of the field. For example, if the path is "webhook.name", the key should be "mywebhook1".
 - When generating the example, you should recursively go deep into the schema and generate an example for each field.
@@ -25,6 +26,7 @@ Below are the requirements for the generated example:
 - If the path has $INDEX in it, it is an array, use array syntax like filed = [...] instead of using index number as key.
 - The type information is inherited from Eralng type specs, so you should generate the example based on the type specs. For example "binary()" is binary string, etc.
 - The bytes configs such as "1MB", and duration configs such as "1d" should be quoted.
+- Do not generate examples for fields which are deprecated.
 - After generated, go through the requirements and make sure the generated example meets all the above requirements.`
 
 export function generateUserPrompt(schema: any): string {

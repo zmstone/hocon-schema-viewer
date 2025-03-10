@@ -66,11 +66,10 @@ export default defineComponent({
     function processExampleText(text: string) {
       if (!text) return ''
       return text.split('\n').map(line => {
-        const match = line.match(/^(\s*)# substruct:(.+)$/)
+        const match = line.match(/^(\s*)# substruct\((.+)\)$/)
         if (match) {
           const [fullMatch, indentation, refName] = match
-          return `<a href="javascript:void(0)" class="generate-link" data-ref="${refName}" data-indent="${indentation}">${match[0]}</a>
-                  <div class="sub-example" id="sub-example-${refName}"></div>`
+          return `<a href="javascript:void(0)" class="generate-link" data-ref="${refName}" data-indent="${indentation}">${match[0]}</a>`
         }
         return line
       }).join('\n')
@@ -123,10 +122,12 @@ export default defineComponent({
           .map((line: string) => indentation + line)
           .join('\n')
 
-        // Update the sub-example div
-        const subExampleDiv = document.getElementById(`sub-example-${refName}`)
-        if (subExampleDiv) {
-          subExampleDiv.textContent = indentedExample
+        // Insert the sub-example after the generate line
+        const lines = generatedExample.value.split('\n')
+        const linkIndex = lines.findIndex(line => line.includes(`# substruct(${refName})`))
+        if (linkIndex >= 0) {
+          lines.splice(linkIndex + 1, 0, indentedExample)
+          generatedExample.value = lines.join('\n')
         }
 
       } catch (err) {
