@@ -129,13 +129,24 @@ export default defineComponent({
     }
 
     const exampleWidth = ref(500)
+    const sidebarWidth = ref(300)
     const isResizing = ref(false)
+    const isResizingSidebar = ref(false)
 
-    const startResize = (e: MouseEvent) => {
+    const startExampleResize = (e: MouseEvent) => {
       e.preventDefault()
       isResizing.value = true
       document.addEventListener('mousemove', handleResize)
       document.addEventListener('mouseup', stopResize)
+      document.body.style.cursor = 'col-resize'
+      document.body.style.userSelect = 'none'
+    }
+
+    const startSidebarResize = (e: MouseEvent) => {
+      e.preventDefault()
+      isResizingSidebar.value = true
+      document.addEventListener('mousemove', handleSidebarResize)
+      document.addEventListener('mouseup', stopSidebarResize)
       document.body.style.cursor = 'col-resize'
       document.body.style.userSelect = 'none'
     }
@@ -151,10 +162,25 @@ export default defineComponent({
       exampleWidth.value = Math.max(300, Math.min(1000, newWidth))
     }
 
+    const handleSidebarResize = (e: MouseEvent) => {
+      e.preventDefault()
+      if (!isResizingSidebar.value) return
+      const newWidth = e.clientX
+      sidebarWidth.value = Math.max(200, Math.min(600, newWidth))
+    }
+
     const stopResize = () => {
       isResizing.value = false
       document.removeEventListener('mousemove', handleResize)
       document.removeEventListener('mouseup', stopResize)
+      document.body.style.cursor = ''
+      document.body.style.userSelect = ''
+    }
+
+    const stopSidebarResize = () => {
+      isResizingSidebar.value = false
+      document.removeEventListener('mousemove', handleSidebarResize)
+      document.removeEventListener('mouseup', stopSidebarResize)
       document.body.style.cursor = ''
       document.body.style.userSelect = ''
     }
@@ -171,7 +197,9 @@ export default defineComponent({
       exampleStruct,
       handleShowExample,
       exampleWidth,
-      startResize
+      sidebarWidth,
+      startExampleResize,
+      startSidebarResize
     }
   },
   components: {
@@ -198,7 +226,7 @@ export default defineComponent({
       />
     </div>
     <div class="inner-container">
-      <div class="sidebar">
+      <div class="sidebar" :style="{ width: sidebarWidth + 'px' }">
         <RootFieldsList
           :rootFields="rootStruct.fields"
           :currentDisplay="displayType"
@@ -206,6 +234,7 @@ export default defineComponent({
           @selected="handleSelectedStruct"
         />
       </div>
+      <div class="resizer" @mousedown="startSidebarResize"></div>
       <div class="struct-view-box" v-if="displayType">
         <div v-if="displayType.parent_field_doc" class="root-doc">
           <div v-html="markdownToHtml(displayType.parent_field_doc)" />
@@ -226,7 +255,7 @@ export default defineComponent({
           @show-example="handleShowExample"
         />
       </div>
-      <div class="resizer" @mousedown="startResize"></div>
+      <div class="resizer" @mousedown="startExampleResize"></div>
       <div class="example-view-box" :style="{ width: exampleWidth + 'px' }">
         <ExampleView v-if="exampleStruct" :currentStruct="exampleStruct" />
       </div>
@@ -249,7 +278,8 @@ export default defineComponent({
 }
 
 .sidebar {
-  min-width: 300px;
+  min-width: 200px;
+  max-width: 600px;
   overflow-y: auto;
   padding: 0px;
   border-right: 1px solid #ccc;
