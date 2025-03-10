@@ -104,13 +104,13 @@ export default defineComponent({
         // Find and remove any existing substruct content
         const currentIndent = (lines[linkIndex].match(/^\s*/) || [''])[0].length
         let nextStructIndex = linkIndex + 1
-        
+
         // Find where this block ends - either at next substruct with same/less indent,
         // or at a line with less indentation (closing brace/bracket)
         while (nextStructIndex < lines.length) {
           const line = lines[nextStructIndex]
           const lineIndent = (line.match(/^\s*/) || [''])[0].length
-          
+
           if (lineIndent <= currentIndent && 
               (line.includes('# substruct(') || line.trim() === '}' || line.trim() === ']')) {
             break
@@ -492,7 +492,7 @@ pre {
   padding: 8px 16px;
   border: none;
   background: none;
-  font-size: 1.1em;
+  font-size: var(--text-sm);
   cursor: pointer;
   color: #666;
   position: relative;
@@ -685,11 +685,6 @@ pre {
 
   .api-key-input {
     width: 200px;
-  }
-
-  .tab-button {
-    padding: 8px 12px;
-    font-size: 1em;
   }
 }
 
