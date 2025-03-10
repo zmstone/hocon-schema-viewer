@@ -16,14 +16,26 @@ export default defineComponent({
     const isLoading = ref(false)
     const showingExample = ref(false)
     const error = ref<string>('')
-    const apiKey = ref('')
+    const apiKey = ref(localStorage.getItem('openai_api_key') || '')
     const showApiInput = ref(false)
+    const showKeyStored = ref(false)
 
     // Reset state when struct changes
     watch(() => props.currentStruct, () => {
       showingExample.value = false
       generatedExample.value = ''
       error.value = ''
+    })
+
+    // Store API key when it changes
+    watch(apiKey, (newKey) => {
+      if (newKey) {
+        localStorage.setItem('openai_api_key', newKey)
+        showKeyStored.value = true
+        setTimeout(() => {
+          showKeyStored.value = false
+        }, 3000)  // Hide notification after 3 seconds
+      }
     })
 
     async function generateExample() {
@@ -44,7 +56,7 @@ export default defineComponent({
             model: 'gpt-4o',
             messages: [{
               role: 'system',
-              content: 'You are a helpful assistant that generates HOCON format examples based the schema specification. In the schema, the "path" field is a dot-separated string that describes the path to the field from the root of the schema. The "type" field describes the type of the field. The "description" field describes the field in human-readable format. The "default" field is the default value of the field if it is not provided. The "required" field is a boolean that describes if the field is required. The "enum" field is an array of possible values for the field if it is an enum. The "properties" field is an object that describes the properties of the field if it is an object. The "items" field is an object that describes the items of the field if it is an array. When generating the example, you should recursively go deep into the schema and generate an example for each field. When it is a union type, you should generate an example based on my following description after the schema JSON section, if no description is provided, you should generate an example based on the first union member type.'
+              content: 'You are a helpful assistant that generates HOCON format examples based the schema specification without any additional text or comments. In the schema, the "path" field is a dot-separated string that describes the path to the field from the root of the schema. The "type" field describes the type of the field. The "description" field describes the field in human-readable format. The "default" field is the default value of the field if it is not provided. The "required" field is a boolean that describes if the field is required. The "enum" field is an array of possible values for the field if it is an enum. The "properties" field is an object that describes the properties of the field if it is an object. The "items" field is an object that describes the items of the field if it is an array. When generating the example, you should recursively go deep into the schema and generate an example for each field. When it is a union type, you should generate an example based on my following description after the schema JSON section, if no description is provided, you should generate an example based on the first union member type.'
             }, {
               role: 'user',
               content: `Please generate a valid HOCON example for this schema:\n${JSON.stringify(props.currentStruct, null, 2)}`
@@ -73,7 +85,8 @@ export default defineComponent({
       showingExample,
       error,
       apiKey,
-      showApiInput
+      showApiInput,
+      showKeyStored
     }
   }
 })
@@ -90,6 +103,9 @@ export default defineComponent({
           placeholder="Enter OpenAI API Key"
           class="api-key-input"
         />
+        <div v-if="showKeyStored" class="key-stored">
+          API key stored in browser
+        </div>
       </div>
       <button 
         @click="generateExample" 
@@ -169,6 +185,7 @@ pre {
 
 .api-input {
   margin-right: 12px;
+  position: relative;
 }
 
 .api-key-input {
@@ -177,6 +194,24 @@ pre {
   border: 1px solid #ccc;
   font-size: 0.9em;
   width: 260px;
+}
+
+.key-stored {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  margin-top: 4px;
+  padding: 4px 8px;
+  background: #e4f5ea;
+  border-radius: 4px;
+  font-size: 0.8em;
+  color: #2e5742;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 @media (prefers-color-scheme: dark) {
@@ -212,6 +247,11 @@ pre {
     background: #1a1a1a;
     border-color: #444;
     color: #fff;
+  }
+
+  .key-stored {
+    background: #2e5742;
+    color: #e4f5ea;
   }
 }
 </style>
