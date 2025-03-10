@@ -71,7 +71,7 @@ export default defineComponent({
       for (let i = index + 1; i < lines.length; i++) {
         const line = lines[i]
         // Stop at next substruct or closing brace/bracket
-        if (line.includes('# substruct(') || line.trim() === '}' || line.trim() === ']') {
+        if (line.includes('#substruct(') || line.trim() === '}' || line.trim() === ']') {
           break
         }
         // Consider any non-empty line as content
@@ -88,11 +88,11 @@ export default defineComponent({
       return text
         .split('\n')
         .map((line, index) => {
-          const match = line.match(/^(\s*)# substruct\((.+)\)$/)
+          const match = line.match(/^(\s*)#substruct\((.+)\)$/)
           if (match) {
             const [fullMatch, indentation, refName] = match
             const hasContent = hasSubstructContent(lines, index)
-            return `<span class="substruct-line">${indentation}<a href="javascript:void(0)" class="generate-link" data-ref="${refName}" data-indent="${indentation}"># substruct(${refName})</a>${
+            return `<span class="substruct-line">${indentation}<a href="javascript:void(0)" class="generate-link" data-ref="${refName}" data-indent="${indentation}">#substruct(${refName})</a>${
               hasContent ? `<a href="javascript:void(0)" class="clear-substruct" data-ref="${refName}" title="Clear substruct">✖</a>` : ''
             }</span>`
           }
@@ -120,7 +120,7 @@ export default defineComponent({
 
       // Insert loading placeholder
       const lines = generatedExample.value.split('\n')
-      const linkIndex = lines.findIndex((line) => line.includes(`# substruct(${refName})`))
+      const linkIndex = lines.findIndex((line) => line.includes(`#substruct(${refName})`))
       if (linkIndex >= 0) {
         // Find and remove any existing substruct content
         const currentIndent = (lines[linkIndex].match(/^\s*/) || [''])[0].length
@@ -133,7 +133,7 @@ export default defineComponent({
           const lineIndent = (line.match(/^\s*/) || [''])[0].length
 
           if (lineIndent <= currentIndent && 
-              (line.includes('# substruct(') || line.trim() === '}' || line.trim() === ']')) {
+              (line.includes('#substruct(') || line.trim() === '}' || line.trim() === ']')) {
             break
           }
           nextStructIndex++
@@ -181,7 +181,7 @@ export default defineComponent({
 
         // Replace loading placeholder with actual example
         const updatedLines = generatedExample.value.split('\n')
-        const loadingIndex = updatedLines.findIndex((line) => line.includes(`# substruct(${refName})`))
+        const loadingIndex = updatedLines.findIndex((line) => line.includes(`#substruct(${refName})`))
         if (loadingIndex >= 0) {
           updatedLines.splice(loadingIndex + 1, 2, indentedExample)
           generatedExample.value = updatedLines.join('\n')
@@ -190,7 +190,7 @@ export default defineComponent({
         console.error('Error generating sub-example:', err)
         // Remove loading placeholder on error
         const errorLines = generatedExample.value.split('\n')
-        const errorIndex = errorLines.findIndex((line) => line.includes(`# substruct(${refName})`))
+        const errorIndex = errorLines.findIndex((line) => line.includes(`#substruct(${refName})`))
         if (errorIndex >= 0) {
           errorLines.splice(errorIndex + 1, 1)
           generatedExample.value = errorLines.join('\n')
@@ -207,7 +207,7 @@ export default defineComponent({
       if (!refName) return
       
       const lines = generatedExample.value.split('\n')
-      const linkIndex = lines.findIndex((line) => line.includes(`# substruct(${refName})`))
+      const linkIndex = lines.findIndex((line) => line.includes(`#substruct(${refName})`))
       if (linkIndex >= 0) {
         const currentIndent = (lines[linkIndex].match(/^\s*/) || [''])[0].length
         let nextStructIndex = linkIndex + 1
@@ -216,7 +216,7 @@ export default defineComponent({
           const line = lines[nextStructIndex]
           const lineIndent = (line.match(/^\s*/) || [''])[0].length
           
-          if (line.includes('# substruct(') && lineIndent === currentIndent) {
+          if (line.includes('#substruct(') && lineIndent === currentIndent) {
             break
           }
           if (lineIndent < currentIndent) {
@@ -617,11 +617,14 @@ pre {
   padding: 2px 4px;
   border-radius: 3px;
   transition: all 0.2s ease;
+  position: relative;
+  z-index: 2;
+  font-weight: 500;
+  background: rgba(0, 102, 204, 0.1);
 }
 
 .generate-link:hover {
-  text-decoration: underline;
-  background: rgba(46, 87, 66, 0.05);
+  background: rgba(0, 102, 204, 0.2);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -758,7 +761,7 @@ pre {
 /* Override pre/code styles for links */
 .example-code :deep(.generate-link) {
   color: #0066cc;
-  text-decoration: underline;
+  text-decoration: none;
   cursor: pointer;
   display: inline-block;
   padding: 2px 4px;
@@ -767,19 +770,21 @@ pre {
   position: relative;
   z-index: 2;
   font-weight: 500;
+  background: rgba(0, 102, 204, 0.1);
 }
 
 .example-code :deep(.generate-link:hover) {
-  background: rgba(0, 102, 204, 0.05);
+  background: rgba(0, 102, 204, 0.2);
 }
 
 @media (prefers-color-scheme: dark) {
   .example-code :deep(.generate-link) {
     color: #66b3ff;
+    background: rgba(102, 179, 255, 0.1);
   }
 
   .example-code :deep(.generate-link:hover) {
-    background: rgba(102, 179, 255, 0.05);
+    background: rgba(102, 179, 255, 0.2);
   }
 }
 

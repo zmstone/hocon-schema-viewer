@@ -13,11 +13,12 @@ Below are the schema rules:
 - If a field has a description that starts with "Deprecated", it's a deprecated field.
 
 Below are the requirements for the generated example:
-- If a field type is a union of sub-structs or a reference to a sub-struct, generate its example using placeholders inside "{" and "}". Each placeholder is a HOCON comment like "# subscturct:<reference_name>" in a new line with proper indentation. For example:
+- If a field type is a union of sub-structs or a reference to a sub-struct, generate its example using placeholders inside "{" and "}". Each placeholder is a HOCON comment like "#subscturct:<reference_name>" in a new line with proper indentation. For example:
   {
-    # substruct(namespace1:substruct1)
-    # substruct(namespace2:substruct2)
+    #substruct(namespace1:substruct1)
+    #substruct(namespace2:substruct2)
   }
+- If a union member is not a substruct, simply generate a config value for the union member.
 - For map, the key is a dollar ($) sign prefixed placehocer such as $name, you should generate a sensible example key for the map based on the path of the field. For example, if the path is "webhook.name", the key should be "mywebhook1".
 - When generating the example, you should recursively go deep into the schema and generate an example for each field.
 - While colon is a valid delimiter for key-value pair, you should use "=" as the delimiter in the generated example.
