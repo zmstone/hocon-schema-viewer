@@ -284,7 +284,7 @@ export default defineComponent({
           <textarea
             v-model="additionalPrompts"
             class="prompts-input"
-            placeholder="Add additional instructions for example generation..."
+            placeholder="Add additional instructions. For example, skip low importance fields."
             rows="4"
           ></textarea>
         </div>
@@ -448,14 +448,24 @@ pre {
   font-size: 1.1em;
   cursor: pointer;
   color: #666;
-  border-bottom: 2px solid transparent;
+  position: relative;
   margin-right: 16px;
   transition: all 0.2s ease;
 }
 
-.tab-button:hover:not(.active) {
+.tab-button.active {
   color: #2e5742;
-  background: rgba(46, 87, 66, 0.05);
+  font-weight: 500;
+}
+
+.tab-button.active::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: #2e5742;
 }
 
 .more-prompts-button {
@@ -570,7 +580,10 @@ pre {
 
   .tab-button.active {
     color: #e4f5ea;
-    border-bottom-color: #e4f5ea;
+  }
+
+  .tab-button.active::after {
+    background: #e4f5ea;
   }
 
   .more-prompts-button {
