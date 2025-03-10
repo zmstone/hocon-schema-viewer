@@ -121,6 +121,13 @@ export default defineComponent({
       window.location.href = newUrl.toString()
     }
 
+    const exampleStruct = ref<schema.Struct | null>(null)
+
+    const handleShowExample = (struct: schema.Struct) => {
+      console.log(JSON.stringify(struct, null, 2))
+      exampleStruct.value = struct
+    }
+
     return {
       rootStruct,
       displayType,
@@ -129,13 +136,16 @@ export default defineComponent({
       handleSelectedStruct,
       resolveDisplayStructs,
       handleImportanceLevelChanged,
-      toHome
+      toHome,
+      exampleStruct,
+      handleShowExample
     }
   },
   components: {
     ImportanceView,
     RootFieldsList,
-    StructView
+    StructView,
+    ExampleView
   },
   methods: {
     markdownToHtml(str: string): string {
@@ -180,10 +190,11 @@ export default defineComponent({
           :importanceLevel="importanceLevel"
           :expandByDefault="true"
           :key="i"
+          @show-example="handleShowExample"
         />
       </div>
       <div class="example-view-box">
-        aaaaaaaaaaaaaaaaaaaaaaaaa
+        <ExampleView v-if="exampleStruct" :currentStruct="exampleStruct" />
       </div>
     </div>
   </div>
@@ -215,6 +226,13 @@ export default defineComponent({
   overflow-y: auto;
 }
 
+.example-view-box {
+  width: 300px;
+  min-width: 300px;
+  padding-left: 20px;
+  border-left: 1px solid #ccc;
+}
+
 .root-doc {
   padding-bottom: 10px;
 }
@@ -237,6 +255,9 @@ export default defineComponent({
   .root-field-type {
     background-color: #2e5742;
     color: #d9e9d9;
+  }
+  .example-view-box {
+    border-left-color: #444;
   }
 }
 </style>

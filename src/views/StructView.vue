@@ -37,6 +37,7 @@ export default defineComponent({
       isExpanded.value = !isExpanded.value
     }
     const showExample = () => {
+      console.log('Show Example', JSON.stringify(props.currentStruct, null, 2))
       emit('show-example', props.currentStruct)
     }
     function isVisible(field: schema.Field): boolean {
@@ -133,6 +134,7 @@ export default defineComponent({
               :structResolver="structResolver"
               :expandByDefault="true"
               :importanceLevel="importanceLevel"
+              @show-example="$emit('show-example', $event)"
             />
           </div>
         </div>
