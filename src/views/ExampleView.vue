@@ -72,7 +72,7 @@ export default defineComponent({
             '- When the type is a reference to another schema, generate "Add fields for <reference_name>" to the example. ' +
             'Below are the requirements for the generated example: ' +
             '- When it is a union type, you should generate an example based on my input after the schema JSON section, if no description is provided, you should generate an example based on the first union member type. ' +
-            '- For map, the key is a dollar ($) sign prefixed placehocer such as $name, you should generate a sensible example key for the map such as "mywebhook1".' +
+            '- For map, the key is a dollar ($) sign prefixed placehocer such as $name, you should generate a sensible example key for the map based on the path of the field. For example, if the path is "webhook.name", the key should be "mywebhook1".' +
             '- When generating the example, you should recursively go deep into the schema and generate an example for each field. ' +
             '- While colon is a valid delimiter for key-value pair, you should use "=" as the delimiter in the generated example. ' +
             '- I prefer to have clean examples, so no need to include comments in the generated example.' +
@@ -164,7 +164,7 @@ export default defineComponent({
             :disabled="isLoading"
             class="generate-button"
           >
-            {{ isLoading ? 'Generating...' : 'Generate Example' }}
+            {{ isLoading ? 'Generating...' : 'Generate Example by AI' }}
           </button>
           <div class="input-group">
             <label class="input-label">Model:</label>
@@ -218,7 +218,7 @@ export default defineComponent({
 
 <style scoped>
 .example-view {
-  padding: 16px;
+  padding: 0;
   background: #f8f8f8;
   border-radius: 4px;
   display: flex;
@@ -233,7 +233,7 @@ export default defineComponent({
 }
 
 .example-content {
-  padding: 16px;
+  padding: 0 16px 16px;
 }
 
 .controls {
@@ -241,6 +241,8 @@ export default defineComponent({
   gap: 12px;
   align-items: center;
   margin-bottom: 16px;
+  padding-top: 16px;
+  flex-wrap: wrap;
 }
 
 .generate-button {
@@ -250,11 +252,23 @@ export default defineComponent({
   border: 1px solid #2e5742;
   cursor: pointer;
   font-size: 0.9em;
+  transition: all 0.2s ease;
+  min-width: 120px;
+}
+
+.generate-button:hover:not(:disabled) {
+  background: #d0ebda;
+}
+
+.generate-button:active:not(:disabled) {
+  transform: translateY(1px);
 }
 
 .generate-button:disabled {
   opacity: 0.7;
   cursor: not-allowed;
+  background: #f5f5f5;
+  border-color: #ccc;
 }
 
 .loading {
@@ -266,11 +280,11 @@ export default defineComponent({
 pre {
   margin: 0;
   overflow-x: auto;
-  height: 100%;
   background: white;
   padding: 12px;
   border-radius: 4px;
   border: 1px solid #eee;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 
 .error {
@@ -334,7 +348,12 @@ pre {
 }
 
 .tabs {
-  margin: 16px 0;
+  position: sticky;
+  top: 0;
+  background: inherit;
+  padding: 0 16px;
+  margin: 0;
+  z-index: 1;
   border-bottom: 1px solid #eee;
 }
 
@@ -347,11 +366,12 @@ pre {
   color: #666;
   border-bottom: 2px solid transparent;
   margin-right: 16px;
+  transition: all 0.2s ease;
 }
 
-.tab-button.active {
+.tab-button:hover:not(.active) {
   color: #2e5742;
-  border-bottom-color: #2e5742;
+  background: rgba(46, 87, 66, 0.05);
 }
 
 .more-prompts-button {
@@ -368,6 +388,7 @@ pre {
   padding: 12px;
   background: #f5f5f5;
   border-radius: 4px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 
 .prompts-input {
@@ -379,6 +400,14 @@ pre {
   font-family: monospace;
   font-size: 0.9em;
   resize: vertical;
+  transition: border-color 0.2s ease;
+  min-height: 80px;
+}
+
+.prompts-input:focus {
+  outline: none;
+  border-color: #2e5742;
+  box-shadow: 0 0 0 2px rgba(46, 87, 66, 0.1);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -393,6 +422,7 @@ pre {
   pre {
     background: #1a1a1a;
     border-color: #333;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
   }
 
   .generate-button {
@@ -452,12 +482,46 @@ pre {
   
   .more-prompts {
     background: #333;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
   }
   
   .prompts-input {
     background: #1a1a1a;
     border-color: #444;
     color: #fff;
+  }
+
+  .tab-button:hover:not(.active) {
+    background: rgba(228, 245, 234, 0.05);
+  }
+
+  .generate-button:hover:not(:disabled) {
+    background: #234434;
+  }
+
+  .generate-button:disabled {
+    background: #2a2a2a;
+    border-color: #444;
+  }
+
+  .prompts-input:focus {
+    border-color: #e4f5ea;
+    box-shadow: 0 0 0 2px rgba(228, 245, 234, 0.1);
+  }
+}
+
+@media (max-width: 768px) {
+  .controls {
+    gap: 8px;
+  }
+  
+  .api-key-input {
+    width: 200px;
+  }
+  
+  .tab-button {
+    padding: 8px 12px;
+    font-size: 1em;
   }
 }
 </style>
