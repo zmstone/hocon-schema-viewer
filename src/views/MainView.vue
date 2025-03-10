@@ -218,7 +218,7 @@ export default defineComponent({
 <template>
   <div class="main-container">
     <div class="top-bar">
-      <button @click="toHome">HOME</button>
+      <button @click="toHome">TOP</button>
       <ImportanceView
         :selectedInUri="importanceLevel"
         @importanceLevelChanged="handleImportanceLevelChanged"
