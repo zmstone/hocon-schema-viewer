@@ -30,9 +30,17 @@ Below are the requirements for the generated example:
 - After generated, go through the requirements and make sure the generated example meets all the above requirements.`
 
 export function generateUserPrompt(schema: any): string {
-  return `Please generate a valid kHOCON root level example for this schema:\n${JSON.stringify(schema, null, 2)}`
+  return `Please generate a valid kHOCON root level example for this schema:\n${JSON.stringify(
+    schema,
+    null,
+    2
+  )}`
 }
 
 export function generateSubExamplePrompt(schema: any): string {
-  return `Please generate a valid HOCON embedded example for this schema:\n${JSON.stringify(schema, null, 2)}`
+  return `Please generate a valid HOCON embedded example for this schema:\n${JSON.stringify(
+    schema,
+    null,
+    2
+  )}`
 }

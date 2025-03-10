@@ -6,7 +6,7 @@
   --error: #c00;
   --error-bg: #fee;
   --error-border: #faa;
-  
+
   /* Neutral colors */
   --bg-light: #f8f8f8;
   --bg-dark: #2a2a2a;
@@ -15,25 +15,25 @@
   --text-dark: #eee;
   --border: #eee;
   --border-dark: #444;
-  
+
   /* Spacing */
   --space-xs: 4px;
   --space-sm: 8px;
   --space-md: 12px;
   --space-lg: 16px;
   --space-xl: 24px;
-  
+
   /* Shadows */
   --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05);
   --shadow-md: 0 2px 6px rgba(0, 0, 0, 0.1);
-  
+
   /* Transitions */
   --transition: all 0.2s ease;
-  
+
   /* Border radius */
   --radius-sm: 4px;
   --radius-md: 6px;
-  
+
   /* Font sizes */
   --text-xs: 0.8em;
   --text-sm: 0.9em;
@@ -54,7 +54,7 @@
 /* Common utility classes */
 .scrollable {
   overflow-y: auto;
-  min-height: 0;  /* Important for Firefox */
+  min-height: 0; /* Important for Firefox */
   scrollbar-width: thin;
   scrollbar-color: var(--primary) transparent;
 }
@@ -119,19 +119,19 @@
     background: var(--primary);
     color: var(--text-dark);
   }
-  
+
   .button:hover:not(:disabled) {
     background: var(--primary-dark);
   }
-  
+
   .input {
     background: var(--bg-dark);
     border-color: var(--border-dark);
     color: var(--text-dark);
   }
-  
+
   .input:focus {
     border-color: var(--primary-light);
     box-shadow: 0 0 0 2px rgba(228, 245, 234, 0.1);
   }
-} 
+}

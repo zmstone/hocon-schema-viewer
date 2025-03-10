@@ -2,7 +2,11 @@
 import { defineComponent, ref, watch } from 'vue'
 import type { PropType } from 'vue'
 import type * as schema from '../schema'
-import { systemPrompt, generateUserPrompt, generateSubExamplePrompt } from '../prompts/example-generator'
+import {
+  systemPrompt,
+  generateUserPrompt,
+  generateSubExamplePrompt
+} from '../prompts/example-generator'
 
 export default defineComponent({
   name: 'ExampleView',
@@ -20,23 +24,24 @@ export default defineComponent({
     const generatedExample = ref<string>('')
     const processedExample = ref<string>('')
     const isLoading = ref(false)
-    const activeTab = ref('schema')  // 'schema' or 'example'
+    const activeTab = ref('schema') // 'schema' or 'example'
     const error = ref<string>('')
     const apiKey = ref(localStorage.getItem('openai_api_key') || '')
     const selectedModel = ref(localStorage.getItem('openai_model') || 'gpt-4o')
     const showKeyStored = ref(false)
     const showMorePrompts = ref(false)
     const additionalPrompts = ref('')
-    const models = [
-      { value: 'gpt-4o', label: 'GPT-4' }
-    ]
+    const models = [{ value: 'gpt-4o', label: 'GPT-4' }]
 
     // Reset state when struct changes
-    watch(() => props.currentStruct, () => {
-      activeTab.value = 'schema'
-      generatedExample.value = ''
-      error.value = ''
-    })
+    watch(
+      () => props.currentStruct,
+      () => {
+        activeTab.value = 'schema'
+        generatedExample.value = ''
+        error.value = ''
+      }
+    )
 
     // Store API key when it changes
     watch(apiKey, (newKey) => {
@@ -45,7 +50,7 @@ export default defineComponent({
         showKeyStored.value = true
         setTimeout(() => {
           showKeyStored.value = false
-        }, 3000)  // Hide notification after 3 seconds
+        }, 3000) // Hide notification after 3 seconds
       }
     })
 
@@ -65,14 +70,17 @@ export default defineComponent({
     // Process example text to convert generate comments into links
     function processExampleText(text: string) {
       if (!text) return ''
-      return text.split('\n').map(line => {
-        const match = line.match(/^(\s*)# substruct\((.+)\)$/)
-        if (match) {
-          const [fullMatch, indentation, refName] = match
-          return `<a href="javascript:void(0)" class="generate-link" data-ref="${refName}" data-indent="${indentation}">${match[0]}</a>`
-        }
-        return line
-      }).join('\n')
+      return text
+        .split('\n')
+        .map((line) => {
+          const match = line.match(/^(\s*)# substruct\((.+)\)$/)
+          if (match) {
+            const [fullMatch, indentation, refName] = match
+            return `<a href="javascript:void(0)" class="generate-link" data-ref="${refName}" data-indent="${indentation}">${match[0]}</a>`
+          }
+          return line
+        })
+        .join('\n')
     }
 
     // Watch for changes in generatedExample and process it
@@ -97,17 +105,20 @@ export default defineComponent({
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${apiKey.value}`
+            Authorization: `Bearer ${apiKey.value}`
           },
           body: JSON.stringify({
             model: selectedModel.value,
-            messages: [{
-              role: 'system',
-              content: systemPrompt
-            }, {
-              role: 'user',
-              content: generateSubExamplePrompt(struct)
-            }],
+            messages: [
+              {
+                role: 'system',
+                content: systemPrompt
+              },
+              {
+                role: 'user',
+                content: generateSubExamplePrompt(struct)
+              }
+            ],
             temperature: selectedModel.value === 'gpt-4o' ? 0.7 : undefined
           })
         })
@@ -124,12 +135,11 @@ export default defineComponent({
 
         // Insert the sub-example after the generate line
         const lines = generatedExample.value.split('\n')
-        const linkIndex = lines.findIndex(line => line.includes(`# substruct(${refName})`))
+        const linkIndex = lines.findIndex((line) => line.includes(`# substruct(${refName})`))
         if (linkIndex >= 0) {
           lines.splice(linkIndex + 1, 0, indentedExample)
           generatedExample.value = lines.join('\n')
         }
-
       } catch (err) {
         console.error('Error generating sub-example:', err)
       }
@@ -144,20 +154,26 @@ export default defineComponent({
       try {
         const requestBody: any = {
           model: selectedModel.value,
-          messages: [{
-            role: 'system',
-            content: systemPrompt
-          }, {
-            role: 'user',
-            content: additionalPrompts.value
-          }, {
-            role: 'user',
-            content: generateUserPrompt(props.currentStruct)
-          }]
+          messages: [
+            {
+              role: 'system',
+              content: systemPrompt
+            },
+            {
+              role: 'user',
+              content: additionalPrompts.value
+            },
+            {
+              role: 'user',
+              content: generateUserPrompt(props.currentStruct)
+            }
+          ]
         }
 
         // Remove empty messages
-        requestBody.messages = requestBody.messages.filter((m: { content: string }) => m.content.trim())
+        requestBody.messages = requestBody.messages.filter((m: { content: string }) =>
+          m.content.trim()
+        )
 
         // Only add temperature for GPT-4 model
         if (selectedModel.value === 'gpt-4o') {
@@ -168,7 +184,7 @@ export default defineComponent({
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${apiKey.value}`
+            Authorization: `Bearer ${apiKey.value}`
           },
           body: JSON.stringify(requestBody)
         })
@@ -212,15 +228,15 @@ export default defineComponent({
   <div class="example-view">
     <div class="content">
       <div class="tabs">
-        <button 
-          class="tab-button" 
+        <button
+          class="tab-button"
           :class="{ active: activeTab === 'schema' }"
           @click="activeTab = 'schema'"
         >
           Schema
         </button>
-        <button 
-          class="tab-button" 
+        <button
+          class="tab-button"
           :class="{ active: activeTab === 'example' }"
           @click="activeTab = 'example'"
         >
@@ -232,11 +248,7 @@ export default defineComponent({
       </div>
       <div v-else class="example-content">
         <div class="controls">
-          <button 
-            @click="generateExample" 
-            :disabled="isLoading"
-            class="generate-button"
-          >
+          <button @click="generateExample" :disabled="isLoading" class="generate-button">
             {{ isLoading ? 'Generating...' : 'Generate Example by AI' }}
           </button>
           <div class="input-group">
@@ -256,24 +268,17 @@ export default defineComponent({
                 placeholder="Enter key"
                 class="api-key-input"
               />
-              <button 
-                @click="showMorePrompts = !showMorePrompts"
-                class="more-prompts-button"
-              >
+              <button @click="showMorePrompts = !showMorePrompts" class="more-prompts-button">
                 {{ showMorePrompts ? 'Hide Prompts' : 'More Prompts' }}
               </button>
-              <div v-if="showKeyStored" class="key-stored">
-                API key stored in browser
-              </div>
+              <div v-if="showKeyStored" class="key-stored">API key stored in browser</div>
             </div>
           </div>
         </div>
         <div v-if="error" class="error">
           {{ error }}
         </div>
-        <div v-else-if="isLoading" class="loading">
-          Generating example...
-        </div>
+        <div v-else-if="isLoading" class="loading">Generating example...</div>
         <div v-if="showMorePrompts" class="more-prompts">
           <label class="input-label">Additional Prompts:</label>
           <textarea
@@ -304,7 +309,7 @@ export default defineComponent({
 .content {
   flex-grow: 1;
   overflow-y: auto;
-  min-height: 0;  /* Important for Firefox */
+  min-height: 0; /* Important for Firefox */
 }
 
 .example-content {
@@ -418,8 +423,12 @@ pre {
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 .tabs {
@@ -504,7 +513,7 @@ pre {
   .example-view {
     background: #2a2a2a;
   }
-  
+
   h3 {
     color: #eee;
   }
@@ -544,7 +553,7 @@ pre {
   .input-label {
     color: #aaa;
   }
-  
+
   .model-select {
     background: #1a1a1a;
     border-color: #444;
@@ -569,12 +578,12 @@ pre {
     border-color: #444;
     color: #fff;
   }
-  
+
   .more-prompts {
     background: #333;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
   }
-  
+
   .prompts-input {
     background: #1a1a1a;
     border-color: #444;
@@ -613,11 +622,11 @@ pre {
   .controls {
     gap: 8px;
   }
-  
+
   .api-key-input {
     width: 200px;
   }
-  
+
   .tab-button {
     padding: 8px 12px;
     font-size: 1em;

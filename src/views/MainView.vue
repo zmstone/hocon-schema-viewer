@@ -155,7 +155,7 @@ export default defineComponent({
       if (!isResizing.value) return
       const container = document.querySelector('.inner-container')
       if (!container) return
-      
+
       const containerRect = container.getBoundingClientRect()
       const newWidth = containerRect.right - e.clientX
       exampleWidth.value = Math.max(300, Math.min(1000, newWidth))
@@ -256,10 +256,11 @@ export default defineComponent({
       </div>
       <div class="resizer" @mousedown="startExampleResize"></div>
       <div class="example-view-box" :style="{ width: exampleWidth + 'px' }">
-        <ExampleView v-if="exampleStruct"
-         :currentStruct="exampleStruct"
-         :structResolver="structResolver"
-         />
+        <ExampleView
+          v-if="exampleStruct"
+          :currentStruct="exampleStruct"
+          :structResolver="structResolver"
+        />
       </div>
     </div>
   </div>
