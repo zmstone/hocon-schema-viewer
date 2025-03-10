@@ -38,6 +38,8 @@ export default defineComponent({
       activeTab.value = 'example'
       generatedExample.value = ''
       error.value = ''
+      // Auto-generate example when struct changes
+      generateExample()
     })
 
     // Store API key when it changes
@@ -359,11 +361,15 @@ export default defineComponent({
           </div>
           <div class="controls-row">
             <button @click="generateExample" :disabled="isLoading" class="generate-button">
-              {{ isLoading ? 'Generating...' : 'Generate Example by AI' }}
+              {{ isLoading ? 'Generating...' : 'Try Again' }}
             </button>
             <button @click="showMorePrompts = !showMorePrompts" class="more-prompts-button">
               {{ showMorePrompts ? 'Hide Prompts' : 'More Prompts' }}
             </button>
+          </div>
+          <div class="struct-name">
+            <span class="struct-label">Current struct:</span>
+            <code>{{ currentStruct.full_name }}</code>
           </div>
         </div>
         <div v-if="error" class="error">
@@ -831,6 +837,25 @@ pre {
   .clear-substruct:hover {
     background: rgba(228, 245, 234, 0.05);
     color: #e4f5ea;
+  }
+}
+
+.struct-name {
+  font-size: var(--text-sm);
+  color: #666;
+}
+
+.struct-label {
+  margin-right: 8px;
+  color: #999;
+}
+
+@media (prefers-color-scheme: dark) {
+  .struct-name {
+    color: #aaa;
+  }
+  .struct-label {
+    color: #777;
   }
 }
 </style>
