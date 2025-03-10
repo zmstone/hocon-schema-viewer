@@ -137,7 +137,7 @@ export default defineComponent({
 
 <template>
   <div class="example-view">
-    <div class="example-header">
+    <div class="header">
       <div class="controls">
         <button 
           @click="generateExample" 
@@ -145,12 +145,6 @@ export default defineComponent({
           class="generate-button"
         >
           {{ isLoading ? 'Generating...' : 'Generate Example' }}
-        </button>
-        <button 
-          @click="showMorePrompts = !showMorePrompts"
-          class="more-prompts-button"
-        >
-          {{ showMorePrompts ? 'Hide Prompts' : 'More Prompts' }}
         </button>
         <div class="input-group">
           <label class="input-label">Model:</label>
@@ -162,13 +156,19 @@ export default defineComponent({
         </div>
         <div class="input-group">
           <label class="input-label">OpenAI API Key:</label>
-          <div class="api-input">
+          <div class="api-controls">
             <input
               type="password"
               v-model="apiKey"
               placeholder="Enter key"
               class="api-key-input"
             />
+            <button 
+              @click="showMorePrompts = !showMorePrompts"
+              class="more-prompts-button"
+            >
+              {{ showMorePrompts ? 'Hide Prompts' : 'More Prompts' }}
+            </button>
             <div v-if="showKeyStored" class="key-stored">
               API key stored in browser
             </div>
@@ -176,39 +176,41 @@ export default defineComponent({
         </div>
       </div>
     </div>
-    <div class="tabs">
-      <button 
-        class="tab-button" 
-        :class="{ active: activeTab === 'schema' }"
-        @click="activeTab = 'schema'"
-      >
-        Schema
-      </button>
-      <button 
-        class="tab-button" 
-        :class="{ active: activeTab === 'example' }"
-        @click="activeTab = 'example'"
-      >
-        Example
-      </button>
-    </div>
-    <div v-if="error" class="error">
-      {{ error }}
-    </div>
-    <div v-else-if="isLoading" class="loading">
-      Generating example...
-    </div>
-    <div v-else>
-      <div v-if="showMorePrompts" class="more-prompts">
-        <label class="input-label">Additional Prompts:</label>
-        <textarea
-          v-model="additionalPrompts"
-          class="prompts-input"
-          placeholder="Add additional instructions for example generation..."
-          rows="4"
-        ></textarea>
+    <div class="content">
+      <div class="tabs">
+        <button 
+          class="tab-button" 
+          :class="{ active: activeTab === 'schema' }"
+          @click="activeTab = 'schema'"
+        >
+          Schema
+        </button>
+        <button 
+          class="tab-button" 
+          :class="{ active: activeTab === 'example' }"
+          @click="activeTab = 'example'"
+        >
+          Example
+        </button>
       </div>
-      <pre><code>{{ activeTab === 'example' ? generatedExample : JSON.stringify(currentStruct, null, 2) }}</code></pre>
+      <div v-if="error" class="error">
+        {{ error }}
+      </div>
+      <div v-else-if="isLoading" class="loading">
+        Generating example...
+      </div>
+      <div v-else>
+        <div v-if="showMorePrompts" class="more-prompts">
+          <label class="input-label">Additional Prompts:</label>
+          <textarea
+            v-model="additionalPrompts"
+            class="prompts-input"
+            placeholder="Add additional instructions for example generation..."
+            rows="4"
+          ></textarea>
+        </div>
+        <pre><code>{{ activeTab === 'example' ? generatedExample : JSON.stringify(currentStruct, null, 2) }}</code></pre>
+      </div>
     </div>
   </div>
 </template>
@@ -218,13 +220,23 @@ export default defineComponent({
   padding: 16px;
   background: #f8f8f8;
   border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 
-.example-header {
+.header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 12px;
+  flex-shrink: 0;
+}
+
+.content {
+  flex-grow: 1;
+  overflow-y: auto;
+  min-height: 0;  /* Important for Firefox */
 }
 
 .controls {
@@ -256,6 +268,7 @@ export default defineComponent({
 pre {
   margin: 0;
   overflow-x: auto;
+  height: 100%;
   background: white;
   padding: 12px;
   border-radius: 4px;
@@ -290,7 +303,9 @@ pre {
   background: white;
 }
 
-.api-input {
+.api-controls {
+  display: flex;
+  gap: 8px;
   position: relative;
 }
 
