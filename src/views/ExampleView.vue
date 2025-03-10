@@ -66,11 +66,11 @@ export default defineComponent({
     function processExampleText(text: string) {
       if (!text) return ''
       return text.split('\n').map(line => {
-        // ignore indentations
-        const match = line.match(/^(\s*)# generate:(.+)$/)
+        const match = line.match(/^(\s*)# substruct:(.+)$/)
         if (match) {
-          const [fullMatch, indentation, refName] = match  // Destructure to get the correct parts
-          return `<a href="javascript:void(0)" class="generate-link" data-ref="${refName}">${match[0]}</a>`
+          const [fullMatch, indentation, refName] = match
+          return `<a href="javascript:void(0)" class="generate-link" data-ref="${refName}" data-indent="${indentation}">${match[0]}</a>
+                  <div class="sub-example" id="sub-example-${refName}"></div>`
         }
         return line
       }).join('\n')
@@ -87,16 +87,11 @@ export default defineComponent({
       if (!target.classList.contains('generate-link')) return
 
       const refName = target.getAttribute('data-ref')
+      const indentation = target.getAttribute('data-indent') || ''
       if (!refName) return
 
       const struct = findStruct(refName)
-      if (!struct) {
-        return
-      }
-
-      // Get the original line with indentation
-      const originalLine = target.textContent || ''
-      const indentation = originalLine.match(/^\s*/)?.[0] || ''
+      if (!struct) return
 
       try {
         const response = await fetch('https://api.openai.com/v1/chat/completions', {
@@ -119,22 +114,19 @@ export default defineComponent({
         })
 
         if (!response.ok) throw new Error(`API error: ${response.statusText}`)
-        
+
         const data = await response.json()
         const subExample = data.choices[0].message.content
-        
-        // Add indentation to each line of the sub-example
+
         const indentedExample = subExample
           .split('\n')
-          .map(line => indentation + line)
+          .map((line: string) => indentation + line)
           .join('\n')
 
-        // Insert the sub-example after the generate line
-        const lines = generatedExample.value.split('\n')
-        const linkIndex = lines.findIndex(line => line.includes(`# generate:${refName}`))
-        if (linkIndex >= 0) {
-          lines.splice(linkIndex + 1, 0, indentedExample)
-          generatedExample.value = lines.join('\n')
+        // Update the sub-example div
+        const subExampleDiv = document.getElementById(`sub-example-${refName}`)
+        if (subExampleDiv) {
+          subExampleDiv.textContent = indentedExample
         }
 
       } catch (err) {
@@ -666,5 +658,10 @@ pre {
   .example-code :deep(.generate-link:hover) {
     background: rgba(228, 245, 234, 0.05);
   }
+}
+
+.example-code :deep(.sub-example) {
+  white-space: pre;
+  font-family: monospace;
 }
 </style>

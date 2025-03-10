@@ -10,10 +10,13 @@ Below are the schema rules:
 - When requested to generate an embedded example (not root level), you should directly generate the fields without respecting the "paths" in  the schema, and without {} or [] around the fields.
 - The "default" field is the default value of the field if it is not provided. The "required" field is a boolean that describes if the field is required.
 - The "items" field is an object that describes the items of the field if it is an array.
-- When the type is a reference to another struct schema, generate the sub-example in {} or [] based one the type, and generate "# generate:<reference_name>" in a new line with proper indentation as placeholder for the content of the sub-example. The indentation should match the current level of nesting.
 
 Below are the requirements for the generated example:
-- When it is a union type, you should generate an example based on my input after the schema JSON section, if no description is provided, you should generate an example based on the first union member type.
+- If a field type is a union of sub-structs or a reference to a sub-struct, generate its example using placeholders inside "{" and "}". Each placeholder is a HOCON comment like "# subscturct:<reference_name>" in a new line with proper indentation. For example:
+  {
+    # substruct:subStructName1
+    # substruct:subStructName2
+  }
 - For map, the key is a dollar ($) sign prefixed placehocer such as $name, you should generate a sensible example key for the map based on the path of the field. For example, if the path is "webhook.name", the key should be "mywebhook1".
 - When generating the example, you should recursively go deep into the schema and generate an example for each field.
 - While colon is a valid delimiter for key-value pair, you should use "=" as the delimiter in the generated example.
