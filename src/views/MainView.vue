@@ -128,6 +128,37 @@ export default defineComponent({
       exampleStruct.value = struct
     }
 
+    const exampleWidth = ref(500)
+    const isResizing = ref(false)
+
+    const startResize = (e: MouseEvent) => {
+      e.preventDefault()
+      isResizing.value = true
+      document.addEventListener('mousemove', handleResize)
+      document.addEventListener('mouseup', stopResize)
+      document.body.style.cursor = 'col-resize'
+      document.body.style.userSelect = 'none'
+    }
+
+    const handleResize = (e: MouseEvent) => {
+      e.preventDefault()
+      if (!isResizing.value) return
+      const container = document.querySelector('.inner-container')
+      if (!container) return
+      
+      const containerRect = container.getBoundingClientRect()
+      const newWidth = containerRect.right - e.clientX
+      exampleWidth.value = Math.max(300, Math.min(1000, newWidth))
+    }
+
+    const stopResize = () => {
+      isResizing.value = false
+      document.removeEventListener('mousemove', handleResize)
+      document.removeEventListener('mouseup', stopResize)
+      document.body.style.cursor = ''
+      document.body.style.userSelect = ''
+    }
+
     return {
       rootStruct,
       displayType,
@@ -138,7 +169,9 @@ export default defineComponent({
       handleImportanceLevelChanged,
       toHome,
       exampleStruct,
-      handleShowExample
+      handleShowExample,
+      exampleWidth,
+      startResize
     }
   },
   components: {
@@ -193,7 +226,8 @@ export default defineComponent({
           @show-example="handleShowExample"
         />
       </div>
-      <div class="example-view-box">
+      <div class="resizer" @mousedown="startResize"></div>
+      <div class="example-view-box" :style="{ width: exampleWidth + 'px' }">
         <ExampleView v-if="exampleStruct" :currentStruct="exampleStruct" />
       </div>
     </div>
@@ -211,6 +245,7 @@ export default defineComponent({
   display: flex;
   flex-grow: 1;
   overflow-y: auto;
+  position: relative;
 }
 
 .sidebar {
@@ -218,17 +253,33 @@ export default defineComponent({
   overflow-y: auto;
   padding: 0px;
   border-right: 1px solid #ccc;
+  flex-shrink: 0;
 }
 
 .struct-view-box {
   flex-grow: 1;
+  flex-shrink: 1;
   padding-left: 20px;
   overflow-y: auto;
 }
 
+.resizer {
+  width: 4px;
+  background: transparent;
+  cursor: col-resize;
+  position: relative;
+  flex-shrink: 0;
+  z-index: 10;
+}
+
+.resizer:hover {
+  background: #ccc;
+}
+
 .example-view-box {
-  width: 300px;
+  flex-shrink: 0;
   min-width: 300px;
+  max-width: 1000px;
   padding-left: 20px;
   border-left: 1px solid #ccc;
 }
@@ -258,6 +309,9 @@ export default defineComponent({
   }
   .example-view-box {
     border-left-color: #444;
+  }
+  .resizer:hover {
+    background: #444;
   }
 }
 </style>
