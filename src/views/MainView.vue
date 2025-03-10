@@ -5,7 +5,7 @@ import * as schema from '../schema'
 import StructView from './StructView.vue'
 import ImportanceView from './ImportanceView.vue'
 import RootFieldsList from './RootFieldsList.vue'
-
+import ExampleView from './ExampleView.vue'
 type StructsIndex = { [name: string]: number }
 
 export default defineComponent({
@@ -181,6 +181,9 @@ export default defineComponent({
           :expandByDefault="true"
           :key="i"
         />
+      </div>
+      <div class="example-view-box">
+        aaaaaaaaaaaaaaaaaaaaaaaaa
       </div>
     </div>
   </div>

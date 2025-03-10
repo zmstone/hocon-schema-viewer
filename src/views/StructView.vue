@@ -5,6 +5,7 @@ import * as schema from '../schema'
 
 export default defineComponent({
   name: 'StructView',
+  emits: ['show-example'],
   props: {
     // the current struct to expand
     currentStruct: {
@@ -30,10 +31,13 @@ export default defineComponent({
       required: true
     }
   },
-  setup(props) {
+  setup(props, { emit }) {
     const isExpanded = ref<boolean>(props.expandByDefault)
     const toggleExpand = () => {
       isExpanded.value = !isExpanded.value
+    }
+    const showExample = () => {
+      emit('show-example', props.currentStruct)
     }
     function isVisible(field: schema.Field): boolean {
       return schema.isVisible(field, props.importanceLevel)
@@ -41,7 +45,8 @@ export default defineComponent({
     return {
       isExpanded,
       toggleExpand,
-      isVisible
+      isVisible,
+      showExample
     }
   },
   components: {
@@ -86,6 +91,7 @@ export default defineComponent({
     <span class="struct-fullname" @click="toggleExpand()">
       <code>{{ currentStruct.full_name }} {{ maybeFold() }}</code>
     </span>
+    <button @click="showExample">Show Example</button>
     <ul class="field-list" v-if="isExpanded">
       <li v-for="(field, index) in visibleFields(currentStruct)" class="field-item">
         <div v-if="isVisible(field)">
@@ -191,6 +197,15 @@ table th {
   background-color: #e4f5ea;
   border-radius: 4px;
   font-size: 0.67em;
+}
+
+.example-button {
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.67em;
+  cursor: pointer;
+  background-color: #e4f5ea;
+  border: 1px solid #2e5742;
 }
 
 .struct-view {
