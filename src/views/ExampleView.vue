@@ -10,6 +10,10 @@ export default defineComponent({
     currentStruct: {
       type: Object as PropType<schema.Struct>,
       required: true
+    },
+    structResolver: {
+      type: Function,
+      required: true
     }
   },
   setup(props) {
@@ -22,7 +26,6 @@ export default defineComponent({
     const showKeyStored = ref(false)
     const showMorePrompts = ref(false)
     const additionalPrompts = ref('')
-
     const models = [
       { value: 'gpt-4o', label: 'GPT-4' }
     ]
@@ -48,6 +51,15 @@ export default defineComponent({
     watch(selectedModel, (newModel) => {
       localStorage.setItem('openai_model', newModel)
     })
+
+    const findStruct = (name: string): schema.Struct | null => {
+      try {
+        return props.structResolver(name)
+      } catch (e) {
+        error.value = `Could not find struct: ${name}`
+        return null
+      }
+    }
 
     async function generateExample() {
       if (!apiKey.value) {
@@ -111,7 +123,8 @@ export default defineComponent({
       models,
       showKeyStored,
       showMorePrompts,
-      additionalPrompts
+      additionalPrompts,
+      findStruct
     }
   }
 })

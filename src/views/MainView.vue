@@ -257,7 +257,10 @@ export default defineComponent({
       </div>
       <div class="resizer" @mousedown="startExampleResize"></div>
       <div class="example-view-box" :style="{ width: exampleWidth + 'px' }">
-        <ExampleView v-if="exampleStruct" :currentStruct="exampleStruct" />
+        <ExampleView v-if="exampleStruct"
+         :currentStruct="exampleStruct"
+         :structResolver="structResolver"
+         />
       </div>
     </div>
   </div>

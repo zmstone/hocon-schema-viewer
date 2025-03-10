@@ -9,7 +9,7 @@ Below are the schema rules:
 - In the schema, the "path" field is a dot-separated string that describes the path to the field from the root of the schema.
 - The "default" field is the default value of the field if it is not provided. The "required" field is a boolean that describes if the field is required.
 - The "items" field is an object that describes the items of the field if it is an array.
-- When the type is a reference to another schema, generate "# Add fields for <reference_name>" to the example.
+- When the type is a reference to another schema, generate "# generaete:<reference_name>" to the example.
 
 Below are the requirements for the generated example:
 - When it is a union type, you should generate an example based on my input after the schema JSON section, if no description is provided, you should generate an example based on the first union member type.
