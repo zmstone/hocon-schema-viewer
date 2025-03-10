@@ -92,7 +92,7 @@ export default defineComponent({
     <span class="struct-fullname" @click="toggleExpand()">
       <code>{{ currentStruct.full_name }} {{ maybeFold() }}</code>
     </span>
-    <button @click="showExample">Show Example</button>
+    <button @click="showExample">Show Schema and Example</button>
     <ul class="field-list" v-if="isExpanded">
       <li v-for="(field, index) in visibleFields(currentStruct)" class="field-item">
         <div v-if="isVisible(field)">
