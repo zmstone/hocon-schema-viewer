@@ -102,12 +102,26 @@ export default defineComponent({
       const linkIndex = lines.findIndex((line) => line.includes(`# substruct(${refName})`))
       if (linkIndex >= 0) {
         // Find and remove any existing substruct content
-        let nextStructIndex = lines.slice(linkIndex + 1).findIndex(line => line.includes('# substruct('))
-        nextStructIndex = nextStructIndex === -1 ? lines.length : nextStructIndex + linkIndex + 1
-        // Remove all lines between current substruct and next one (or end)
+        const currentIndent = (lines[linkIndex].match(/^\s*/) || [''])[0].length
+        let nextStructIndex = linkIndex + 1
+        
+        // Find where this block ends - either at next substruct with same/less indent,
+        // or at a line with less indentation (closing brace/bracket)
+        while (nextStructIndex < lines.length) {
+          const line = lines[nextStructIndex]
+          const lineIndent = (line.match(/^\s*/) || [''])[0].length
+          
+          if (lineIndent <= currentIndent && 
+              (line.includes('# substruct(') || line.trim() === '}' || line.trim() === ']')) {
+            break
+          }
+          nextStructIndex++
+        }
+
+        // Remove all lines between current substruct and block end
         lines.splice(linkIndex + 1, nextStructIndex - linkIndex - 1)
         // Add loading placeholder
-        lines.splice(linkIndex + 1, 0, indentation + 'Generating...')
+        lines.splice(linkIndex + 1, 0, indentation + '  Generating...\n' + indentation)
         generatedExample.value = lines.join('\n')
       }
 
@@ -148,7 +162,7 @@ export default defineComponent({
         const updatedLines = generatedExample.value.split('\n')
         const loadingIndex = updatedLines.findIndex((line) => line.includes(`# substruct(${refName})`))
         if (loadingIndex >= 0) {
-          updatedLines.splice(loadingIndex + 1, 1, indentedExample)
+          updatedLines.splice(loadingIndex + 1, 2, indentedExample)
           generatedExample.value = updatedLines.join('\n')
         }
       } catch (err) {
