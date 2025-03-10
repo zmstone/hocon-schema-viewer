@@ -1,7 +1,7 @@
 <script lang="ts">
 import { defineComponent, ref, watch } from 'vue'
 import type { PropType } from 'vue'
-import * as schema from '../schema'
+import type * as schema from '../schema'
 import { systemPrompt, generateUserPrompt, generateSubExamplePrompt } from '../prompts/example-generator'
 
 export default defineComponent({
