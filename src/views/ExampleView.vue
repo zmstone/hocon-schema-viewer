@@ -73,7 +73,7 @@ export default defineComponent({
           const match = line.match(/^(\s*)# substruct\((.+)\)$/)
           if (match) {
             const [fullMatch, indentation, refName] = match
-            return `<a href="javascript:void(0)" class="generate-link" data-ref="${refName}" data-indent="${indentation}">${match[0]}</a>`
+            return `<span class="substruct-line"><a href="javascript:void(0)" class="generate-link" data-ref="${refName}" data-indent="${indentation}">${match[0]}</a><a href="javascript:void(0)" class="clear-substruct" data-ref="${refName}" title="Clear substruct">✕</a></span>`
           }
           return line
         })
@@ -177,6 +177,39 @@ export default defineComponent({
       }
     }
 
+    // Handle clear substruct button clicks
+    function handleClearSubstruct(event: MouseEvent) {
+      const target = event.target as HTMLElement
+      if (!target.classList.contains('clear-substruct')) return
+      
+      const refName = target.getAttribute('data-ref')
+      if (!refName) return
+      
+      const lines = generatedExample.value.split('\n')
+      const linkIndex = lines.findIndex((line) => line.includes(`# substruct(${refName})`))
+      if (linkIndex >= 0) {
+        const currentIndent = (lines[linkIndex].match(/^\s*/) || [''])[0].length
+        let nextStructIndex = linkIndex + 1
+        
+        while (nextStructIndex < lines.length) {
+          const line = lines[nextStructIndex]
+          const lineIndent = (line.match(/^\s*/) || [''])[0].length
+          
+          if (line.includes('# substruct(')) {
+            break
+          }
+          if (lineIndent < currentIndent) {
+            break
+          }
+          nextStructIndex++
+        }
+        
+        // Remove all lines between current substruct and block end
+        lines.splice(linkIndex + 1, nextStructIndex - linkIndex - 1)
+        generatedExample.value = lines.join('\n')
+      }
+    }
+
     async function generateExample() {
       if (!apiKey.value) {
         return
@@ -250,7 +283,8 @@ export default defineComponent({
       showMorePrompts,
       additionalPrompts,
       findStruct,
-      handleGenerateClick
+      handleGenerateClick,
+      handleClearSubstruct
     }
   }
 })
@@ -324,7 +358,10 @@ export default defineComponent({
             rows="4"
           ></textarea>
         </div>
-        <div v-if="!isLoading" class="example-code" @click="handleGenerateClick">
+        <div v-if="!isLoading" class="example-code" @click="(e) => {
+          handleGenerateClick(e)
+          handleClearSubstruct(e)
+        }">
           <pre><code v-html="processedExample"></code></pre>
         </div>
       </div>
@@ -728,5 +765,47 @@ pre {
 .example-code :deep(.sub-example) {
   white-space: pre;
   font-family: monospace;
+}
+
+.substruct-line {
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+}
+
+.clear-substruct {
+  opacity: 0;
+  margin-left: 4px;
+  color: #666;
+  font-size: var(--text-sm);
+  line-height: 1;
+  cursor: pointer;
+  padding: 2px;
+  border-radius: 3px;
+  transition: all 0.2s ease;
+  font-family: var(--font-main);
+  text-decoration: none;
+  display: inline-block;
+}
+
+.substruct-line:hover .clear-substruct {
+  opacity: 1;
+}
+
+.clear-substruct:hover {
+  background: rgba(46, 87, 66, 0.05);
+  color: #2e5742;
+  text-decoration: none;
+}
+
+@media (prefers-color-scheme: dark) {
+  .clear-substruct {
+    color: #999;
+  }
+  
+  .clear-substruct:hover {
+    background: rgba(228, 245, 234, 0.05);
+    color: #e4f5ea;
+  }
 }
 </style>
