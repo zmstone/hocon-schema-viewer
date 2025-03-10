@@ -24,7 +24,7 @@ export default defineComponent({
     const generatedExample = ref<string>('')
     const processedExample = ref<string>('')
     const isLoading = ref(false)
-    const activeTab = ref('schema') // 'schema' or 'example'
+    const activeTab = ref('example')  // 'example' or 'schema'
     const error = ref<string>('')
     const apiKey = ref(localStorage.getItem('openai_api_key') || '')
     const selectedModel = ref(localStorage.getItem('openai_model') || 'gpt-4o')
@@ -34,14 +34,11 @@ export default defineComponent({
     const models = [{ value: 'gpt-4o', label: 'GPT-4' }]
 
     // Reset state when struct changes
-    watch(
-      () => props.currentStruct,
-      () => {
-        activeTab.value = 'schema'
-        generatedExample.value = ''
-        error.value = ''
-      }
-    )
+    watch(() => props.currentStruct, () => {
+      activeTab.value = 'example'
+      generatedExample.value = ''
+      error.value = ''
+    })
 
     // Store API key when it changes
     watch(apiKey, (newKey) => {
@@ -100,6 +97,20 @@ export default defineComponent({
       const struct = findStruct(refName)
       if (!struct) return
 
+      // Insert loading placeholder
+      const lines = generatedExample.value.split('\n')
+      const linkIndex = lines.findIndex((line) => line.includes(`# substruct(${refName})`))
+      if (linkIndex >= 0) {
+        // Find and remove any existing substruct content
+        let nextStructIndex = lines.slice(linkIndex + 1).findIndex(line => line.includes('# substruct('))
+        nextStructIndex = nextStructIndex === -1 ? lines.length : nextStructIndex + linkIndex + 1
+        // Remove all lines between current substruct and next one (or end)
+        lines.splice(linkIndex + 1, nextStructIndex - linkIndex - 1)
+        // Add loading placeholder
+        lines.splice(linkIndex + 1, 0, indentation + 'Generating...')
+        generatedExample.value = lines.join('\n')
+      }
+
       try {
         const response = await fetch('https://api.openai.com/v1/chat/completions', {
           method: 'POST',
@@ -133,15 +144,22 @@ export default defineComponent({
           .map((line: string) => indentation + line)
           .join('\n')
 
-        // Insert the sub-example after the generate line
-        const lines = generatedExample.value.split('\n')
-        const linkIndex = lines.findIndex((line) => line.includes(`# substruct(${refName})`))
-        if (linkIndex >= 0) {
-          lines.splice(linkIndex + 1, 0, indentedExample)
-          generatedExample.value = lines.join('\n')
+        // Replace loading placeholder with actual example
+        const updatedLines = generatedExample.value.split('\n')
+        const loadingIndex = updatedLines.findIndex((line) => line.includes(`# substruct(${refName})`))
+        if (loadingIndex >= 0) {
+          updatedLines.splice(loadingIndex + 1, 1, indentedExample)
+          generatedExample.value = updatedLines.join('\n')
         }
       } catch (err) {
         console.error('Error generating sub-example:', err)
+        // Remove loading placeholder on error
+        const errorLines = generatedExample.value.split('\n')
+        const errorIndex = errorLines.findIndex((line) => line.includes(`# substruct(${refName})`))
+        if (errorIndex >= 0) {
+          errorLines.splice(errorIndex + 1, 1)
+          generatedExample.value = errorLines.join('\n')
+        }
       }
     }
 
@@ -230,17 +248,17 @@ export default defineComponent({
       <div class="tabs">
         <button
           class="tab-button"
-          :class="{ active: activeTab === 'schema' }"
-          @click="activeTab = 'schema'"
-        >
-          Schema
-        </button>
-        <button
-          class="tab-button"
           :class="{ active: activeTab === 'example' }"
           @click="activeTab = 'example'"
         >
           Example
+        </button>
+        <button
+          class="tab-button"
+          :class="{ active: activeTab === 'schema' }"
+          @click="activeTab = 'schema'"
+        >
+          Schema
         </button>
       </div>
       <div v-if="activeTab === 'schema'">
@@ -248,31 +266,35 @@ export default defineComponent({
       </div>
       <div v-else class="example-content">
         <div class="controls">
-          <button @click="generateExample" :disabled="isLoading" class="generate-button">
-            {{ isLoading ? 'Generating...' : 'Generate Example by AI' }}
-          </button>
-          <div class="input-group">
-            <label class="input-label">Model:</label>
-            <select v-model="selectedModel" class="model-select">
-              <option v-for="model in models" :key="model.value" :value="model.value">
-                {{ model.label }}
-              </option>
-            </select>
-          </div>
-          <div class="input-group">
-            <label class="input-label">OpenAI API Key:</label>
-            <div class="api-controls">
-              <input
-                type="password"
-                v-model="apiKey"
-                placeholder="Enter key"
-                class="api-key-input"
-              />
-              <button @click="showMorePrompts = !showMorePrompts" class="more-prompts-button">
-                {{ showMorePrompts ? 'Hide Prompts' : 'More Prompts' }}
-              </button>
-              <div v-if="showKeyStored" class="key-stored">API key stored in browser</div>
+          <div class="controls-inputs">
+            <div class="input-group">
+              <label class="input-label">Model:</label>
+              <select v-model="selectedModel" class="model-select">
+                <option v-for="model in models" :key="model.value" :value="model.value">
+                  {{ model.label }}
+                </option>
+              </select>
             </div>
+            <div class="input-group">
+              <label class="input-label">OpenAI API Key:</label>
+              <div class="api-controls">
+                <input
+                  type="password"
+                  v-model="apiKey"
+                  placeholder="Enter key"
+                  class="api-key-input"
+                />
+                <div v-if="showKeyStored" class="key-stored">API key stored in browser</div>
+              </div>
+            </div>
+          </div>
+          <div class="controls-row">
+            <button @click="generateExample" :disabled="isLoading" class="generate-button">
+              {{ isLoading ? 'Generating...' : 'Generate Example by AI' }}
+            </button>
+            <button @click="showMorePrompts = !showMorePrompts" class="more-prompts-button">
+              {{ showMorePrompts ? 'Hide Prompts' : 'More Prompts' }}
+            </button>
           </div>
         </div>
         <div v-if="error" class="error">
@@ -318,11 +340,22 @@ export default defineComponent({
 
 .controls {
   display: flex;
+  flex-direction: column;
   gap: 12px;
-  align-items: center;
   margin-bottom: 16px;
   padding-top: 16px;
-  flex-wrap: wrap;
+}
+
+.controls-inputs {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.controls-row {
+  display: flex;
+  gap: 12px;
+  align-items: center;
 }
 
 .generate-button {
