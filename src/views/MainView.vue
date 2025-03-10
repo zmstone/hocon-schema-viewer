@@ -108,7 +108,7 @@ export default defineComponent({
     onUnmounted(() => {
       window.removeEventListener('popstate', handleUrlChange)
     })
-    const toHome = () => {
+    const toTop = () => {
       // current URL
       const url = new URL(window.location.href)
       // the ?s param is the search query
@@ -119,6 +119,12 @@ export default defineComponent({
         newUrl.searchParams.set('s', sParam)
       }
       window.location.href = newUrl.toString()
+    }
+
+    const toBaseHome = () => {
+      // Go to base URL without any parameters
+      const url = new URL(window.location.href)
+      window.location.href = url.protocol + '//' + url.host + url.pathname
     }
 
     const exampleStruct = ref<schema.Struct | null>(null)
@@ -192,7 +198,8 @@ export default defineComponent({
       handleSelectedStruct,
       resolveDisplayStructs,
       handleImportanceLevelChanged,
-      toHome,
+      toTop,
+      toBaseHome,
       exampleStruct,
       handleShowExample,
       exampleWidth,
@@ -218,7 +225,10 @@ export default defineComponent({
 <template>
   <div class="main-container">
     <div class="top-bar">
-      <button @click="toHome">TOP</button>
+      <div class="nav-buttons">
+        <button @click="toBaseHome">HOME</button>
+        <button @click="toTop">BACK</button>
+      </div>
       <ImportanceView
         :selectedInUri="importanceLevel"
         @importanceLevelChanged="handleImportanceLevelChanged"
@@ -332,6 +342,11 @@ export default defineComponent({
   align-items: center;
   padding: 5px;
   border-bottom: 1px solid #ccc;
+}
+
+.nav-buttons {
+  display: flex;
+  gap: 8px;
 }
 
 /* Dark mode styles */
