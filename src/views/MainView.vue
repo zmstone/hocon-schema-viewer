@@ -124,7 +124,6 @@ export default defineComponent({
     const exampleStruct = ref<schema.Struct | null>(null)
 
     const handleShowExample = (struct: schema.Struct) => {
-      console.log(JSON.stringify(struct, null, 2))
       exampleStruct.value = struct
     }
 

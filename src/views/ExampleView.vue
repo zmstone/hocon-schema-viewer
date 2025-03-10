@@ -2,7 +2,7 @@
 import { defineComponent, ref, watch } from 'vue'
 import type { PropType } from 'vue'
 import * as schema from '../schema'
-import { systemPrompt, generateUserPrompt } from '../prompts/example-generator'
+import { systemPrompt, generateUserPrompt, generateSubExamplePrompt } from '../prompts/example-generator'
 
 export default defineComponent({
   name: 'ExampleView',
@@ -18,6 +18,7 @@ export default defineComponent({
   },
   setup(props) {
     const generatedExample = ref<string>('')
+    const processedExample = ref<string>('')
     const isLoading = ref(false)
     const activeTab = ref('schema')  // 'schema' or 'example'
     const error = ref<string>('')
@@ -61,6 +62,86 @@ export default defineComponent({
       }
     }
 
+    // Process example text to convert generate comments into links
+    function processExampleText(text: string) {
+      if (!text) return ''
+      return text.split('\n').map(line => {
+        // ignore indentations
+        const match = line.match(/^(\s*)# generate:(.+)$/)
+        if (match) {
+          const [fullMatch, indentation, refName] = match  // Destructure to get the correct parts
+          return `<a href="javascript:void(0)" class="generate-link" data-ref="${refName}">${match[0]}</a>`
+        }
+        return line
+      }).join('\n')
+    }
+
+    // Watch for changes in generatedExample and process it
+    watch(generatedExample, (newValue) => {
+      processedExample.value = processExampleText(newValue)
+    })
+
+    // Handle generate link clicks
+    async function handleGenerateClick(event: MouseEvent) {
+      const target = event.target as HTMLElement
+      if (!target.classList.contains('generate-link')) return
+
+      const refName = target.getAttribute('data-ref')
+      if (!refName) return
+
+      const struct = findStruct(refName)
+      if (!struct) {
+        return
+      }
+
+      // Get the original line with indentation
+      const originalLine = target.textContent || ''
+      const indentation = originalLine.match(/^\s*/)?.[0] || ''
+
+      try {
+        const response = await fetch('https://api.openai.com/v1/chat/completions', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${apiKey.value}`
+          },
+          body: JSON.stringify({
+            model: selectedModel.value,
+            messages: [{
+              role: 'system',
+              content: systemPrompt
+            }, {
+              role: 'user',
+              content: generateSubExamplePrompt(struct)
+            }],
+            temperature: selectedModel.value === 'gpt-4o' ? 0.7 : undefined
+          })
+        })
+
+        if (!response.ok) throw new Error(`API error: ${response.statusText}`)
+        
+        const data = await response.json()
+        const subExample = data.choices[0].message.content
+        
+        // Add indentation to each line of the sub-example
+        const indentedExample = subExample
+          .split('\n')
+          .map(line => indentation + line)
+          .join('\n')
+
+        // Insert the sub-example after the generate line
+        const lines = generatedExample.value.split('\n')
+        const linkIndex = lines.findIndex(line => line.includes(`# generate:${refName}`))
+        if (linkIndex >= 0) {
+          lines.splice(linkIndex + 1, 0, indentedExample)
+          generatedExample.value = lines.join('\n')
+        }
+
+      } catch (err) {
+        console.error('Error generating sub-example:', err)
+      }
+    }
+
     async function generateExample() {
       if (!apiKey.value) {
         return
@@ -83,7 +164,7 @@ export default defineComponent({
         }
 
         // Remove empty messages
-        requestBody.messages = requestBody.messages.filter(m => m.content.trim())
+        requestBody.messages = requestBody.messages.filter((m: { content: string }) => m.content.trim())
 
         // Only add temperature for GPT-4 model
         if (selectedModel.value === 'gpt-4o') {
@@ -98,9 +179,11 @@ export default defineComponent({
           },
           body: JSON.stringify(requestBody)
         })
+
         if (!response.ok) {
           throw new Error(`API error: ${response.statusText}`)
         }
+
         const data = await response.json()
         generatedExample.value = data.choices[0].message.content
         activeTab.value = 'example'
@@ -114,6 +197,7 @@ export default defineComponent({
 
     return {
       generatedExample,
+      processedExample,
       isLoading,
       generateExample,
       activeTab,
@@ -124,7 +208,8 @@ export default defineComponent({
       showKeyStored,
       showMorePrompts,
       additionalPrompts,
-      findStruct
+      findStruct,
+      handleGenerateClick
     }
   }
 })
@@ -205,7 +290,9 @@ export default defineComponent({
             rows="4"
           ></textarea>
         </div>
-        <pre v-if="!isLoading"><code>{{ generatedExample }}</code></pre>
+        <div v-if="!isLoading" class="example-code" @click="handleGenerateClick">
+          <pre><code v-html="processedExample"></code></pre>
+        </div>
       </div>
     </div>
   </div>
@@ -405,6 +492,21 @@ pre {
   box-shadow: 0 0 0 2px rgba(46, 87, 66, 0.1);
 }
 
+.generate-link {
+  color: #2e5742;
+  text-decoration: none;
+  cursor: pointer;
+  display: inline-block;
+  padding: 2px 4px;
+  border-radius: 3px;
+  transition: all 0.2s ease;
+}
+
+.generate-link:hover {
+  text-decoration: underline;
+  background: rgba(46, 87, 66, 0.05);
+}
+
 @media (prefers-color-scheme: dark) {
   .example-view {
     background: #2a2a2a;
@@ -503,6 +605,15 @@ pre {
     border-color: #e4f5ea;
     box-shadow: 0 0 0 2px rgba(228, 245, 234, 0.1);
   }
+
+  .generate-link {
+    color: #e4f5ea;
+  }
+
+  .generate-link:hover {
+    text-decoration: underline;
+    background: rgba(228, 245, 234, 0.05);
+  }
 }
 
 @media (max-width: 768px) {
@@ -517,6 +628,43 @@ pre {
   .tab-button {
     padding: 8px 12px;
     font-size: 1em;
+  }
+}
+
+.example-code {
+  position: relative;
+}
+
+.example-code pre {
+  position: relative;
+  z-index: 1;
+}
+
+/* Override pre/code styles for links */
+.example-code :deep(.generate-link) {
+  color: #2e5742;
+  text-decoration: none;
+  cursor: pointer;
+  display: inline-block;
+  padding: 2px 4px;
+  border-radius: 3px;
+  transition: all 0.2s ease;
+  position: relative;
+  z-index: 2;
+}
+
+.example-code :deep(.generate-link:hover) {
+  text-decoration: underline;
+  background: rgba(46, 87, 66, 0.05);
+}
+
+@media (prefers-color-scheme: dark) {
+  .example-code :deep(.generate-link) {
+    color: #e4f5ea;
+  }
+
+  .example-code :deep(.generate-link:hover) {
+    background: rgba(228, 245, 234, 0.05);
   }
 }
 </style>

@@ -6,10 +6,11 @@ Below are the schema rules:
 - The root level type is always a struct or a map.
 - Other than strut or map, the other compelex types are array and union.
 - The "description" field describes the field in human-readable format.
-- In the schema, the "path" field is a dot-separated string that describes the path to the field from the root of the schema.
+- In the schema, the "paths" field is an array of dot-separated strings that describes the path to the field from the root of the schema. When requested to generate an root level example, you should generate the fields respecting to one of the paths in the "paths" array, the user may specify which path to use, otherwise use the first path.
+- When requested to generate an embedded example (not root level), you should directly generate the fields without respecting the "paths" in  the schema, and without {} or [] around the fields.
 - The "default" field is the default value of the field if it is not provided. The "required" field is a boolean that describes if the field is required.
 - The "items" field is an object that describes the items of the field if it is an array.
-- When the type is a reference to another schema, generate "# generaete:<reference_name>" to the example.
+- When the type is a reference to another struct schema, generate the sub-example in {} or [] based one the type, and generate "# generate:<reference_name>" in a new line with proper indentation as placeholder for the content of the sub-example. The indentation should match the current level of nesting.
 
 Below are the requirements for the generated example:
 - When it is a union type, you should generate an example based on my input after the schema JSON section, if no description is provided, you should generate an example based on the first union member type.
@@ -24,5 +25,9 @@ Below are the requirements for the generated example:
 - After generated, go through the requirements and make sure the generated example meets all the above requirements.`
 
 export function generateUserPrompt(schema: any): string {
-  return `Please generate a valid HOCON example for this schema:\n${JSON.stringify(schema, null, 2)}`
-} 
+  return `Please generate a valid kHOCON root level example for this schema:\n${JSON.stringify(schema, null, 2)}`
+}
+
+export function generateSubExamplePrompt(schema: any): string {
+  return `Please generate a valid HOCON embedded example for this schema:\n${JSON.stringify(schema, null, 2)}`
+}
