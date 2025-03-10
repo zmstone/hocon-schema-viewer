@@ -65,15 +65,36 @@ export default defineComponent({
     }
 
     // Process example text to convert generate comments into links
+    function hasSubstructContent(lines: string[], index: number): boolean {
+      if (index + 1 >= lines.length) return false
+      // Check next few lines for content
+      for (let i = index + 1; i < lines.length; i++) {
+        const line = lines[i]
+        // Stop at next substruct or closing brace/bracket
+        if (line.includes('# substruct(') || line.trim() === '}' || line.trim() === ']') {
+          break
+        }
+        // Consider any non-empty line as content
+        if (line.trim() !== '') {
+          return true
+        }
+      }
+      return false
+    }
+
     function processExampleText(text: string) {
       if (!text) return ''
+      const lines = text.split('\n')
       return text
         .split('\n')
-        .map((line) => {
+        .map((line, index) => {
           const match = line.match(/^(\s*)# substruct\((.+)\)$/)
           if (match) {
             const [fullMatch, indentation, refName] = match
-            return `<span class="substruct-line"><a href="javascript:void(0)" class="generate-link" data-ref="${refName}" data-indent="${indentation}">${match[0]}</a><a href="javascript:void(0)" class="clear-substruct" data-ref="${refName}" title="Clear substruct">✖</a></span>`
+            const hasContent = hasSubstructContent(lines, index)
+            return `<span class="substruct-line">${indentation}<a href="javascript:void(0)" class="generate-link" data-ref="${refName}" data-indent="${indentation}"># substruct(${refName})</a>${
+              hasContent ? `<a href="javascript:void(0)" class="clear-substruct" data-ref="${refName}" title="Clear substruct">✖</a>` : ''
+            }</span>`
           }
           return line
         })
@@ -736,8 +757,8 @@ pre {
 
 /* Override pre/code styles for links */
 .example-code :deep(.generate-link) {
-  color: #2e5742;
-  text-decoration: none;
+  color: #0066cc;
+  text-decoration: underline;
   cursor: pointer;
   display: inline-block;
   padding: 2px 4px;
@@ -745,20 +766,20 @@ pre {
   transition: all 0.2s ease;
   position: relative;
   z-index: 2;
+  font-weight: 500;
 }
 
 .example-code :deep(.generate-link:hover) {
-  text-decoration: underline;
-  background: rgba(46, 87, 66, 0.05);
+  background: rgba(0, 102, 204, 0.05);
 }
 
 @media (prefers-color-scheme: dark) {
   .example-code :deep(.generate-link) {
-    color: #e4f5ea;
+    color: #66b3ff;
   }
 
   .example-code :deep(.generate-link:hover) {
-    background: rgba(228, 245, 234, 0.05);
+    background: rgba(102, 179, 255, 0.05);
   }
 }
 
