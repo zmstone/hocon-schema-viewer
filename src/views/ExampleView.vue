@@ -137,45 +137,6 @@ export default defineComponent({
 
 <template>
   <div class="example-view">
-    <div class="header">
-      <div class="controls">
-        <button 
-          @click="generateExample" 
-          :disabled="isLoading"
-          class="generate-button"
-        >
-          {{ isLoading ? 'Generating...' : 'Generate Example' }}
-        </button>
-        <div class="input-group">
-          <label class="input-label">Model:</label>
-          <select v-model="selectedModel" class="model-select">
-            <option v-for="model in models" :key="model.value" :value="model.value">
-              {{ model.label }}
-            </option>
-          </select>
-        </div>
-        <div class="input-group">
-          <label class="input-label">OpenAI API Key:</label>
-          <div class="api-controls">
-            <input
-              type="password"
-              v-model="apiKey"
-              placeholder="Enter key"
-              class="api-key-input"
-            />
-            <button 
-              @click="showMorePrompts = !showMorePrompts"
-              class="more-prompts-button"
-            >
-              {{ showMorePrompts ? 'Hide Prompts' : 'More Prompts' }}
-            </button>
-            <div v-if="showKeyStored" class="key-stored">
-              API key stored in browser
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
     <div class="content">
       <div class="tabs">
         <button 
@@ -193,13 +154,53 @@ export default defineComponent({
           Example
         </button>
       </div>
-      <div v-if="error" class="error">
-        {{ error }}
+      <div v-if="activeTab === 'schema'">
+        <pre><code>{{ JSON.stringify(currentStruct, null, 2) }}</code></pre>
       </div>
-      <div v-else-if="isLoading" class="loading">
-        Generating example...
-      </div>
-      <div v-else>
+      <div v-else class="example-content">
+        <div class="controls">
+          <button 
+            @click="generateExample" 
+            :disabled="isLoading"
+            class="generate-button"
+          >
+            {{ isLoading ? 'Generating...' : 'Generate Example' }}
+          </button>
+          <div class="input-group">
+            <label class="input-label">Model:</label>
+            <select v-model="selectedModel" class="model-select">
+              <option v-for="model in models" :key="model.value" :value="model.value">
+                {{ model.label }}
+              </option>
+            </select>
+          </div>
+          <div class="input-group">
+            <label class="input-label">OpenAI API Key:</label>
+            <div class="api-controls">
+              <input
+                type="password"
+                v-model="apiKey"
+                placeholder="Enter key"
+                class="api-key-input"
+              />
+              <button 
+                @click="showMorePrompts = !showMorePrompts"
+                class="more-prompts-button"
+              >
+                {{ showMorePrompts ? 'Hide Prompts' : 'More Prompts' }}
+              </button>
+              <div v-if="showKeyStored" class="key-stored">
+                API key stored in browser
+              </div>
+            </div>
+          </div>
+        </div>
+        <div v-if="error" class="error">
+          {{ error }}
+        </div>
+        <div v-else-if="isLoading" class="loading">
+          Generating example...
+        </div>
         <div v-if="showMorePrompts" class="more-prompts">
           <label class="input-label">Additional Prompts:</label>
           <textarea
@@ -209,7 +210,7 @@ export default defineComponent({
             rows="4"
           ></textarea>
         </div>
-        <pre><code>{{ activeTab === 'example' ? generatedExample : JSON.stringify(currentStruct, null, 2) }}</code></pre>
+        <pre v-if="!isLoading"><code>{{ generatedExample }}</code></pre>
       </div>
     </div>
   </div>
@@ -225,24 +226,21 @@ export default defineComponent({
   height: 100%;
 }
 
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 12px;
-  flex-shrink: 0;
-}
-
 .content {
   flex-grow: 1;
   overflow-y: auto;
   min-height: 0;  /* Important for Firefox */
 }
 
+.example-content {
+  padding: 16px;
+}
+
 .controls {
   display: flex;
   gap: 12px;
   align-items: center;
+  margin-bottom: 16px;
 }
 
 .generate-button {
