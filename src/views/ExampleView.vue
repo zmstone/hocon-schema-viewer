@@ -73,7 +73,7 @@ export default defineComponent({
           const match = line.match(/^(\s*)# substruct\((.+)\)$/)
           if (match) {
             const [fullMatch, indentation, refName] = match
-            return `<span class="substruct-line"><a href="javascript:void(0)" class="generate-link" data-ref="${refName}" data-indent="${indentation}">${match[0]}</a><a href="javascript:void(0)" class="clear-substruct" data-ref="${refName}" title="Clear substruct">✕</a></span>`
+            return `<span class="substruct-line"><a href="javascript:void(0)" class="generate-link" data-ref="${refName}" data-indent="${indentation}">${match[0]}</a><a href="javascript:void(0)" class="clear-substruct" data-ref="${refName}" title="Clear substruct">✖</a></span>`
           }
           return line
         })
@@ -195,7 +195,7 @@ export default defineComponent({
           const line = lines[nextStructIndex]
           const lineIndent = (line.match(/^\s*/) || [''])[0].length
           
-          if (line.includes('# substruct(')) {
+          if (line.includes('# substruct(') && lineIndent === currentIndent) {
             break
           }
           if (lineIndent < currentIndent) {
@@ -783,7 +783,6 @@ pre {
   padding: 2px;
   border-radius: 3px;
   transition: all 0.2s ease;
-  font-family: var(--font-main);
   text-decoration: none;
   display: inline-block;
 }
