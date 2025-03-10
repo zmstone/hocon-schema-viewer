@@ -12,13 +12,13 @@ npm run inline
 
 # Fix for macOS BSD sed
 if [[ "$OSTYPE" == "darwin"* ]]; then
-    # macOS version
+    # macOS version - first replace VERSION
     sed -i '' "s/VERSION/$version/" dist/conf-docs.html
-    sed -i '' 's/<!--INJECT_FONT_LINK_HERE-->/<link rel="stylesheet" href="https:\/\/fonts.googleapis.com\/css?family=Roboto:100,300,400,500,700,900"\/>/' dist/conf-docs.html > $output
+    # Then replace font link and output to new file
 else
     # Linux version
     sed -i "s/VERSION/$version/" dist/conf-docs.html
-    sed 's/<!--INJECT_FONT_LINK_HERE-->/<link rel="stylesheet" href="https:\/\/fonts.googleapis.com\/css?family=Roboto:100,300,400,500,700,900"\/>/' dist/conf-docs.html > $output
 fi
+sed 's/<!--INJECT_FONT_LINK_HERE-->/<link rel="stylesheet" href="https:\/\/fonts.googleapis.com\/css?family=Roboto:100,300,400,500,700,900"\/>/' dist/conf-docs.html > "$output"
 
 echo "built $output"
