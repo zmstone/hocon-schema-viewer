@@ -17,7 +17,6 @@ export default defineComponent({
     const showingExample = ref(false)
     const error = ref<string>('')
     const apiKey = ref(localStorage.getItem('openai_api_key') || '')
-    const showApiInput = ref(false)
     const showKeyStored = ref(false)
 
     // Reset state when struct changes
@@ -40,7 +39,6 @@ export default defineComponent({
 
     async function generateExample() {
       if (!apiKey.value) {
-        showApiInput.value = true
         return
       }
       isLoading.value = true
@@ -56,7 +54,24 @@ export default defineComponent({
             model: 'gpt-4o',
             messages: [{
               role: 'system',
-              content: 'You are a helpful assistant that generates HOCON format examples based the schema specification without any additional text or comments. In the schema, the "path" field is a dot-separated string that describes the path to the field from the root of the schema. The "type" field describes the type of the field. The "description" field describes the field in human-readable format. The "default" field is the default value of the field if it is not provided. The "required" field is a boolean that describes if the field is required. The "enum" field is an array of possible values for the field if it is an enum. The "properties" field is an object that describes the properties of the field if it is an object. The "items" field is an object that describes the items of the field if it is an array. When generating the example, you should recursively go deep into the schema and generate an example for each field. When it is a union type, you should generate an example based on my following description after the schema JSON section, if no description is provided, you should generate an example based on the first union member type.'
+              content: 'You are a helpful assistant that generates HOCON format examples based the schema specification. ' +
+              'Below are the schema rules: ' +
+              '- Each schema is a JSON object. ' +
+              '- The "type" field describes the type of the field. ' +
+              '- The root level type is always a struct or a map. ' +
+              '- Other than strut or map, the other compelex types are array and union. ' +
+              '- The "description" field describes the field in human-readable format. ' +
+              '- In the schema, the "path" field is a dot-separated string that describes the path to the field from the root of the schema. ' +
+              '- The "default" field is the default value of the field if it is not provided. The "required" field is a boolean that describes if the field is required. ' +
+              '- The "items" field is an object that describes the items of the field if it is an array. ' +
+              '- When the type is a reference to another schema, generate "Add fields for <reference_name>" to the example. ' +
+              'Below are the requirements for the generated example: ' +
+              '- When it is a union type, you should generate an example based on my input after the schema JSON section, if no description is provided, you should generate an example based on the first union member type. ' +
+              '- For map, the key is a dollar ($) sign prefixed placehocer such as $name, you should generate a sensible example key for the map such as "mywebhook1".' +
+              '- When generating the example, you should recursively go deep into the schema and generate an example for each field. ' +
+              '- While colon is a valid delimiter for key-value pair, you should use "=" as the delimiter in the generated example. ' +
+              '- I prefer to have clean examples, so no need to include comments in the generated example.' +
+              '- Do not quote the generated example in triple quotes.'
             }, {
               role: 'user',
               content: `Please generate a valid HOCON example for this schema:\n${JSON.stringify(props.currentStruct, null, 2)}`
@@ -85,7 +100,6 @@ export default defineComponent({
       showingExample,
       error,
       apiKey,
-      showApiInput,
       showKeyStored
     }
   }
@@ -96,24 +110,26 @@ export default defineComponent({
   <div class="example-view">
     <div class="example-header">
       <h3>{{ showingExample ? 'Example' : 'Schema' }}</h3>
-      <div class="api-input" v-if="showApiInput">
-        <input
-          type="password"
-          v-model="apiKey"
-          placeholder="Enter OpenAI API Key"
-          class="api-key-input"
-        />
-        <div v-if="showKeyStored" class="key-stored">
-          API key stored in browser
+      <div class="controls">
+        <button 
+          @click="generateExample" 
+          :disabled="isLoading"
+          class="generate-button"
+        >
+          {{ isLoading ? 'Generating...' : 'Generate Example' }}
+        </button>
+        <div class="api-input">
+          <input
+            type="password"
+            v-model="apiKey"
+            placeholder="Enter OpenAI API Key"
+            class="api-key-input"
+          />
+          <div v-if="showKeyStored" class="key-stored">
+            API key stored in browser
+          </div>
         </div>
       </div>
-      <button 
-        @click="generateExample" 
-        :disabled="isLoading"
-        class="generate-button"
-      >
-        {{ isLoading ? 'Generating...' : 'Generate Example' }}
-      </button>
     </div>
     <div v-if="error" class="error">
       {{ error }}
@@ -183,8 +199,13 @@ pre {
   color: #c00;
 }
 
+.controls {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
 .api-input {
-  margin-right: 12px;
   position: relative;
 }
 
