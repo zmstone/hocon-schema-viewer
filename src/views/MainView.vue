@@ -255,12 +255,13 @@ export default defineComponent({
         </div>
         <StructView
           v-for="(st, i) in resolveDisplayStructs()"
+          :key="st.full_name"
           :markdownProvider="markdownToHtml"
           :structResolver="structResolver"
           :currentStruct="st"
           :importanceLevel="importanceLevel"
           :expandByDefault="true"
-          :key="i"
+          :isRoot="i === 0"
           @show-example="handleShowExample"
         />
       </div>

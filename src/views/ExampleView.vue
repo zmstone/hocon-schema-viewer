@@ -368,7 +368,6 @@ export default defineComponent({
             </button>
           </div>
           <div class="struct-name">
-            <span class="struct-label">Current struct:</span>
             <code>{{ currentStruct.full_name }}</code>
           </div>
         </div>

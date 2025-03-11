@@ -1,5 +1,5 @@
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
+import { defineComponent, ref, watch } from 'vue'
 import type { PropType } from 'vue'
 import * as schema from '../schema'
 
@@ -29,6 +29,10 @@ export default defineComponent({
     importanceLevel: {
       type: String,
       required: true
+    },
+    isRoot: {
+      type: Boolean,
+      default: false
     }
   },
   setup(props, { emit }) {
@@ -42,7 +46,20 @@ export default defineComponent({
     function isVisible(field: schema.Field): boolean {
       return schema.isVisible(field, props.importanceLevel)
     }
-    return {
+
+    // Watch for changes to currentStruct
+    watch(
+      () => props.currentStruct,
+      (newStruct) => {
+        console.log('currentStruct changed:', newStruct.full_name)
+        if (props.isRoot) {
+          showExample()
+        }
+      },
+      { immediate: true }  // Run immediately on mount
+    )
+
+   return {
       isExpanded,
       toggleExpand,
       isVisible,
@@ -128,11 +145,13 @@ export default defineComponent({
             class="sub-struct"
           >
             <StructView
+              :key="st.name"
               :currentStruct="findStruct(st.name)"
               :markdownProvider="markdownProvider"
               :structResolver="structResolver"
               :expandByDefault="true"
               :importanceLevel="importanceLevel"
+              :isRoot="false"
               @show-example="$emit('show-example', $event)"
             />
           </div>
