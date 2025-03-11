@@ -9,27 +9,19 @@ and a superset of JSON.
 EMQX configuration consists of two layers.
 From bottom up:
 
+0. Overridable base configs: `$EMQX_ETC_DIR/base.hocon`. (since 5.9)
 1. Cluster-synced configs: `$EMQX_NODE__DATA_DIR/configs/cluster.hocon`.
-2. Local node configs: `emqx.conf` + `EMQX_` prefixed environment variables.
+2. Immutable configs: `$EMQX_ETC_DIR/emqx.conf`.
+3. `EMQX_` prefixed environment variables.
 
-:::tip Tip
-Prior to v5.0.23 and e5.0.3, the cluster-synced configs are stored in
-`cluster-override.conf` which is applied on top of the local configs.
-
-If upgraded from an earlier version, as long as `cluster-override.conf` exists,
-`cluster.hocon` will not be created, and `cluster-override.conf` will stay on
-top of the overriding layers.
-:::
-
-When environment variable `$EMQX_NODE__DATA_DIR` is not set, config `node.data_dir`
-is used.
+When environment variable `$EMQX_NODE__DATA_DIR` is not set, config `node.data_dir` is used.
 
 The `cluster.hocon` file is overwritten at runtime when changes
-are made from Dashboard, management HTTP API, or CLI. When clustered,
-after EMQX restarts, it copies the file from the node which has the greatest `uptime`.
+are made from Dashboard, management HTTP API, or CLI.
+When clustered, after EMQX restarts, it copies the file from the node which has the greatest `uptime`.
 
-:::tip Tip
-To avoid confusion, don't add the same keys in both `cluster.hocon` and `emqx.conf`.
+:::warning Warning
+To avoid confusion, do not put runtime-overrideable configs in `emqx.conf` or environment variables.
 :::
 
 For detailed override rules, see [Config Overlay Rules](#config-overlay-rules).
@@ -251,81 +243,3 @@ authentication=[{enable=true, backend="built_in_database", mechanism="password_b
 authentication=[{enable=true}]
 ```
 :::
-
-#### TLS/SSL ciphers
-
-Starting from v5.0.6, EMQX no longer pre-populates the ciphers list with a default
-set of cipher suite names.
-Instead, the default ciphers are applied at runtime when starting the listener
-for servers, or when establishing a TLS connection as a client.
-
-Below are the default ciphers selected by EMQX.
-
-For tlsv1.3:
-```
-ciphers =
-  [ "TLS_AES_256_GCM_SHA384", "TLS_AES_128_GCM_SHA256",
-    "TLS_CHACHA20_POLY1305_SHA256", "TLS_AES_128_CCM_SHA256",
-    "TLS_AES_128_CCM_8_SHA256"
-  ]
-```
-
-For tlsv1.2 or earlier
-
-```
-ciphers =
-  [ "ECDHE-ECDSA-AES256-GCM-SHA384",
-    "ECDHE-RSA-AES256-GCM-SHA384",
-    "ECDHE-ECDSA-AES256-SHA384",
-    "ECDHE-RSA-AES256-SHA384",
-    "ECDH-ECDSA-AES256-GCM-SHA384",
-    "ECDH-RSA-AES256-GCM-SHA384",
-    "ECDH-ECDSA-AES256-SHA384",
-    "ECDH-RSA-AES256-SHA384",
-    "DHE-DSS-AES256-GCM-SHA384",
-    "DHE-DSS-AES256-SHA256",
-    "AES256-GCM-SHA384",
-    "AES256-SHA256",
-    "ECDHE-ECDSA-AES128-GCM-SHA256",
-    "ECDHE-RSA-AES128-GCM-SHA256",
-    "ECDHE-ECDSA-AES128-SHA256",
-    "ECDHE-RSA-AES128-SHA256",
-    "ECDH-ECDSA-AES128-GCM-SHA256",
-    "ECDH-RSA-AES128-GCM-SHA256",
-    "ECDH-ECDSA-AES128-SHA256",
-    "ECDH-RSA-AES128-SHA256",
-    "DHE-DSS-AES128-GCM-SHA256",
-    "DHE-DSS-AES128-SHA256",
-    "AES128-GCM-SHA256",
-    "AES128-SHA256",
-    "ECDHE-ECDSA-AES256-SHA",
-    "ECDHE-RSA-AES256-SHA",
-    "DHE-DSS-AES256-SHA",
-    "ECDH-ECDSA-AES256-SHA",
-    "ECDH-RSA-AES256-SHA",
-    "ECDHE-ECDSA-AES128-SHA",
-    "ECDHE-RSA-AES128-SHA",
-    "DHE-DSS-AES128-SHA",
-    "ECDH-ECDSA-AES128-SHA",
-    "ECDH-RSA-AES128-SHA"
-  ]
-```
-
-For PSK enabled listeners
-
-```
-ciphers =
-  [ "RSA-PSK-AES256-GCM-SHA384",
-    "RSA-PSK-AES256-CBC-SHA384",
-    "RSA-PSK-AES128-GCM-SHA256",
-    "RSA-PSK-AES128-CBC-SHA256",
-    "RSA-PSK-AES256-CBC-SHA",
-    "RSA-PSK-AES128-CBC-SHA",
-    "PSK-AES256-GCM-SHA384",
-    "PSK-AES128-GCM-SHA256",
-    "PSK-AES256-CBC-SHA384",
-    "PSK-AES256-CBC-SHA",
-    "PSK-AES128-CBC-SHA256",
-    "PSK-AES128-CBC-SHA"
-  ]
-```
