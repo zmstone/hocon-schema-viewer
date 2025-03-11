@@ -7,13 +7,21 @@ import type { Struct } from './schema'
 let isLoading = ref<boolean>(true)
 const fetchedStructs = ref<Struct[]>([])
 const fetchedRootDoc = ref<string>('')
+const version = ref<string>('')
+
+function parseVersion(path: string): string {
+  if (path.endsWith('default.json')) return ''
+  const match = path.match(/[ev]?([\d.]+)\.json$/)
+  return match ? match[1] : ''
+}
 
 const fetchStructs = async () => {
   const params = new URLSearchParams(window.location.search)
-  const url = params.get('s')
-  if (url) {
+  const path = params.get('s')
+  if (path) {
     try {
-      const response = await fetch(url)
+      version.value = parseVersion(path)
+      const response = await fetch(path)
       if (response.ok) {
         const jsonData = await response.json()
         fetchedStructs.value = jsonData as Struct[]
@@ -62,6 +70,7 @@ function renderMarkdown(desc: string): string {
       :allStructs="fetchedStructs"
       :rootDoc="fetchedRootDoc"
       :markdownProvider="renderMarkdown"
+      :version="version"
     />
   </div>
   <div v-if="isLoading">Loading...</div>

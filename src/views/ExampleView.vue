@@ -18,6 +18,10 @@ export default defineComponent({
     structResolver: {
       type: Function,
       required: true
+    },
+    version: {
+      type: String,
+      required: true
     }
   },
   setup(props) {

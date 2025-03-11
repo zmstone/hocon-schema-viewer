@@ -24,6 +24,10 @@ export default defineComponent({
     markdownProvider: {
       type: Function,
       required: true
+    },
+    version: {
+      type: String,
+      required: true
     }
   },
   setup(props) {
@@ -205,7 +209,8 @@ export default defineComponent({
       exampleWidth,
       sidebarWidth,
       startExampleResize,
-      startSidebarResize
+      startSidebarResize,
+      version: props.version
     }
   },
   components: {
@@ -271,6 +276,7 @@ export default defineComponent({
           v-if="exampleStruct"
           :currentStruct="exampleStruct"
           :structResolver="structResolver"
+          :version="version"
         />
       </div>
     </div>
