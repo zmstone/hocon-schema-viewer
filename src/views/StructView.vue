@@ -33,6 +33,10 @@ export default defineComponent({
     isRoot: {
       type: Boolean,
       default: false
+    },
+    valuePath: {
+      type: String,
+      default: ''
     }
   },
   setup(props, { emit }) {
@@ -41,7 +45,10 @@ export default defineComponent({
       isExpanded.value = !isExpanded.value
     }
     const showExample = () => {
-      emit('show-example', props.currentStruct)
+      emit('show-example', {
+        struct: props.currentStruct,
+        valuePath: props.valuePath
+      })
     }
     function isVisible(field: schema.Field): boolean {
       return schema.isVisible(field, props.importanceLevel)
@@ -97,6 +104,9 @@ export default defineComponent({
         return collapseChar
       }
       return expandChar
+    },
+    appendPath(path: string, typeName: string, fieldName: string) {
+      return `${path}/${typeName}.${fieldName}`
     }
   }
 })
@@ -151,6 +161,7 @@ export default defineComponent({
               :expandByDefault="true"
               :importanceLevel="importanceLevel"
               :isRoot="false"
+              :valuePath="appendPath(valuePath, st.name,field.name)"
               @show-example="$emit('show-example', $event)"
             />
           </div>

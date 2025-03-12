@@ -131,9 +131,11 @@ export default defineComponent({
     }
 
     const exampleStruct = ref<schema.Struct | null>(null)
+    const valuePath = ref<string>('')
 
-    const handleShowExample = (struct: schema.Struct) => {
+    const handleShowExample = ({ struct, valuePath: path }: { struct: schema.Struct; valuePath: string }) => {
       exampleStruct.value = struct
+      valuePath.value = path
     }
 
     const exampleWidth = ref(500)
@@ -209,7 +211,8 @@ export default defineComponent({
       sidebarWidth,
       startExampleResize,
       startSidebarResize,
-      version: props.version
+      version: props.version,
+      valuePath
     }
   },
   components: {
@@ -260,12 +263,13 @@ export default defineComponent({
         <StructView
           v-for="(st, i) in resolveDisplayStructs()"
           :key="st.full_name"
+          :currentStruct="st"
           :markdownProvider="markdownToHtml"
           :structResolver="structResolver"
-          :currentStruct="st"
-          :importanceLevel="importanceLevel"
           :expandByDefault="true"
+          :importanceLevel="importanceLevel"
           :isRoot="i === 0"
+          :valuePath="st.full_name"
           @show-example="handleShowExample"
         />
       </div>
@@ -276,6 +280,7 @@ export default defineComponent({
           :currentStruct="exampleStruct"
           :structResolver="structResolver"
           :version="version"
+          :valuePath="valuePath"
         />
       </div>
     </div>

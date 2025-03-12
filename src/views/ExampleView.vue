@@ -18,6 +18,10 @@ export default defineComponent({
     version: {
       type: String,
       required: true
+    },
+    valuePath: {
+      type: String,
+      required: true
     }
   },
   setup(props) {
@@ -33,6 +37,7 @@ export default defineComponent({
     const additionalPrompts = ref('')
     const models = [{ value: 'gpt-4o', label: 'GPT-4' }]
     const exampleSource = ref<'ai' | 'pre-generated' | null>(null)
+    const valuePath = ref(props.valuePath)
 
     // Reset state when struct changes
     watch(
@@ -60,6 +65,11 @@ export default defineComponent({
 
     watch(selectedModel, (newModel) => {
       localStorage.setItem('openai_model', newModel)
+    })
+
+    // Watch for changes to valuePath prop
+    watch(() => props.valuePath, (newPath) => {
+      valuePath.value = newPath
     })
 
     const findStruct = (name: string): schema.Struct | null => {
@@ -172,7 +182,7 @@ export default defineComponent({
           // Fall back to AI generation if local example not found
           const rawExample = await callOpenAI(apiKey.value, selectedModel.value, [
             { role: 'system', content: systemPrompt },
-            { role: 'user', content: generateUserPrompt(struct) }
+            { role: 'user', content: generateUserPrompt(struct, valuePath.value) }
           ])
           subExample = stripWrappingLines(rawExample)
         }
@@ -331,7 +341,7 @@ export default defineComponent({
           messages.push({ role: 'user', content: additionalPrompts.value })
         }
 
-        messages.push({ role: 'user', content: generateUserPrompt(props.currentStruct) })
+        messages.push({ role: 'user', content: generateUserPrompt(props.currentStruct, valuePath.value) })
 
         generatedExample.value = await callOpenAI(apiKey.value, selectedModel.value, messages)
         exampleSource.value = 'ai'
@@ -360,7 +370,8 @@ export default defineComponent({
       findStruct,
       handleGenerateClick,
       handleClearSubstruct,
-      exampleSource
+      exampleSource,
+      valuePath
     }
   }
 })
@@ -421,7 +432,14 @@ export default defineComponent({
             </button>
           </div>
           <div class="struct-name">
-            <code>{{ currentStruct.full_name }}</code>
+            <div class="struct-info">
+              <span class="struct-label">Type:</span>
+              <code>{{ currentStruct.full_name }}</code>
+            </div>
+            <div class="struct-info" v-if="valuePath">
+              <span class="struct-label">Path:</span>
+              <span class="struct-path">{{ valuePath }}</span>
+            </div>
             <span v-if="exampleSource" class="example-source" :class="exampleSource">
               {{ exampleSource === 'pre-generated' ? 'Pre-generated' : 'AI-generated' }}
             </span>
@@ -903,22 +921,33 @@ pre {
   }
 }
 
-.struct-name {
-  font-size: var(--text-sm);
-  color: #666;
+.struct-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .struct-label {
-  margin-right: 8px;
-  color: #999;
+  color: #666;
+  font-size: var(--text-xs);
 }
 
 @media (prefers-color-scheme: dark) {
-  .struct-name {
-    color: #aaa;
-  }
   .struct-label {
-    color: #777;
+    color: #999;
+  }
+}
+
+.struct-path {
+  color: #666;
+  margin-left: 8px;
+  font-style: italic;
+  font-size: var(--text-xs);
+}
+
+@media (prefers-color-scheme: dark) {
+  .struct-path {
+    color: #999;
   }
 }
 
