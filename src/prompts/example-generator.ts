@@ -43,6 +43,7 @@ Below are the requirements for the generated example:
 - Do not quote the generated example in backticks.
 - The type information is inherited from Eralng type specs, so you should generate the example based on the type specs. For example "binary()" is binary string, etc.
 - The bytes configs such as "1MB", and duration configs such as "1d" should be quoted.
+- A 'singleton' kind type is a single-symbol enum, do not confuse it with a struct.
 - After generated, go through the requirements and make sure the generated example meets all the above requirements.
 `
 
