@@ -50,8 +50,7 @@ export default defineComponent({
     // Watch for changes to currentStruct
     watch(
       () => props.currentStruct,
-      (newStruct) => {
-        console.log('currentStruct changed:', newStruct.full_name)
+      () => {
         if (props.isRoot) {
           showExample()
         }

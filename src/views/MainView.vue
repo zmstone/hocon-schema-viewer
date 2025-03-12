@@ -97,7 +97,6 @@ export default defineComponent({
       const urlParams = new URLSearchParams(window.location.search)
       const currentPath = urlParams.get('r') || ''
       const importanceLevelInUrl = urlParams.get(importanceArgName) || defaultImportanceLevel
-      console.log(importanceLevelInUrl)
       let resolvedDisplay = schema.resolveRootDisplay(rootStruct.fields, currentPath)
       if (resolvedDisplay) {
         displayType.value = resolvedDisplay

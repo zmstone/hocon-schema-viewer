@@ -36,6 +36,8 @@ export default defineComponent({
     const showMorePrompts = ref(false)
     const additionalPrompts = ref('')
     const models = [{ value: 'gpt-4o', label: 'GPT-4' }]
+    const exampleSource = ref<'ai' | 'pre-generated'>('ai')
+    const forceAIGeneration = ref(false)
 
     // Reset state when struct changes
     watch(
@@ -44,6 +46,8 @@ export default defineComponent({
         activeTab.value = 'example'
         generatedExample.value = ''
         error.value = ''
+        exampleSource.value = 'ai'
+        forceAIGeneration.value = false
         // Auto-generate example when struct changes
         generateExample()
       }
@@ -249,6 +253,29 @@ export default defineComponent({
       }
       isLoading.value = true
       error.value = ''
+      
+      // Try loading local example first unless forceAIGeneration is true
+      if (!forceAIGeneration.value) {
+        try {
+          const fileName = props.currentStruct.full_name.replace(/:/g, '-') + '.hocon'
+          const path = props.version 
+            ? `examples/${props.version}/${fileName}`
+            : `examples/${fileName}`
+          
+          const response = await fetch(path)
+          if (response.ok) {
+            generatedExample.value = await response.text()
+            activeTab.value = 'example'
+            exampleSource.value = 'pre-generated'
+            isLoading.value = false
+            return
+          }
+        } catch (err) {
+          console.log('No local example found, falling back to AI generation')
+        }
+      }
+      
+      // Fall back to AI generation if local example not found
       try {
         const messages = [{ role: 'system', content: systemPrompt }]
 
@@ -259,6 +286,7 @@ export default defineComponent({
         messages.push({ role: 'user', content: generateUserPrompt(props.currentStruct) })
 
         generatedExample.value = await callOpenAI(apiKey.value, selectedModel.value, messages)
+        exampleSource.value = 'ai'
         activeTab.value = 'example'
       } catch (error) {
         generatedExample.value = 'Error generating example'
@@ -283,7 +311,9 @@ export default defineComponent({
       additionalPrompts,
       findStruct,
       handleGenerateClick,
-      handleClearSubstruct
+      handleClearSubstruct,
+      exampleSource,
+      forceAIGeneration
     }
   }
 })
@@ -336,7 +366,11 @@ export default defineComponent({
             </div>
           </div>
           <div class="controls-row">
-            <button @click="generateExample" :disabled="isLoading" class="generate-button">
+            <button 
+              @click="forceAIGeneration = true; generateExample()" 
+              :disabled="isLoading" 
+              class="generate-button"
+            >
               {{ isLoading ? 'Generating...' : 'Try Again' }}
             </button>
             <button @click="showMorePrompts = !showMorePrompts" class="more-prompts-button">
@@ -345,6 +379,9 @@ export default defineComponent({
           </div>
           <div class="struct-name">
             <code>{{ currentStruct.full_name }}</code>
+            <span class="example-source" :class="exampleSource">
+              {{ exampleSource === 'pre-generated' ? 'Pre-generated' : 'AI-generated' }}
+            </span>
           </div>
         </div>
         <div v-if="error" class="error">
@@ -837,6 +874,35 @@ pre {
   }
   .struct-label {
     color: #777;
+  }
+}
+
+.example-source {
+  font-size: var(--text-xs);
+  padding: 2px 6px;
+  border-radius: 3px;
+  margin-left: 8px;
+}
+
+.example-source.pre-generated {
+  background: #e4f5ea;
+  color: #2e5742;
+}
+
+.example-source.ai {
+  background: #f0f0f0;
+  color: #666;
+}
+
+@media (prefers-color-scheme: dark) {
+  .example-source.pre-generated {
+    background: #2e5742;
+    color: #e4f5ea;
+  }
+  
+  .example-source.ai {
+    background: #333;
+    color: #999;
   }
 }
 </style>

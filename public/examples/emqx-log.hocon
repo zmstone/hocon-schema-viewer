@@ -1,0 +1,8 @@
+log {
+  console {
+    #substruct(console_handler)
+  }
+  file {
+    #substruct(log_file_handler)
+  }
+}

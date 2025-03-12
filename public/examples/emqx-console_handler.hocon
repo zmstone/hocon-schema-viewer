@@ -1,0 +1,6 @@
+log.console {
+  level = warning
+  enable = false
+  formatter = text
+  time_offset = "system"
+}
