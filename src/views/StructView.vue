@@ -88,8 +88,8 @@ export default defineComponent({
     typeDisplay(type: schema.FieldType): string {
       return schema.shortTypeDisplay(type)
     },
-    findStruct(name: string) {
-      return this.structResolver(name)
+    findStruct(name: string, parentVpath: string) {
+      return this.structResolver(name, parentVpath)
     },
     visibleFields(struct: schema.Struct) {
       return schema.visibleFields(struct)
@@ -105,8 +105,12 @@ export default defineComponent({
       }
       return expandChar
     },
-    appendPath(path: string, typeName: string, fieldName: string) {
-      return `${path}/${typeName}.${fieldName}`
+    appendPath(path: string, fieldName: string) {
+      // if path is empty, return fieldName
+      if (path === '') {
+        return fieldName
+      }
+      return `${path}.${fieldName}`
     }
   }
 })
@@ -155,13 +159,13 @@ export default defineComponent({
           >
             <StructView
               :key="st.name"
-              :currentStruct="findStruct(st.name)"
+              :currentStruct="findStruct(st.name, field.vpath)"
               :markdownProvider="markdownProvider"
               :structResolver="structResolver"
               :expandByDefault="true"
               :importanceLevel="importanceLevel"
               :isRoot="false"
-              :valuePath="appendPath(valuePath, st.name,field.name)"
+              :valuePath="appendPath(valuePath, field.name)"
               @show-example="$emit('show-example', $event)"
             />
           </div>

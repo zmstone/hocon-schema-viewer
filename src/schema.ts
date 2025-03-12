@@ -23,6 +23,8 @@ export interface Field {
   // only possible for root fields
   expands?: DisplayType[]
   deprecated?: string
+  // the value path dynamically altered when resolving from parent structs
+  vpath: string
 }
 
 export interface DefaultValue {
@@ -92,6 +94,8 @@ export interface DisplayType {
   // true if i'm a union member
   is_union_member?: boolean
   importance?: string
+  // the value path of the field
+  vpath: string
 }
 
 export const unionMemberSelectorSymbol = '@'
@@ -139,7 +143,8 @@ export function fieldToDisplayType(rootName: string, f: Field): DisplayType {
     list_display: f.name,
     parent_field_doc: f.desc,
     type: f.type,
-    tpath: rootName
+    tpath: rootName,
+    vpath: rootName === '' ? f.name : `${rootName}.${f.name}`
   }
   if (f.type.kind != 'struct') {
     res.type_display = typeDisplay(f.type)
@@ -285,12 +290,15 @@ export function initialize(root: Struct, findStruct: Function): Field[] {
   visibleFields(root).forEach((field: Field) => {
     updatedFields.push(field) // Keep the parent field
     const parentName = field.name
+    // for root fields, the vpath is the same as the field name
+    field.vpath = field.name
     if (field.type.kind === 'struct') {
       const subStruct = findStruct(field.type.name)
       if (subStruct) {
         subStruct.fields.forEach((subField: Field) => {
           if (isDocLift(subField)) {
             subField.name = `${parentName}.${subField.name}` // Update the sub-field name
+            subField.vpath = `${field.vpath}.${subField.name}`
             updatedFields.push(subField) // Add the sub-field next to the parent field if doc_lift is true
           }
         })
