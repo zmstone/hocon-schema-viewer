@@ -138,8 +138,8 @@ export default defineComponent({
       valuePath.value = path
     }
 
-    const exampleWidth = ref(500)
-    const sidebarWidth = ref(300)
+    const exampleWidth = ref(window.innerWidth * 0.4) // 40% of window width
+    const sidebarWidth = ref(200)
     const isResizing = ref(false)
     const isResizingSidebar = ref(false)
 
@@ -168,15 +168,18 @@ export default defineComponent({
       if (!container) return
 
       const containerRect = container.getBoundingClientRect()
+      // Calculate available width (total width minus sidebar)
+      const availableWidth = containerRect.width - sidebarWidth.value
       const newWidth = containerRect.right - e.clientX
-      exampleWidth.value = Math.max(300, Math.min(1000, newWidth))
+      // Ensure example view stays between 30% and 70% of available width
+      exampleWidth.value = Math.max(availableWidth * 0.3, Math.min(availableWidth * 0.7, newWidth))
     }
 
     const handleSidebarResize = (e: MouseEvent) => {
       e.preventDefault()
       if (!isResizingSidebar.value) return
       const newWidth = e.clientX
-      sidebarWidth.value = Math.max(200, Math.min(600, newWidth))
+      sidebarWidth.value = Math.max(150, Math.min(300, newWidth))
     }
 
     const stopResize = () => {

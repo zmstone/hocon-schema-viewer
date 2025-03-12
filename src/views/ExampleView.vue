@@ -432,12 +432,16 @@ export default defineComponent({
             </button>
           </div>
           <div class="struct-name">
-            <div class="struct-info" v-if="valuePath">
-              <span class="struct-path">{{ valuePath }}</span>
+            <div class="header-content">
+              <div class="struct-info" v-if="valuePath">
+                <span class="struct-path">{{ valuePath }}</span>
+              </div>
+              <div class="source-info">
+                <span v-if="exampleSource" class="example-source" :class="exampleSource">
+                  {{ exampleSource === 'pre-generated' ? 'Pre-generated' : 'AI-generated' }}
+                </span>
+              </div>
             </div>
-            <span v-if="exampleSource" class="example-source" :class="exampleSource">
-              {{ exampleSource === 'pre-generated' ? 'Pre-generated' : 'AI-generated' }}
-            </span>
           </div>
         </div>
         <div v-if="error" class="error">
@@ -983,5 +987,16 @@ pre {
   .example-code :deep(code:not(:has(a))) {
     color: #999;
   }
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.source-info {
+  flex-shrink: 0;
 }
 </style>
