@@ -15,8 +15,12 @@ Below is the schema format:
     path.to.webhook.my_webhook_1.config {
       ...
     }
-- If a struct is embedded in an array, the path may have a placeholder like "$INDEX" where the actual config value is not dot index, but put inside '[' and ']' like "[{field1 = ..., field2 = ..., ...}]".
-
+- If a struct is embedded in an array, the path may have a placeholder like "$INDEX" where the actual config value is not dot index, but put inside '[' and ']' like:
+  path.to.field = [
+    {
+      ...
+    }
+  ]
 Below are the requirements for the generated example:
 - Generate exactly one example for the given struct schema.
 - If there are more than one paths, generate one example based on user inputs about the enclosing structs. If nothing is provided, generate the first path. Note: the enclosing-structs is not exactly the value path, but provides enough information to determine which path is to be used.
@@ -47,5 +51,5 @@ export function generateUserPrompt(schema: any, valuePath: string): string {
     schema,
     null,
     2
-  )}\n\nEnclosing structs: ${valuePath}`
+  )}\n\nValue path hint: ${valuePath}`
 }

@@ -432,12 +432,7 @@ export default defineComponent({
             </button>
           </div>
           <div class="struct-name">
-            <div class="struct-info">
-              <span class="struct-label">Type:</span>
-              <code>{{ currentStruct.full_name }}</code>
-            </div>
             <div class="struct-info" v-if="valuePath">
-              <span class="struct-label">Path:</span>
               <span class="struct-path">{{ valuePath }}</span>
             </div>
             <span v-if="exampleSource" class="example-source" :class="exampleSource">
@@ -964,8 +959,8 @@ pre {
 }
 
 .example-source.ai {
-  background: #f0f0f0;
-  color: #666;
+  background: #e4f5ea;
+  color: #2e5742;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -975,14 +970,13 @@ pre {
   }
 
   .example-source.ai {
-    background: #333;
-    color: #999;
+    background: #2e5742;
+    color: #e4f5ea;
   }
 }
 
 .example-code :deep(code:not(:has(a))) {
   color: #666;
-  font-style: italic;
 }
 
 @media (prefers-color-scheme: dark) {

@@ -50,17 +50,12 @@ export default defineComponent({
       index[props.allStructs[i].full_name] = i
     }
     // find struct by name (using the index)
-    function structResolver(name: string, parentVpath: string): schema.Struct | undefined {
+    function structResolver(name: string): schema.Struct | undefined {
       if (name === 'THE_ROOT') {
         return props.allStructs[0]
       }
       if (typeof index[name] === 'number') {
-        // assign vpath to the struct fields
-        const struct = props.allStructs[index[name]]
-        struct.fields.forEach((field) => {
-          field.vpath = `${parentVpath}.${field.name}`
-        })
-        return struct
+        return props.allStructs[index[name]]
       }
       console.log('Struct not found: ' + name)
     }
@@ -86,7 +81,7 @@ export default defineComponent({
       const types = schema.liftStructs(displayType.value.type)
       return types
         .map((t: schema.StructReference) => {
-          const s = structResolver(t.name, displayType.value.vpath)
+          const s = structResolver(t.name)
           return s ? s : null
         })
         .filter((s: schema.Struct | null) => s !== null) as schema.Struct[]
@@ -274,7 +269,7 @@ export default defineComponent({
           :expandByDefault="true"
           :importanceLevel="importanceLevel"
           :isRoot="i === 0"
-          :valuePath="displayType.vpath || ''"
+          :valuePath="st.full_name"
           @show-example="handleShowExample"
         />
       </div>
