@@ -37,11 +37,3 @@ export function generateUserPrompt(schema: any): string {
     2
   )}`
 }
-
-export function generateSubExamplePrompt(schema: any): string {
-  return `Please generate a valid HOCON embedded example for this schema:\n${JSON.stringify(
-    schema,
-    null,
-    2
-  )}`
-}

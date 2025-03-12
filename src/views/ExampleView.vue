@@ -2,11 +2,7 @@
 import { defineComponent, ref, watch } from 'vue'
 import type { PropType } from 'vue'
 import type * as schema from '../schema'
-import {
-  systemPrompt,
-  generateUserPrompt,
-  generateSubExamplePrompt
-} from '../prompts/example-generator'
+import { systemPrompt, generateUserPrompt } from '../prompts/example-generator'
 
 export default defineComponent({
   name: 'ExampleView',
@@ -139,8 +135,6 @@ export default defineComponent({
         const currentIndent = (lines[linkIndex].match(/^\s*/) || [''])[0].length
         let nextStructIndex = linkIndex + 1
 
-        // Find where this block ends - either at next substruct with same/less indent,
-        // or at a line with less indentation (closing brace/bracket)
         while (nextStructIndex < lines.length) {
           const line = lines[nextStructIndex]
           const lineIndent = (line.match(/^\s*/) || [''])[0].length
@@ -161,11 +155,25 @@ export default defineComponent({
         generatedExample.value = lines.join('\n')
       }
 
+      let subExample: string
       try {
-        const subExample = await callOpenAI(apiKey.value, selectedModel.value, [
-          { role: 'system', content: systemPrompt },
-          { role: 'user', content: generateSubExamplePrompt(struct) }
-        ])
+        // Try loading local example first
+        const fileName = refName.replace(/:/g, '-') + '.hocon'
+        const path = props.version
+          ? `examples/${props.version}/${fileName}`
+          : `examples/${fileName}`
+
+        const response = await fetch(path)
+        if (response.ok) {
+          subExample = stripWrappingLines(await response.text())
+        } else {
+          // Fall back to AI generation if local example not found
+          const rawExample = await callOpenAI(apiKey.value, selectedModel.value, [
+            { role: 'system', content: systemPrompt },
+            { role: 'user', content: generateUserPrompt(struct) }
+          ])
+          subExample = stripWrappingLines(rawExample)
+        }
 
         const indentedExample = subExample
           .split('\n')
@@ -243,6 +251,37 @@ export default defineComponent({
       if (!response.ok) throw new Error(`API error: ${response.statusText}`)
       const data = await response.json()
       return data.choices[0].message.content
+    }
+
+    function stripWrappingLines(text: string): string {
+      const lines = text.trim().split('\n')
+
+      // Remove first line if it contains a path
+      if (lines[0].includes('=') || lines[0].includes('{')) {
+        lines.shift()
+      }
+
+      // Remove opening brace if present
+      if (lines[0].trim() === '{') {
+        lines.shift()
+      }
+
+      // Remove closing brace if present
+      if (lines[lines.length - 1].trim() === '}') {
+        lines.pop()
+      }
+
+      // Find base indentation level (from first non-empty line)
+      const firstNonEmptyLine = lines.find((line) => line.trim())
+      const baseIndent = firstNonEmptyLine ? firstNonEmptyLine.match(/^\s*/)[0].length : 0
+
+      // Remove one level of indentation from each line
+      const deindentedLines = lines.map((line) => {
+        if (line.trim() === '') return ''
+        return line.slice(baseIndent)
+      })
+
+      return deindentedLines.join('\n').trim()
     }
 
     async function generateExample(forceAI: boolean = false) {
