@@ -32,7 +32,7 @@ export default defineComponent({
     const showMorePrompts = ref(false)
     const additionalPrompts = ref('')
     const models = [{ value: 'gpt-4o', label: 'GPT-4' }]
-    const exampleSource = ref<'ai' | 'pre-generated'>('ai')
+    const exampleSource = ref<'ai' | 'pre-generated' | null>(null)
 
     // Reset state when struct changes
     watch(
@@ -41,7 +41,7 @@ export default defineComponent({
         activeTab.value = 'example'
         generatedExample.value = ''
         error.value = ''
-        exampleSource.value = 'ai'
+        exampleSource.value = null
         // Auto-generate example when struct changes
         generateExample(false)
       }
@@ -89,6 +89,8 @@ export default defineComponent({
       return false
     }
 
+    // if the substruct example has wrapping lines, such as path.to.config {, }
+    // remove the wrapping lines so they can be embedded in the parent struct example
     function processExampleText(text: string) {
       if (!text) return ''
       const lines = text.split('\n')
@@ -273,7 +275,7 @@ export default defineComponent({
 
       // Find base indentation level (from first non-empty line)
       const firstNonEmptyLine = lines.find((line) => line.trim())
-      const baseIndent = firstNonEmptyLine ? firstNonEmptyLine.match(/^\s*/)[0].length : 0
+      const baseIndent = firstNonEmptyLine ? (firstNonEmptyLine.match(/^\s*/)?.[0].length || 0) : 0
 
       // Remove one level of indentation from each line
       const deindentedLines = lines.map((line) => {
@@ -285,9 +287,14 @@ export default defineComponent({
     }
 
     async function generateExample(forceAI: boolean = false) {
-      if (!apiKey.value) {
+      // Check if paths array is empty
+      if (props.currentStruct.paths.length === 0) {
+        generatedExample.value = 'Click one one of the struct types to generate an example.'
+        activeTab.value = 'example'
+        isLoading.value = false
         return
       }
+
       isLoading.value = true
       error.value = ''
 
@@ -311,8 +318,12 @@ export default defineComponent({
           console.log('No local example found, falling back to AI generation')
         }
       }
-
       // Fall back to AI generation if local example not found
+      if (!apiKey.value) {
+        error.value = 'OpenAI API key is required to generate examples. Please enter your API key above.'
+        isLoading.value = false
+        return
+      }
       try {
         const messages = [{ role: 'system', content: systemPrompt }]
 
@@ -411,7 +422,7 @@ export default defineComponent({
           </div>
           <div class="struct-name">
             <code>{{ currentStruct.full_name }}</code>
-            <span class="example-source" :class="exampleSource">
+            <span v-if="exampleSource" class="example-source" :class="exampleSource">
               {{ exampleSource === 'pre-generated' ? 'Pre-generated' : 'AI-generated' }}
             </span>
           </div>
@@ -812,6 +823,8 @@ pre {
 .example-code pre {
   position: relative;
   z-index: 1;
+  white-space: pre-wrap;
+  line-height: 1.5;
 }
 
 /* Override pre/code styles for links */
@@ -934,6 +947,17 @@ pre {
 
   .example-source.ai {
     background: #333;
+    color: #999;
+  }
+}
+
+.example-code :deep(code:not(:has(a))) {
+  color: #666;
+  font-style: italic;
+}
+
+@media (prefers-color-scheme: dark) {
+  .example-code :deep(code:not(:has(a))) {
     color: #999;
   }
 }
