@@ -37,7 +37,6 @@ export default defineComponent({
     const additionalPrompts = ref('')
     const models = [{ value: 'gpt-4o', label: 'GPT-4' }]
     const exampleSource = ref<'ai' | 'pre-generated'>('ai')
-    const forceAIGeneration = ref(false)
 
     // Reset state when struct changes
     watch(
@@ -47,9 +46,8 @@ export default defineComponent({
         generatedExample.value = ''
         error.value = ''
         exampleSource.value = 'ai'
-        forceAIGeneration.value = false
         // Auto-generate example when struct changes
-        generateExample()
+        generateExample(false)
       }
     )
 
@@ -247,21 +245,21 @@ export default defineComponent({
       return data.choices[0].message.content
     }
 
-    async function generateExample() {
+    async function generateExample(forceAI: boolean = false) {
       if (!apiKey.value) {
         return
       }
       isLoading.value = true
       error.value = ''
-      
+
       // Try loading local example first unless forceAIGeneration is true
-      if (!forceAIGeneration.value) {
+      if (!forceAI) {
         try {
           const fileName = props.currentStruct.full_name.replace(/:/g, '-') + '.hocon'
-          const path = props.version 
+          const path = props.version
             ? `examples/${props.version}/${fileName}`
             : `examples/${fileName}`
-          
+
           const response = await fetch(path)
           if (response.ok) {
             generatedExample.value = await response.text()
@@ -274,7 +272,7 @@ export default defineComponent({
           console.log('No local example found, falling back to AI generation')
         }
       }
-      
+
       // Fall back to AI generation if local example not found
       try {
         const messages = [{ role: 'system', content: systemPrompt }]
@@ -312,8 +310,7 @@ export default defineComponent({
       findStruct,
       handleGenerateClick,
       handleClearSubstruct,
-      exampleSource,
-      forceAIGeneration
+      exampleSource
     }
   }
 })
@@ -366,11 +363,7 @@ export default defineComponent({
             </div>
           </div>
           <div class="controls-row">
-            <button 
-              @click="forceAIGeneration = true; generateExample()" 
-              :disabled="isLoading" 
-              class="generate-button"
-            >
+            <button @click="generateExample(true)" :disabled="isLoading" class="generate-button">
               {{ isLoading ? 'Generating...' : 'Try Again' }}
             </button>
             <button @click="showMorePrompts = !showMorePrompts" class="more-prompts-button">
@@ -899,7 +892,7 @@ pre {
     background: #2e5742;
     color: #e4f5ea;
   }
-  
+
   .example-source.ai {
     background: #333;
     color: #999;

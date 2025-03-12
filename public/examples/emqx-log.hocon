@@ -1,8 +1,8 @@
 log {
   console {
-    #substruct(console_handler)
+    #substruct(emqx:console_handler)
   }
   file {
-    #substruct(log_file_handler)
+    #substruct(emqx:log_file_handler)
   }
 }
