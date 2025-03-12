@@ -28,7 +28,7 @@ export default defineComponent({
     const generatedExample = ref<string>('')
     const processedExample = ref<string>('')
     const isLoading = ref(false)
-    const activeTab = ref('example')  // 'example' or 'schema'
+    const activeTab = ref('example') // 'example' or 'schema'
     const error = ref<string>('')
     const apiKey = ref(localStorage.getItem('openai_api_key') || '')
     const selectedModel = ref(localStorage.getItem('openai_model') || 'gpt-4o')
@@ -38,13 +38,16 @@ export default defineComponent({
     const models = [{ value: 'gpt-4o', label: 'GPT-4' }]
 
     // Reset state when struct changes
-    watch(() => props.currentStruct, () => {
-      activeTab.value = 'example'
-      generatedExample.value = ''
-      error.value = ''
-      // Auto-generate example when struct changes
-      generateExample()
-    })
+    watch(
+      () => props.currentStruct,
+      () => {
+        activeTab.value = 'example'
+        generatedExample.value = ''
+        error.value = ''
+        // Auto-generate example when struct changes
+        generateExample()
+      }
+    )
 
     // Store API key when it changes
     watch(apiKey, (newKey) => {
@@ -99,7 +102,9 @@ export default defineComponent({
             const [fullMatch, indentation, refName] = match
             const hasContent = hasSubstructContent(lines, index)
             return `<span class="substruct-line">${indentation}<a href="javascript:void(0)" class="generate-link" data-ref="${refName}" data-indent="${indentation}">#substruct(${refName})</a>${
-              hasContent ? `<a href="javascript:void(0)" class="clear-substruct" data-ref="${refName}" title="Clear substruct">✖</a>` : ''
+              hasContent
+                ? `<a href="javascript:void(0)" class="clear-substruct" data-ref="${refName}" title="Clear substruct">✖</a>`
+                : ''
             }</span>`
           }
           return line
@@ -138,8 +143,10 @@ export default defineComponent({
           const line = lines[nextStructIndex]
           const lineIndent = (line.match(/^\s*/) || [''])[0].length
 
-          if (lineIndent <= currentIndent && 
-              (line.includes('#substruct(') || line.trim() === '}' || line.trim() === ']')) {
+          if (
+            lineIndent <= currentIndent &&
+            (line.includes('#substruct(') || line.trim() === '}' || line.trim() === ']')
+          ) {
             break
           }
           nextStructIndex++
@@ -153,32 +160,10 @@ export default defineComponent({
       }
 
       try {
-        const response = await fetch('https://api.openai.com/v1/chat/completions', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${apiKey.value}`
-          },
-          body: JSON.stringify({
-            model: selectedModel.value,
-            messages: [
-              {
-                role: 'system',
-                content: systemPrompt
-              },
-              {
-                role: 'user',
-                content: generateSubExamplePrompt(struct)
-              }
-            ],
-            temperature: selectedModel.value === 'gpt-4o' ? 0.7 : undefined
-          })
-        })
-
-        if (!response.ok) throw new Error(`API error: ${response.statusText}`)
-
-        const data = await response.json()
-        const subExample = data.choices[0].message.content
+        const subExample = await callOpenAI(apiKey.value, selectedModel.value, [
+          { role: 'system', content: systemPrompt },
+          { role: 'user', content: generateSubExamplePrompt(struct) }
+        ])
 
         const indentedExample = subExample
           .split('\n')
@@ -187,7 +172,9 @@ export default defineComponent({
 
         // Replace loading placeholder with actual example
         const updatedLines = generatedExample.value.split('\n')
-        const loadingIndex = updatedLines.findIndex((line) => line.includes(`#substruct(${refName})`))
+        const loadingIndex = updatedLines.findIndex((line) =>
+          line.includes(`#substruct(${refName})`)
+        )
         if (loadingIndex >= 0) {
           updatedLines.splice(loadingIndex + 1, 2, indentedExample)
           generatedExample.value = updatedLines.join('\n')
@@ -208,20 +195,20 @@ export default defineComponent({
     function handleClearSubstruct(event: MouseEvent) {
       const target = event.target as HTMLElement
       if (!target.classList.contains('clear-substruct')) return
-      
+
       const refName = target.getAttribute('data-ref')
       if (!refName) return
-      
+
       const lines = generatedExample.value.split('\n')
       const linkIndex = lines.findIndex((line) => line.includes(`#substruct(${refName})`))
       if (linkIndex >= 0) {
         const currentIndent = (lines[linkIndex].match(/^\s*/) || [''])[0].length
         let nextStructIndex = linkIndex + 1
-        
+
         while (nextStructIndex < lines.length) {
           const line = lines[nextStructIndex]
           const lineIndent = (line.match(/^\s*/) || [''])[0].length
-          
+
           if (line.includes('#substruct(') && lineIndent === currentIndent) {
             break
           }
@@ -230,11 +217,30 @@ export default defineComponent({
           }
           nextStructIndex++
         }
-        
+
         // Remove all lines between current substruct and block end
         lines.splice(linkIndex + 1, nextStructIndex - linkIndex - 1)
         generatedExample.value = lines.join('\n')
       }
+    }
+
+    async function callOpenAI(apiKey: string, model: string, messages: any[]) {
+      const response = await fetch('https://api.openai.com/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${apiKey}`
+        },
+        body: JSON.stringify({
+          model,
+          messages,
+          temperature: model === 'gpt-4o' ? 0.7 : undefined
+        })
+      })
+
+      if (!response.ok) throw new Error(`API error: ${response.statusText}`)
+      const data = await response.json()
+      return data.choices[0].message.content
     }
 
     async function generateExample() {
@@ -244,49 +250,15 @@ export default defineComponent({
       isLoading.value = true
       error.value = ''
       try {
-        const requestBody: any = {
-          model: selectedModel.value,
-          messages: [
-            {
-              role: 'system',
-              content: systemPrompt
-            },
-            {
-              role: 'user',
-              content: additionalPrompts.value
-            },
-            {
-              role: 'user',
-              content: generateUserPrompt(props.currentStruct)
-            }
-          ]
+        const messages = [{ role: 'system', content: systemPrompt }]
+
+        if (additionalPrompts.value.trim()) {
+          messages.push({ role: 'user', content: additionalPrompts.value })
         }
 
-        // Remove empty messages
-        requestBody.messages = requestBody.messages.filter((m: { content: string }) =>
-          m.content.trim()
-        )
+        messages.push({ role: 'user', content: generateUserPrompt(props.currentStruct) })
 
-        // Only add temperature for GPT-4 model
-        if (selectedModel.value === 'gpt-4o') {
-          requestBody.temperature = 0.7
-        }
-
-        const response = await fetch('https://api.openai.com/v1/chat/completions', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${apiKey.value}`
-          },
-          body: JSON.stringify(requestBody)
-        })
-
-        if (!response.ok) {
-          throw new Error(`API error: ${response.statusText}`)
-        }
-
-        const data = await response.json()
-        generatedExample.value = data.choices[0].message.content
+        generatedExample.value = await callOpenAI(apiKey.value, selectedModel.value, messages)
         activeTab.value = 'example'
       } catch (error) {
         generatedExample.value = 'Error generating example'
@@ -388,10 +360,16 @@ export default defineComponent({
             rows="4"
           ></textarea>
         </div>
-        <div v-if="!isLoading" class="example-code" @click="(e) => {
-          handleGenerateClick(e)
-          handleClearSubstruct(e)
-        }">
+        <div
+          v-if="!isLoading"
+          class="example-code"
+          @click="
+            (e) => {
+              handleGenerateClick(e)
+              handleClearSubstruct(e)
+            }
+          "
+        >
           <pre><code v-html="processedExample"></code></pre>
         </div>
       </div>
@@ -836,7 +814,7 @@ pre {
   .clear-substruct {
     color: #999;
   }
-  
+
   .clear-substruct:hover {
     background: rgba(228, 245, 234, 0.05);
     color: #e4f5ea;

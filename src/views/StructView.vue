@@ -56,10 +56,10 @@ export default defineComponent({
           showExample()
         }
       },
-      { immediate: true }  // Run immediately on mount
+      { immediate: true } // Run immediately on mount
     )
 
-   return {
+    return {
       isExpanded,
       toggleExpand,
       isVisible,
