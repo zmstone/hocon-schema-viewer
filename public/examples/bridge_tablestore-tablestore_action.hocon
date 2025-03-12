@@ -1,0 +1,14 @@
+actions.tablestore.my_tablestore_action {
+  local_topic = ""
+  parameters = {
+    #substruct(bridge_tablestore:action_parameters)
+  }
+  connector = ""
+  tags = [
+    ""
+  ]
+  description = ""
+  resource_opts = {
+    #substruct(actions_and_sources:action_resource_opts)
+  }
+}

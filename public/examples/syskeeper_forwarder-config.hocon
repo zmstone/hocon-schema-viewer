@@ -1,0 +1,11 @@
+connectors.syskeeper_forwarder.my_syskeeper {
+  tags = []
+  description = ""
+  server = "example.server.com"
+  ack_mode = no_ack
+  ack_timeout = "10s"
+  pool_size = 16
+  resource_opts = {
+    #substruct(syskeeper_forwarder:connector_resource_opts)
+  }
+}

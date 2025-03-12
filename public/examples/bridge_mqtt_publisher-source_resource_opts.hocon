@@ -1,0 +1,3 @@
+sources.mqtt.my_mqtt_source.resource_opts {
+  health_check_interval = "15s"
+}

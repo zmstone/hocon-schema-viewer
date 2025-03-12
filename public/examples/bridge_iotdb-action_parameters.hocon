@@ -1,0 +1,10 @@
+actions.iotdb.my_device.parameters {
+  is_aligned = false
+  device_id = ""
+  data = [
+    {
+      #substruct(bridge_iotdb:action_parameters_data)
+    }
+  ]
+  max_retries = 2
+}

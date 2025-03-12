@@ -1,0 +1,17 @@
+actions.s3.my_s3_action.parameters {
+  mode = aggregated
+  container = {
+    type = csv
+  }
+  aggregation = {
+    #substruct(bridge_s3:s3_aggregation)
+  }
+  bucket = "my-s3-bucket"
+  key = "${action}/${node}/${datetime.rfc3339utc}/${sequence}"
+  acl = private
+  headers = {
+    "Content-Type" = "application/json"
+  }
+  min_part_size = "5mb"
+  max_part_size = "5gb"
+}

@@ -1,0 +1,4 @@
+force_gc {
+  count = 16000
+  bytes = "16MB"
+}

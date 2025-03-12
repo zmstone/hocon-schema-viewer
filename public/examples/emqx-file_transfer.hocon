@@ -1,0 +1,9 @@
+file_transfer {
+  enable = false
+  init_timeout = "10s"
+  store_segment_timeout = "5m"
+  assemble_timeout = "5m"
+  storage = {
+    #substruct(file_transfer:storage_backend)
+  }
+}

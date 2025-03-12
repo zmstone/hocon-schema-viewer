@@ -1,0 +1,6 @@
+authentication = [
+  {
+    type = bind
+    bind_password = "${password}"
+  }
+]

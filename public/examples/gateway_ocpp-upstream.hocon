@@ -1,0 +1,6 @@
+gateway.ocpp.upstream {
+  topic = "cp/${cid}"
+  topic_override_mapping = {}
+  reply_topic = "cp/${cid}/Reply"
+  error_topic = "cp/${cid}/Reply"
+}

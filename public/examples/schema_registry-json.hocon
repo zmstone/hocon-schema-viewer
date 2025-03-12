@@ -1,0 +1,5 @@
+schema_registry.schemas.my_schema {
+  type = json
+  source = "<source text for the schema>"
+  description = ""
+}

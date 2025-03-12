@@ -1,0 +1,10 @@
+actions.matrix.my_action {
+  local_topic = ""
+  parameters = {
+    #substruct(bridge_pgsql:action_parameters)
+  }
+  connector = ""
+  tags = []
+  description = ""
+  resource_opts = {}
+}

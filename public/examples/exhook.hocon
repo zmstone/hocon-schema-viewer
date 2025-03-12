@@ -1,0 +1,7 @@
+exhook {
+  servers = [
+    {
+      #substruct(exhook:server)
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+actions.azure_event_hub_producer.my_event_hub {
+  local_topic = ""
+  parameters = {
+    #substruct(bridge_azure_event_hub:producer_kafka_opts)
+  }
+  resource_opts = {}
+  connector = ""
+  tags = [
+    "tag1",
+    "tag2"
+  ]
+  description = ""
+}

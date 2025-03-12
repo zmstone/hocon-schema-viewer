@@ -1,0 +1,8 @@
+plugins {
+  states = [
+    {
+      #substruct(plugin:state)
+    }
+  ]
+  install_dir = plugins
+}

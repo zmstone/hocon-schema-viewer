@@ -1,0 +1,13 @@
+actions.couchbase.my_couchbase_action {
+  local_topic = "example/topic"
+  parameters = {
+    #substruct(action_couchbase:parameters)
+  }
+  connector = "my_connector"
+  tags = [
+    "tag1",
+    "tag2"
+  ]
+  description = ""
+  resource_opts = {}
+}

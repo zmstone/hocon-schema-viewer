@@ -1,0 +1,9 @@
+gateway.ocpp.listeners.ws.example_name.websocket.deflate_opts {
+    level = none
+    mem_level = 8
+    strategy = default
+    server_context_takeover = takeover
+    client_context_takeover = takeover
+    server_max_window_bits = 15
+    client_max_window_bits = 15
+}

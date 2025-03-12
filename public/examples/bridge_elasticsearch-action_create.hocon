@@ -1,0 +1,10 @@
+actions.elasticsearch.my_action.parameters {
+  action = create
+  index = ${payload.index}
+  id = ${payload.id}
+  doc = ${payload.doc}
+  routing = ${payload.routing}
+  require_alias = false
+  overwrite = true
+  max_retries = 2
+}

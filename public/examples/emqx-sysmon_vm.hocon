@@ -1,0 +1,10 @@
+sysmon.vm {
+  process_check_interval = "30s"
+  process_high_watermark = "80%"
+  process_low_watermark = "60%"
+  long_gc = disabled
+  long_schedule = "240ms"
+  large_heap = "32MB"
+  busy_dist_port = true
+  busy_port = true
+}

@@ -1,0 +1,10 @@
+actions.redis.my_redis_action {
+  local_topic = ""
+  parameters = {
+    #substruct(bridge_redis:action_parameters)
+  }
+  connector = ""
+  tags = []
+  description = ""
+  resource_opts = {}
+}

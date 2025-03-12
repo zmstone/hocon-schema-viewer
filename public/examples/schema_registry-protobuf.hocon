@@ -1,0 +1,5 @@
+schema_registry.schemas.my_schema {
+  type = protobuf
+  source = ""
+  description = ""
+}

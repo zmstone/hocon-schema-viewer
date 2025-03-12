@@ -1,0 +1,6 @@
+actions.azure_event_hub_producer.my_producer.parameters.buffer {
+  mode = memory
+  per_partition_limit = "256MB"
+  segment_bytes = "10MB"
+  memory_overload_protection = true
+}

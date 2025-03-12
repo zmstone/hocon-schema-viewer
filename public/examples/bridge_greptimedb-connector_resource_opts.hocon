@@ -1,0 +1,5 @@
+connectors.greptimedb.my_connector.resource_opts {
+  health_check_interval = "15s"
+  start_after_created = true
+  start_timeout = "5s"
+}

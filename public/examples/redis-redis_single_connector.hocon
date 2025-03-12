@@ -1,0 +1,8 @@
+connectors.redis.my_redis_connector.parameters {
+  server = "localhost:6379"
+  redis_type = single
+  pool_size = 8
+  username = ""
+  password = ""
+  database = 0
+}

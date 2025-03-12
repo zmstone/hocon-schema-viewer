@@ -1,0 +1,13 @@
+connectors.pulsar.my_pulsar_connector {
+  tags = []
+  description = ""
+  servers = "pulsar://localhost:6650"
+  authentication = none
+  connect_timeout = "5s"
+  ssl = {
+    enable = false
+  }
+  resource_opts = {
+    #substruct(pulsar:connector_resource_opts)
+  }
+}

@@ -1,0 +1,8 @@
+authentication = [
+  {
+    mechanism = scram
+    backend = built_in_database
+    algorithm = sha256
+    iteration_count = 4096
+  }
+]

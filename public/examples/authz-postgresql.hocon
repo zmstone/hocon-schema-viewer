@@ -1,0 +1,18 @@
+authorization.sources = [
+  {
+    type = postgresql
+    server = "your_host:5432"
+    disable_prepared_statements = false
+    database = "your_database"
+    pool_size = 8
+    username = "your_username"
+    password = "your_password"
+    ssl = {
+      enable = false
+    }
+    prepare_statement = {
+      # Add your SQL prepared statements here
+    }
+    query = "your_query"
+  }
+]

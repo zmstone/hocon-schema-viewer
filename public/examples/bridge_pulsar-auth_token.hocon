@@ -1,0 +1,3 @@
+connectors.pulsar.my_pulsar_instance.authentication {
+  jwt = ""
+}

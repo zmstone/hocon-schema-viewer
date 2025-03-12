@@ -1,0 +1,18 @@
+gateway.coap.listeners.dtls.my_dtls_listener {
+  acceptors = 16
+  health_check = {
+    #substruct(gateway:udp_health_check)
+  }
+  udp_options = {
+    #substruct(gateway:udp_opts)
+  }
+  bind = "0.0.0.0:5684"
+  max_connections = 1024
+  max_conn_rate = 1000
+  enable_authn = true
+  mountpoint = ""
+  access_rules = []
+  dtls_options = {
+    #substruct(gateway:dtls_opts)
+  }
+}

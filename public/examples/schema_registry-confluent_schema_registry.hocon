@@ -1,0 +1,5 @@
+schema_registry.external.my_schema_registry {
+  type = confluent
+  url = "http://example.com"
+  auth = none
+}

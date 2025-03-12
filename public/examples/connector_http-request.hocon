@@ -1,0 +1,13 @@
+authentication = [
+  {
+    method = "GET"
+    path = "/api/resource"
+    body = "{\"key\": \"value\"}"
+    headers = {
+      "Content-Type" = "application/json"
+      "Authorization" = "Bearer token"
+    }
+    max_retries = 3
+    request_timeout = "5000"
+  }
+]

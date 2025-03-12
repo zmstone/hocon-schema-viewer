@@ -1,0 +1,8 @@
+authentication = [
+  {
+    name = pbkdf2
+    mac_fun = sha256
+    iterations = 10000
+    dk_length = 32
+  }
+]

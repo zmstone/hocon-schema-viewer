@@ -1,0 +1,4 @@
+gateway.ocpp.dnstream {
+  topic = "cs/${cid}"
+  max_mqueue_len = 100
+}

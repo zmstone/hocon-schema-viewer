@@ -1,0 +1,3 @@
+gateway.jt808.frame {
+  max_length = 8192
+}

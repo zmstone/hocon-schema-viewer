@@ -1,0 +1,15 @@
+connectors.sqlserver.my_sqlserver {
+  driver = "ms-sql"
+  tags = [
+    "example-tag"
+  ]
+  description = ""
+  server = "example-host:1433"
+  database = "example_db"
+  pool_size = 8
+  username = "sa"
+  password = "your_password_here"
+  resource_opts = {
+    #substruct(bridge_sqlserver:connector_resource_opts)
+  }
+}

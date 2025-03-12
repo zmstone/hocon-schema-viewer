@@ -1,0 +1,12 @@
+actions.http.my_http_action {
+  connector = "example_connector"
+  tags = [
+    "tag1",
+    "tag2"
+  ]
+  description = ""
+  parameters = {
+    #substruct(bridge_http:parameters_opts)
+  }
+  resource_opts = {}
+}

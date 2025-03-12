@@ -1,0 +1,10 @@
+actions.sqlserver.my_sqlserver_action {
+  local_topic = ""
+  parameters = {
+    #substruct(bridge_sqlserver:action_parameters)
+  }
+  connector = ""
+  tags = []
+  description = ""
+  resource_opts = {}
+}

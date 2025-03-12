@@ -1,0 +1,8 @@
+actions.tablestore.my_table_name.parameters.fields = [
+  {
+    column = "${payload.column}"
+    value = true
+    isint = false
+    isbinary = false
+  }
+]

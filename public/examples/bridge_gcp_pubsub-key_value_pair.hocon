@@ -1,0 +1,6 @@
+actions.gcp_pubsub_producer.my_pubsub_producer.parameters.attributes_template = [
+  {
+    key = "example_key"
+    value = "example_value"
+  }
+]

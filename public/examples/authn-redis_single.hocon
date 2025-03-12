@@ -1,0 +1,15 @@
+authentication = [
+  {
+    mechanism = password_based
+    backend = redis
+    cmd = hget
+    password_hash_algorithm = {name = sha256, salt_position = prefix}
+    server = "localhost:6379"
+    redis_type = single
+    pool_size = 8
+    username = "user"
+    password = "secret"
+    database = 0
+    ssl = {enable = false}
+  }
+]

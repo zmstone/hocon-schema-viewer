@@ -1,0 +1,4 @@
+actions.datalayers.my_datalayer.parameters {
+  write_syntax = "<measurement>,<tag_key>=<tag_value> <field_key>=<field_value> <timestamp>"
+  precision = ms
+}

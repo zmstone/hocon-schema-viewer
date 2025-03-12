@@ -1,0 +1,3 @@
+actions.cassandra.my_action.parameters {
+  cql = "insert into mqtt_msg(msgid, topic, qos, payload, arrived) values (${id}, ${topic},  ${qos}, ${payload}, ${timestamp})"
+}

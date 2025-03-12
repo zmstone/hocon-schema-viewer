@@ -1,0 +1,7 @@
+actions.redis.my_redis_action.parameters {
+  command_template = [
+    "rpush",
+    "msgs",
+    "${payload}"
+  ]
+}

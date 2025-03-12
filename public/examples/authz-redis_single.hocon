@@ -1,0 +1,13 @@
+authorization.sources = [
+  {
+    type = redis
+    server = "localhost:6379"
+    redis_type = single
+    pool_size = 8
+    username = "user"
+    password = "secret"
+    database = 0
+    ssl = {enable = false}
+    cmd = "HGETALL mqtt_authz"
+  }
+]

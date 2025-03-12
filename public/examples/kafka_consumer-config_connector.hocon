@@ -1,0 +1,19 @@
+connectors.kafka_consumer.my_kafka_consumer {
+  tags = []
+  description = ""
+  bootstrap_hosts = "localhost:9092"
+  connect_timeout = "5s"
+  min_metadata_refresh_interval = "3s"
+  metadata_request_timeout = "5s"
+  authentication = none
+  socket_opts = {
+    #substruct(bridge_kafka:socket_opts)
+  }
+  health_check_topic = "health_check_topic_name"
+  ssl = {
+    #substruct(bridge_kafka:ssl_client_opts)
+  }
+  resource_opts = {
+    #substruct(bridge_kafka:connector_resource_opts)
+  }
+}

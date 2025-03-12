@@ -1,0 +1,3 @@
+delayed {
+  max_delayed_messages = 0
+}

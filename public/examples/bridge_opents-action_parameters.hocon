@@ -1,0 +1,7 @@
+actions.opents.my_action.parameters {
+  data = [
+    {
+      #substruct(bridge_opents:action_parameters_data)
+    }
+  ]
+}

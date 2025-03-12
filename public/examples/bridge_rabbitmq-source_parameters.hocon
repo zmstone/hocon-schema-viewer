@@ -1,0 +1,5 @@
+sources.rabbitmq.my_rabbitmq_source.parameters {
+  queue = "your_queue_name"
+  wait_for_publish_confirmations = true
+  no_ack = true
+}

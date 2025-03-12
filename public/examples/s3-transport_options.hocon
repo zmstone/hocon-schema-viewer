@@ -1,0 +1,14 @@
+connectors.s3.my_s3_instance.transport_options {
+  ipv6_probe = false
+  connect_timeout = "15s"
+  pool_size = 8
+  ssl = {
+    #substruct(emqx:ssl_client_opts)
+  }
+  headers = {
+    # Example header
+    "Content-Type" = "application/json"
+  }
+  max_retries = 3
+  request_timeout = "30s"
+}

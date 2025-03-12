@@ -1,0 +1,12 @@
+connectors.tablestore.my_tablestore {
+  tags = []
+  description = ""
+  storage_model_type = timeseries
+  endpoint = "https://myinstance.cn-hangzhou.ots.aliyuncs.com"
+  instance_name = "my_instance"
+  access_key_id = "NTS**********************"
+  access_key_secret = "7NR2****************************************"
+  pool_size = 8
+  ssl = {enable = false}
+  resource_opts = {}
+}

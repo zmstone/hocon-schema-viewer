@@ -1,0 +1,13 @@
+retainer {
+  msg_expiry_interval = "0s"
+  msg_expiry_interval_override = disabled
+  allow_never_expire = true
+  msg_clear_interval = "0s"
+  max_payload_size = "1MB"
+  stop_publish_clear_msg = false
+  delivery_rate = "1000/s"
+  max_publish_rate = "1000/s"
+  backend = {
+    #substruct(retainer:mnesia_config)
+  }
+}

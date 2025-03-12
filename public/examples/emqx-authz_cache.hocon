@@ -1,0 +1,5 @@
+authorization.cache {
+  max_size = 32
+  ttl = "1m"
+  excludes = []
+}

@@ -1,0 +1,4 @@
+connectors.iotdb.my_iotdb_instance.authentication {
+  username = "your_username"
+  password = "your_password"
+}

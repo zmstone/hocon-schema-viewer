@@ -1,0 +1,15 @@
+actions.hstreamdb.my_hstreamdb_action {
+  local_topic = "sample/topic"
+  parameters = {
+    #substruct(bridge_hstreamdb:action_parameters)
+  }
+  connector = "my_connector"
+  tags = [
+    "tag1",
+    "tag2"
+  ]
+  description = ""
+  resource_opts = {
+    #substruct(actions_and_sources:action_resource_opts)
+  }
+}

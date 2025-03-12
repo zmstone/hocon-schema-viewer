@@ -1,0 +1,12 @@
+sources.kafka_consumer.my_consumer {
+  parameters = {
+    #substruct(kafka_consumer:source_parameters)
+  }
+  connector = "example_connector"
+  tags = [
+    "tag1",
+    "tag2"
+  ]
+  description = ""
+  resource_opts = {}
+}

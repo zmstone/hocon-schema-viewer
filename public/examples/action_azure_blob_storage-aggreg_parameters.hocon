@@ -1,0 +1,8 @@
+actions.azure_blob_storage.my_blob_storage.parameters {
+  mode = aggregated
+  aggregation = {
+    #substruct(action_azure_blob_storage:aggregation)
+  }
+  container = "example_container"
+  blob = "${action}/${node}/${datetime.rfc3339utc}/${sequence}"
+}

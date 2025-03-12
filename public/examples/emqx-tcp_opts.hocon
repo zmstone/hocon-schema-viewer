@@ -1,0 +1,14 @@
+listeners.tcp.my_listener.tcp_options {
+  active_n = 100
+  backlog = 1024
+  send_timeout = "15s"
+  send_timeout_close = true
+  recbuf = "2KB"
+  sndbuf = "4KB"
+  buffer = "4KB"
+  high_watermark = "1MB"
+  nodelay = true
+  nolinger = false
+  reuseaddr = true
+  keepalive = none
+}

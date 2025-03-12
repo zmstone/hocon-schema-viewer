@@ -1,0 +1,10 @@
+actions.tdengine.my_tdengine_action {
+  local_topic = ""
+  parameters = {
+    #substruct(bridge_tdengine:action_parameters)
+  }
+  connector = ""
+  tags = []
+  description = ""
+  resource_opts = {}
+}

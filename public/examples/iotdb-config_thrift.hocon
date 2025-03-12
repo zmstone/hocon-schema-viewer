@@ -1,0 +1,17 @@
+connectors.iotdb.my_iotdb_connector {
+  tags = []
+  description = ""
+  driver = restapi
+  server = "host:port"
+  protocol_version = protocol_v3
+  zoneId = "Asia/Shanghai"
+  pool_size = 8
+  connect_timeout = "10s"
+  recv_timeout = "10s"
+  username = "your_username"
+  password = "your_password"
+  ssl = {
+    enable = false
+  }
+  resource_opts = {}
+}

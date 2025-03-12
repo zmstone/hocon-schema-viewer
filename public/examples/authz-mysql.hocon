@@ -1,0 +1,17 @@
+authorization.sources = [
+  {
+    type = mysql
+    server = "127.0.0.1:3306"
+    database = "example_db"
+    pool_size = 8
+    username = "root"
+    password = "your_password"
+    ssl = {
+      enable = false
+    }
+    prepare_statement = {
+      # Add your SQL prepared statements here
+    }
+    query = "SELECT * FROM authz WHERE user = ?"
+  }
+]

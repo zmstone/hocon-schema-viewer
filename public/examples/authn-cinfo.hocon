@@ -1,0 +1,10 @@
+authentication = [
+  {
+    mechanism = cinfo
+    checks = [
+      {
+        #substruct(authn:cinfo_check)
+      }
+    ]
+  }
+]

@@ -1,0 +1,5 @@
+actions.kinesis.my_kinesis_action.parameters {
+  payload_template = "${.}"
+  stream_name = "your_kinesis_stream_name"
+  partition_key = "${your_partition_key_placeholder}"
+}

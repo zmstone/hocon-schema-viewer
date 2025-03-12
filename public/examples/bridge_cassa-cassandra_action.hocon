@@ -1,0 +1,12 @@
+actions.cassandra.my_cassandra_action {
+  local_topic = ""
+  parameters = {
+    #substruct(bridge_cassa:action_parameters)
+  }
+  connector = ""
+  tags = []
+  description = ""
+  resource_opts = {
+    #substruct(actions_and_sources:action_resource_opts)
+  }
+}

@@ -1,0 +1,12 @@
+connectors.azure_blob_storage.my_blob_storage {
+  tags = [
+    "tag1",
+    "tag2"
+  ]
+  description = ""
+  account_name = "your_account_name"
+  account_key = "your_account_key"
+  resource_opts = {
+    #substruct(connector_azure_blob_storage:resource_opts)
+  }
+}

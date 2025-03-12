@@ -1,0 +1,13 @@
+actions.rabbitmq.my_rabbitmq_action {
+  local_topic = ""
+  parameters = {
+    #substruct(bridge_rabbitmq:action_parameters)
+  }
+  connector = ""
+  tags = [
+    "tag1",
+    "tag2"
+  ]
+  description = ""
+  resource_opts = {}
+}

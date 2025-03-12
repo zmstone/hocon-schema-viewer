@@ -1,0 +1,17 @@
+connectors.couchbase.my_couchbase {
+  tags = []
+  description = ""
+  server = "example.com"
+  connect_timeout = "15s"
+  pipelining = 100
+  pool_size = 8
+  username = "couchbase_user"
+  password = "couchbase_password"
+  resource_opts = {
+    #substruct(connector:resource_opts)
+  }
+  ssl = {
+    enable = false
+    #substruct(emqx:ssl_client_opts)
+  }
+}

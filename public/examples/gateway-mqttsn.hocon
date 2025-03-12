@@ -1,0 +1,20 @@
+gateway.mqttsn {
+  gateway_id = 1
+  broadcast = false
+  enable_qos3 = true
+  subs_resume = false
+  predefined = [
+    {
+      #substruct(gateway:mqttsn_predefined)
+    }
+  ]
+  mountpoint = ""
+  listeners = {
+    #substruct(gateway:udp_listeners)
+  }
+  enable_stats = true
+  idle_timeout = "30s"
+  clientinfo_override = {
+    #substruct(gateway:clientinfo_override)
+  }
+}

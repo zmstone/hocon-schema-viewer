@@ -1,0 +1,4 @@
+schema_registry.external.my_service.auth {
+  username = "your_username"
+  password = "your_password"
+}

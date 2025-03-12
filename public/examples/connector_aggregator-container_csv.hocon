@@ -1,0 +1,4 @@
+actions.azure_blob_storage.my_aggregation.parameters.aggregation.container {
+  type = csv
+  column_order = []
+}

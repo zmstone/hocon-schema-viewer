@@ -1,0 +1,13 @@
+actions.gcp_pubsub_producer.my_gcp_pubsub_producer {
+  local_topic = "example_topic"
+  parameters = {
+    #substruct(gcp_pubsub_producer:action_parameters)
+  }
+  connector = "example_connector"
+  tags = [
+    "tag1",
+    "tag2"
+  ]
+  description = ""
+  resource_opts = {}
+}

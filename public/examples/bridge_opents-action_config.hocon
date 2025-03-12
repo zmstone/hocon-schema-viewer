@@ -1,0 +1,10 @@
+actions.opents.my_opents {
+  local_topic = ""
+  parameters = {
+    #substruct(bridge_opents:action_parameters)
+  }
+  connector = ""
+  tags = []
+  description = ""
+  resource_opts = {}
+}

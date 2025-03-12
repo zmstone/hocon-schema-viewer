@@ -1,0 +1,9 @@
+dashboard.sso.saml {
+  enable = false
+  backend = saml
+  dashboard_addr = "https://127.0.0.1:18083"
+  idp_metadata_url = "https://idp.example.com"
+  sp_sign_request = false
+  sp_public_key = "Pub Key"
+  sp_private_key = "Private Key"
+}

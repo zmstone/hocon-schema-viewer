@@ -1,0 +1,4 @@
+actions.pulsar.my_resource_name.resource_opts {
+  health_check_interval = "15s"
+  query_mode = async
+}

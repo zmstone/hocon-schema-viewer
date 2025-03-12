@@ -1,0 +1,1 @@
+Since all fields in the schema are marked as deprecated, according to the requirements, no example should be generated for deprecated fields. Therefore, the resulting HOCON example is empty.

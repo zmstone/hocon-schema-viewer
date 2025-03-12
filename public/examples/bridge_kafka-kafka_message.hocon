@@ -1,0 +1,5 @@
+actions.kafka_producer.my_kafka_producer.parameters.message {
+  key = "${.clientid}"
+  value = "${.}"
+  timestamp = "${.timestamp}"
+}

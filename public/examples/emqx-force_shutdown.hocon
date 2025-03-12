@@ -1,0 +1,4 @@
+force_shutdown {
+  max_mailbox_size = 1000
+  max_heap_size = "32MB"
+}

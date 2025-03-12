@@ -1,0 +1,20 @@
+cluster {
+  name = emqxcl
+  discovery_strategy = manual
+  autoclean = "24h"
+  autoheal = true
+  proto_dist = inet_tcp
+  static = {
+    #substruct(emqx:cluster_static)
+  }
+  dns = {
+    #substruct(emqx:cluster_dns)
+  }
+  etcd = {
+    #substruct(emqx:cluster_etcd)
+  }
+  k8s = {
+    #substruct(emqx:cluster_k8s)
+  }
+  links = []
+}

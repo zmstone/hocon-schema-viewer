@@ -1,0 +1,4 @@
+cluster.dns {
+  name = "localhost"
+  record_type = "a"
+}

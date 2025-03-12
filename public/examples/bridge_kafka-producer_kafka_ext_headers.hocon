@@ -1,0 +1,6 @@
+actions.azure_event_hub_producer.my_producer.parameters.kafka_ext_headers = [
+  {
+    kafka_ext_header_key = "<your_key_here>"
+    kafka_ext_header_value = "<your_value_here>"
+  }
+]

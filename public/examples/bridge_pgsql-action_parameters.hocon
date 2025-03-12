@@ -1,0 +1,3 @@
+actions.matrix.my_action.parameters {
+  sql = "insert into t_mqtt_msg(msgid, topic, qos, payload, arrived) values (${id}, ${topic}, ${qos}, ${payload}, TO_TIMESTAMP((${timestamp} :: bigint)/1000))"
+}

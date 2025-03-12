@@ -1,0 +1,24 @@
+authorization {
+  no_match = allow
+  deny_action = ignore
+  cache = {
+    #substruct(emqx:authz_cache)
+  }
+  sources = [
+    {
+      #substruct(authz:file)
+      #substruct(authz:builtin_db)
+      #substruct(authz:http_get)
+      #substruct(authz:http_post)
+      #substruct(authz:redis_single)
+      #substruct(authz:redis_sentinel)
+      #substruct(authz:redis_cluster)
+      #substruct(authz:mysql)
+      #substruct(authz:postgresql)
+      #substruct(authz:mongo_single)
+      #substruct(authz:mongo_rs)
+      #substruct(authz:mongo_sharded)
+      #substruct(authz:ldap)
+    }
+  ]
+}

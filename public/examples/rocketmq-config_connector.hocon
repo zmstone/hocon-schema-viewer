@@ -1,0 +1,12 @@
+connectors.rocketmq.my_connector {
+  tags = []
+  description = ""
+  servers = "example.rocketmq.server:9876"
+  namespace = "my_namespace"
+  access_key = ""
+  secret_key = ""
+  security_token = ""
+  pool_size = 8
+  ssl = {enable = false}
+  resource_opts = {}
+}

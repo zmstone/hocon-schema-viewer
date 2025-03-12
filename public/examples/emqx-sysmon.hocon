@@ -1,0 +1,10 @@
+sysmon {
+  vm = {
+    #substruct(emqx:sysmon_vm)
+  }
+  os = {
+    #substruct(emqx:sysmon_os)
+  }
+  mnesia_tm_mailbox_size_alarm_threshold = 500
+  broker_pool_mailbox_size_alarm_threshold = 500
+}

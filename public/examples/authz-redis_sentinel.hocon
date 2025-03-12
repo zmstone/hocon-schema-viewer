@@ -1,0 +1,16 @@
+authorization.sources = [
+  {
+    type = redis
+    servers = "127.0.0.1:26379,127.0.0.2:26379"
+    redis_type = sentinel
+    sentinel = "mymaster"
+    pool_size = 8
+    username = "user"
+    password = "secret"
+    database = 0
+    ssl = {
+      enable = false
+    }
+    cmd = "HGETALL mqtt_authz"
+  }
+]

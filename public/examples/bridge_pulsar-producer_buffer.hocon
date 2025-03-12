@@ -1,0 +1,6 @@
+actions.pulsar.my_producer.parameters.buffer {
+  mode = memory
+  per_partition_limit = "256MB"
+  segment_bytes = "100MB"
+  memory_overload_protection = false
+}

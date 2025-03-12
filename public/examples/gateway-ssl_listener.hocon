@@ -1,0 +1,17 @@
+gateway.exproto.listeners.ssl.myListener {
+  acceptors = 16
+  tcp_options = {
+    #substruct(emqx:tcp_opts)
+  }
+  proxy_protocol = false
+  proxy_protocol_timeout = "3s"
+  bind = "127.0.0.1:8883"
+  max_connections = 1024
+  max_conn_rate = 1000
+  enable_authn = true
+  mountpoint = "/${clientid}/"
+  access_rules = []
+  ssl_options = {
+    #substruct(emqx:listener_ssl_opts)
+  }
+}

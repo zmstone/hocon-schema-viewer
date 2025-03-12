@@ -1,0 +1,10 @@
+actions.confluent_producer.my_confluent_action {
+  local_topic = ""
+  parameters = {
+    #substruct(confluent:producer_kafka_opts)
+  }
+  resource_opts = {}
+  connector = ""
+  tags = []
+  description = ""
+}

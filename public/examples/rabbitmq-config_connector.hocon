@@ -1,0 +1,16 @@
+connectors.rabbitmq.my_rabbitmq_connector {
+  tags = []
+  description = ""
+  server = "localhost"
+  port = 5672
+  username = "user"
+  password = "secret"
+  pool_size = 8
+  timeout = "5s"
+  virtual_host = "/"
+  heartbeat = "30s"
+  ssl = {
+    enable = false
+  }
+  resource_opts = {}
+}

@@ -1,0 +1,13 @@
+actions.kafka_producer.my_producer {
+  connector = "my_connector"
+  tags = [
+    "tag1",
+    "tag2"
+  ]
+  description = ""
+  local_topic = "my_topic"
+  parameters = {
+    #substruct(bridge_kafka:producer_kafka_opts)
+  }
+  resource_opts = {}
+}

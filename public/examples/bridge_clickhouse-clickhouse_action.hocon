@@ -1,0 +1,12 @@
+actions.clickhouse.my_clickhouse_action {
+  local_topic = ""
+  parameters = {
+    #substruct(bridge_clickhouse:action_parameters)
+  }
+  connector = ""
+  tags = [
+    ""
+  ]
+  description = ""
+  resource_opts = {}
+}

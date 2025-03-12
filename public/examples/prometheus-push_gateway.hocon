@@ -1,0 +1,8 @@
+prometheus.push_gateway {
+  enable = false
+  method = put
+  url = "http://127.0.0.1:9091"
+  interval = "15s"
+  headers = {}
+  job_name = "${name}/instance/${name}~${host}"
+}

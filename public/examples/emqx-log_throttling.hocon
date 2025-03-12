@@ -1,0 +1,3 @@
+log.throttling {
+  time_window = "1m"
+}

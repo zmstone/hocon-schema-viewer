@@ -1,0 +1,4 @@
+actions.couchbase.my_couchbase_action.parameters {
+  sql = "SELECT * FROM bucket WHERE condition = true"
+  max_retries = 3
+}
