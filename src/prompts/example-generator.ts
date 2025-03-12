@@ -42,7 +42,7 @@ Below are the requirements for the generated example:
 - If a union member is not a substruct, simply generate a config value for the union member.
 - While colon is a valid delimiter for key-value pair, you should use "=" as the delimiter in the generated example.
 - I prefer to have clean examples, so no need to include comments in the generated example.
-- Do not quote the generated example in backticks.
+- Do not quote the generated example in backticks or markdown code blocks.
 - The type information is inherited from Eralng type specs, so you should generate the example based on the type specs. For example "binary()" is binary string, etc.
 - The bytes configs such as "1MB", and duration configs such as "1d" should be quoted.
 - After generated, go through the requirements and make sure the generated example meets all the above requirements.

@@ -111,11 +111,7 @@ export default defineComponent({
           if (match) {
             const [fullMatch, indentation, refName] = match
             const hasContent = hasSubstructContent(lines, index)
-            return `<span class="substruct-line">${indentation}<a href="javascript:void(0)" class="generate-link" data-ref="${refName}" data-indent="${indentation}">#substruct(${refName})</a>${
-              hasContent
-                ? `<a href="javascript:void(0)" class="clear-substruct" data-ref="${refName}" title="Clear substruct">✖</a>`
-                : ''
-            }</span>`
+            return `<span class="substruct-line">${indentation}<span class="substruct-content"><a href="javascript:void(0)" class="generate-link" data-ref="${refName}" data-indent="${indentation}">#substruct(${refName})</a> <a href="javascript:void(0)" class="regenerate-substruct" data-ref="${refName}" title="Regenerate substruct">↺</a>${hasContent ? ` <a href="javascript:void(0)" class="clear-substruct" data-ref="${refName}" title="Clear substruct">✖</a>` : ''}</span></span>`
           }
           return line
         })
@@ -180,10 +176,15 @@ export default defineComponent({
           subExample = stripWrappingLines(await response.text())
         } else {
           // Fall back to AI generation if local example not found
-          const rawExample = await callOpenAI(apiKey.value, selectedModel.value, [
-            { role: 'system', content: systemPrompt },
-            { role: 'user', content: generateUserPrompt(struct, valuePath.value) }
-          ])
+          const messages = [{ role: 'system', content: systemPrompt }]
+
+          messages.push({ role: 'user', content: generateUserPrompt(struct, valuePath.value) })
+
+          if (additionalPrompts.value.trim()) {
+            messages.push({ role: 'user', content: 'Additional instructions:\n' + additionalPrompts.value })
+          }
+
+          const rawExample = await callOpenAI(apiKey.value, selectedModel.value, messages)
           subExample = stripWrappingLines(rawExample)
         }
 
@@ -354,6 +355,59 @@ export default defineComponent({
       }
     }
 
+    async function handleRegenerateSubstruct(event: MouseEvent) {
+      const target = event.target as HTMLElement
+      if (!target.classList.contains('regenerate-substruct')) return
+
+      const refName = target.getAttribute('data-ref')
+      const indentation = target.closest('.substruct-line')?.querySelector('.generate-link')?.getAttribute('data-indent') || ''
+      if (!refName) return
+
+      const struct = findStruct(refName)
+      if (!struct) return
+
+      // Force AI generation
+      const messages = [{ role: 'system', content: systemPrompt }]
+
+      if (additionalPrompts.value.trim()) {
+        messages.push({ role: 'user', content: additionalPrompts.value })
+      }
+
+      messages.push({ role: 'user', content: generateUserPrompt(struct, valuePath.value) })
+
+      const rawExample = await callOpenAI(apiKey.value, selectedModel.value, messages)
+      const subExample = stripWrappingLines(rawExample)
+
+      const indentedExample = subExample
+        .split('\n')
+        .map((line: string) => indentation + line)
+        .join('\n')
+
+      // Replace existing content
+      const lines = generatedExample.value.split('\n')
+      const linkIndex = lines.findIndex((line) => line.includes(`#substruct(${refName})`))
+      if (linkIndex >= 0) {
+        const currentIndent = (lines[linkIndex].match(/^\s*/) || [''])[0].length
+        let nextStructIndex = linkIndex + 1
+
+        while (nextStructIndex < lines.length) {
+          const line = lines[nextStructIndex]
+          const lineIndent = (line.match(/^\s*/) || [''])[0].length
+
+          if (line.includes('#substruct(') && lineIndent === currentIndent) {
+            break
+          }
+          if (lineIndent < currentIndent) {
+            break
+          }
+          nextStructIndex++
+        }
+
+        lines.splice(linkIndex + 1, nextStructIndex - linkIndex - 1, indentedExample)
+        generatedExample.value = lines.join('\n')
+      }
+    }
+
     return {
       generatedExample,
       processedExample,
@@ -371,7 +425,8 @@ export default defineComponent({
       handleGenerateClick,
       handleClearSubstruct,
       exampleSource,
-      valuePath
+      valuePath,
+      handleRegenerateSubstruct
     }
   }
 })
@@ -438,7 +493,7 @@ export default defineComponent({
               </div>
               <div class="source-info">
                 <span v-if="exampleSource" class="example-source" :class="exampleSource">
-                  {{ exampleSource === 'pre-generated' ? 'Pre-generated' : 'AI-generated' }}
+                  {{ exampleSource === 'pre-generated' ? 'pregenerated' : 'regenerated' }}
                 </span>
               </div>
             </div>
@@ -464,6 +519,7 @@ export default defineComponent({
             (e) => {
               handleGenerateClick(e)
               handleClearSubstruct(e)
+              handleRegenerateSubstruct(e)
             }
           "
         >
@@ -885,38 +941,55 @@ pre {
   white-space: nowrap;
 }
 
+.substruct-content {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
 .clear-substruct {
-  opacity: 0;
-  margin-left: 4px;
   color: #666;
-  font-size: var(--text-sm);
+  font-size: var(--text-base);
   line-height: 1;
   cursor: pointer;
   padding: 2px;
   border-radius: 3px;
   transition: all 0.2s ease;
-  text-decoration: none;
-  display: inline-block;
+  text-decoration: none !important;
+  opacity: 0;
 }
 
+.substruct-line:hover .regenerate-substruct,
 .substruct-line:hover .clear-substruct {
   opacity: 1;
 }
 
-.clear-substruct:hover {
+.regenerate-substruct {
+  color: #666;
+  font-size: var(--text-base);
+  line-height: 1;
+  cursor: pointer;
+  padding: 2px;
+  border-radius: 3px;
+  transition: all 0.2s ease;
+  text-decoration: none !important;
+}
+
+.regenerate-substruct:hover {
   background: rgba(46, 87, 66, 0.05);
   color: #2e5742;
-  text-decoration: none;
+  text-decoration: none !important;
 }
 
 @media (prefers-color-scheme: dark) {
-  .clear-substruct {
+  .regenerate-substruct {
     color: #999;
   }
 
-  .clear-substruct:hover {
+  .regenerate-substruct:hover {
     background: rgba(228, 245, 234, 0.05);
     color: #e4f5ea;
+    text-decoration: none !important;
   }
 }
 
