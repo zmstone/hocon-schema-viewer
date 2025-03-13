@@ -1,5 +1,3 @@
-plugins.states = [
-  {
+plugins.states[0] {
     name_vsn = "my_plugin-0.1.0"
-  }
-]
+}

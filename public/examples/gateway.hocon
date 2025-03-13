@@ -1,26 +1,26 @@
 gateway {
-  coap = {
-    #substruct(gateway:coap)
-  }
-  exproto = {
-    #substruct(gateway:exproto)
-  }
-  gbt32960 = {
-    #substruct(gateway_gbt32960:gbt32960)
-  }
-  jt808 = {
-    #substruct(gateway:jt808)
-  }
-  lwm2m = {
-    #substruct(gateway:lwm2m)
-  }
-  mqttsn = {
-    #substruct(gateway:mqttsn)
-  }
-  ocpp = {
-    #substruct(gateway_ocpp:ocpp)
-  }
-  stomp = {
-    #substruct(gateway:stomp)
-  }
+    coap = {
+        #substruct(gateway:coap)
+    }
+    exproto = {
+        #substruct(gateway:exproto)
+    }
+    gbt32960 = {
+        #substruct(gateway_gbt32960:gbt32960)
+    }
+    jt808 = {
+        #substruct(gateway:jt808)
+    }
+    lwm2m = {
+        #substruct(gateway:lwm2m)
+    }
+    mqttsn = {
+        #substruct(gateway:mqttsn)
+    }
+    ocpp = {
+        #substruct(gateway_ocpp:ocpp)
+    }
+    stomp = {
+        #substruct(gateway:stomp)
+    }
 }

@@ -1,7 +1,5 @@
-authentication = [
-  {
+authentication[0].method = {
     type = hash
-    password_attribute = userPassword
-    is_superuser_attribute = isSuperuser
-  }
-]
+    password_attribute = "userPassword"
+    is_superuser_attribute = "isSuperuser"
+}

@@ -1,7 +1,7 @@
-actions.opents.my_action.parameters {
-  data = [
-    {
-      #substruct(bridge_opents:action_parameters_data)
-    }
-  ]
+actions.opents.my_webhook_1.parameters {
+    data = [
+        {
+            #substruct(bridge_opents:action_parameters_data)
+        }
+    ]
 }

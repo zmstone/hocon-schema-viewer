@@ -1,14 +1,8 @@
-actions.tablestore.my_tablestore_action {
-  local_topic = ""
-  parameters = {
-    #substruct(bridge_tablestore:action_parameters)
-  }
-  connector = ""
-  tags = [
-    ""
-  ]
-  description = ""
-  resource_opts = {
-    #substruct(actions_and_sources:action_resource_opts)
-  }
+actions.tablestore.my_webhook_1 {
+    local_topic = "topic/example"
+    parameters = {
+        #substruct(bridge_tablestore:action_parameters)
+    }
+    connector = "connector_name"
+    resource_opts = {}
 }

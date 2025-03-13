@@ -1,5 +1,5 @@
 file_transfer.storage.local.segments.gc {
-  interval = "1h"
-  maximum_segments_ttl = "24h"
-  minimum_segments_ttl = "5m"
+    interval = "1h"
+    maximum_segments_ttl = "24h"
+    minimum_segments_ttl = "5m"
 }

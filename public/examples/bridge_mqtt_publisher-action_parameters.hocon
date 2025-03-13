@@ -1,6 +1,6 @@
-actions.mqtt.my_mqtt_publisher.parameters {
-  topic = "<topic_template>"
-  qos = 1
-  retain = false
-  payload = "<payload_template>"
+actions.mqtt.my_webhook_1.parameters {
+    topic = "your/topic/here"
+    qos = 1
+    retain = false
+    payload = "your payload template"
 }

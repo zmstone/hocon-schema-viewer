@@ -1,8 +1,4 @@
-authentication = [
-  {
-    password_hash_algorithm {
-      name = plain
-      salt_position = prefix
-    }
-  }
-]
+authentication[0].password_hash_algorithm = {
+    name = "plain"
+    salt_position = "prefix"
+}

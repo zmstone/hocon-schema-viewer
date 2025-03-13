@@ -1,7 +1,7 @@
 slow_subs {
-  enable = false
-  threshold = "500ms"
-  expire_interval = "300s"
-  top_k_num = 10
-  stats_type = whole
+    enable = false
+    threshold = "500ms"
+    expire_interval = "300s"
+    top_k_num = 10
+    stats_type = "whole"
 }

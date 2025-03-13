@@ -1,3 +1,6 @@
 cluster.static {
-  seeds = []
+    seeds = [
+        "node1@hostname",
+        "node2@hostname"
+    ]
 }

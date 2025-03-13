@@ -1,7 +1,7 @@
-opentelemetry.traces.filter {
-  trace_mode = legacy
-  trace_all = false
-  e2e_tracing_options = {
-    #substruct(opentelemetry:e2e_tracing_options)
-  }
+opentelemetry.traces.filter = {
+    trace_mode = legacy
+    trace_all = false
+    e2e_tracing_options = {
+        #substruct(opentelemetry:e2e_tracing_options)
+    }
 }

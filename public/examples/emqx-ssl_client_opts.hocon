@@ -1,21 +1,18 @@
-cluster.etcd.ssl_options {
-  cacertfile = "/path/to/ca_cert.pem"
-  certfile = "/path/to/cert_chain.pem"
-  keyfile = "/path/to/private_key.pem"
-  verify = verify_none
-  reuse_sessions = true
-  depth = 10
-  password = "your_password"
-  versions = ["tlsv1.3", "tlsv1.2"]
-  ciphers = []
-  secure_renegotiate = true
-  log_level = notice
-  hibernate_after = "5s"
-  partial_chain = "false"
-  verify_peer_ext_key_usage = "clientAuth,serverAuth"
-  enable = false
-  server_name_indication = {
-    #substruct(disable)
-    #substruct(string())
-  }
+connectors.cassandra.my_webhook_1.ssl {
+    cacertfile = "/path/to/ca.pem"
+    certfile = "/path/to/cert.pem"
+    keyfile = "/path/to/key.pem"
+    verify = verify_none
+    reuse_sessions = true
+    depth = 10
+    password = "your_password_here"
+    versions = ["tlsv1.3", "tlsv1.2"]
+    ciphers = []
+    secure_renegotiate = true
+    log_level = notice
+    hibernate_after = "5s"
+    partial_chain = false
+    verify_peer_ext_key_usage = "clientAuth"
+    enable = false
+    server_name_indication = "disable"
 }

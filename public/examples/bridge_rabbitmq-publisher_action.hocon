@@ -1,13 +1,10 @@
-actions.rabbitmq.my_rabbitmq_action {
-  local_topic = ""
-  parameters = {
-    #substruct(bridge_rabbitmq:action_parameters)
-  }
-  connector = ""
-  tags = [
-    "tag1",
-    "tag2"
-  ]
-  description = ""
-  resource_opts = {}
+actions.rabbitmq.my_webhook_1 {
+    local_topic = "my/mqtt/topic"
+    parameters = {
+        #substruct(bridge_rabbitmq:action_parameters)
+    }
+    connector = "my_connector_name"
+    resource_opts = {
+        #substruct(bridge_rabbitmq:action_resource_opts)
+    }
 }

@@ -1,15 +1,11 @@
-connectors.sqlserver.my_sqlserver {
-  driver = "ms-sql"
-  tags = [
-    "example-tag"
-  ]
-  description = ""
-  server = "example-host:1433"
-  database = "example_db"
-  pool_size = 8
-  username = "sa"
-  password = "your_password_here"
-  resource_opts = {
-    #substruct(bridge_sqlserver:connector_resource_opts)
-  }
+connectors.sqlserver.my_webhook_1 {
+    driver = "ms-sql"
+    server = "localhost:1433"
+    database = "my_database"
+    pool_size = 8
+    username = "sa"
+    password = "your_password_here"
+    resource_opts = {
+        #substruct(bridge_sqlserver:connector_resource_opts)
+    }
 }

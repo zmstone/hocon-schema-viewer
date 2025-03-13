@@ -1,18 +1,15 @@
 log {
-  console = {
-    #substruct(emqx:console_handler)
-  }
-  file = {
-    level = warning
-    #substruct(emqx:log_file_handler)
-    #substruct(handler_name)
-  }
-  throttling = {
-    #substruct(emqx:log_throttling)
-  }
-  audit = {
-    enable = false
-    level = info
-    #substruct(emqx:log_audit_handler)
-  }
+    console = {
+        #substruct(emqx:console_handler)
+    }
+    file = {
+        #substruct(emqx:log_file_handler)
+    }
+    throttling = {
+        #substruct(emqx:log_throttling)
+    }
+    audit = {
+        enable = false
+        level = "info"
+    }
 }

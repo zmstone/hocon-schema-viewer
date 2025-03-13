@@ -1,8 +1,8 @@
 cluster.links[0].resource_opts {
-  worker_pool_size = 16
-  health_check_interval = "15s"
-  start_timeout = "5s"
-  request_ttl = "45s"
-  inflight_window = 100
-  max_buffer_bytes = "256MB"
+    worker_pool_size = 16
+    health_check_interval = "15s"
+    start_timeout = "5s"
+    request_ttl = "45s"
+    inflight_window = 100
+    max_buffer_bytes = "256MB"
 }

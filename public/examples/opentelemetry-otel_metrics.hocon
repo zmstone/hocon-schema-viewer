@@ -1,4 +1,4 @@
 opentelemetry.metrics {
-  enable = false
-  interval = "10s"
+    enable = false
+    interval = "10s"
 }

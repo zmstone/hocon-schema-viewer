@@ -1,6 +1,4 @@
-authentication = [
-  {
-    name = bcrypt
+authentication[0].password_hash_algorithm {
+    name = "bcrypt"
     salt_rounds = 10
-  }
-]
+}

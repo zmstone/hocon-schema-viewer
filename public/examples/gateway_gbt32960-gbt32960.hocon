@@ -1,14 +1,14 @@
 gateway.gbt32960 {
-  mountpoint = "gbt32960/${clientid}/"
-  retry_interval = "8s"
-  max_retry_times = 3
-  message_queue_len = 10
-  listeners = {
-    #substruct(gateway:tcp_listeners)
-  }
-  enable_stats = true
-  idle_timeout = "30s"
-  clientinfo_override = {
-    #substruct(gateway:clientinfo_override)
-  }
+    mountpoint = "gbt32960/${clientid}/"
+    retry_interval = "8s"
+    max_retry_times = 3
+    message_queue_len = 10
+    listeners = {
+        #substruct(gateway:tcp_listeners)
+    }
+    enable_stats = true
+    idle_timeout = "30s"
+    clientinfo_override = {
+        #substruct(gateway:clientinfo_override)
+    }
 }

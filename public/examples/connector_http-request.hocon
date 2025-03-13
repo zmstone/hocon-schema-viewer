@@ -1,13 +1,11 @@
-authentication = [
-  {
+authentication[0].request {
     method = "GET"
-    path = "/api/resource"
+    path = "/api/v1/resource"
     body = "{\"key\": \"value\"}"
     headers = {
-      "Content-Type" = "application/json"
-      "Authorization" = "Bearer token"
+        "Content-Type" = "application/json"
+        "Authorization" = "Bearer token"
     }
     max_retries = 3
     request_timeout = "5000"
-  }
-]
+}

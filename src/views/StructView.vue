@@ -117,7 +117,7 @@ export default defineComponent({
     <span class="struct-fullname" @click="toggleExpand()">
       <code>{{ currentStruct.full_name }} {{ maybeFold() }}</code>
     </span>
-    <button @click="showExample">Show Example</button>
+    <button @click="showExample" class="example-button">Example</button>
     <ul class="field-list" v-if="isExpanded">
       <li v-for="(field, index) in visibleFields(currentStruct)" class="field-item">
         <div v-if="isVisible(field)">
@@ -227,22 +227,27 @@ table th {
   background-color: #e4f5ea;
   border-radius: 4px;
   font-size: 0.67em;
+  margin-right: 8px;
 }
 
 .example-button {
-  padding: 4px 8px;
+  padding: 4px 12px;
   border-radius: 4px;
   font-size: 0.67em;
   cursor: pointer;
   background-color: #e4f5ea;
   border: 1px solid #2e5742;
+  transition: all 0.2s ease;
 }
 
-.struct-view {
-  padding-top: 10px;
+.example-button:hover {
+  background-color: #d0ebda;
 }
 
-/* Dark mode styles */
+.example-button:active {
+  transform: translateY(1px);
+}
+
 @media (prefers-color-scheme: dark) {
   table tr:nth-child(even) {
     background-color: #2a2a2a;
@@ -253,6 +258,13 @@ table th {
   .struct-fullname {
     background-color: #2e5742;
     color: #d9e9d9;
+  }
+  .example-button {
+    background-color: #2e5742;
+    color: #e4f5ea;
+  }
+  .example-button:hover {
+    background-color: #234434;
   }
 }
 </style>

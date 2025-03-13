@@ -1,7 +1,7 @@
 sys_topics {
-  sys_msg_interval = "1m"
-  sys_heartbeat_interval = "30s"
-  sys_event_messages = {
-    #substruct(emqx:event_names)
-  }
+    sys_msg_interval = "1m"
+    sys_heartbeat_interval = "30s"
+    sys_event_messages = {
+        #substruct(emqx:event_names)
+    }
 }

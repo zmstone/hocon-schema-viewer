@@ -1,4 +1,4 @@
-actions.pulsar.my_pulsar_action.parameters.message {
-  key = "${.clientid}"
-  value = "${.}"
+actions.pulsar.my_webhook_1.parameters.message {
+    key = "${.clientid}"
+    value = "${.}"
 }

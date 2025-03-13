@@ -1,4 +1,7 @@
-authentication[0].checks[0] {
-  is_match = "username == 'admin'"
-  result = "allow"
+authentication[0].checks[0] = {
+    is_match = [
+        "username == 'admin'",
+        "clientid == 'client_123'"
+    ]
+    result = allow
 }

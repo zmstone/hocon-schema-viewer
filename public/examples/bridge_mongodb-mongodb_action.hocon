@@ -1,15 +1,10 @@
-actions.mongodb.my_mongodb_action {
-  local_topic = ""
-  parameters = {
-    #substruct(bridge_mongodb:action_parameters)
-  }
-  connector = ""
-  tags = [
-    "example_tag1",
-    "example_tag2"
-  ]
-  description = ""
-  resource_opts = {
-    #substruct(bridge_mongodb:action_resource_opts)
-  }
+actions.mongodb.my_webhook_1 {
+    local_topic = "example/topic"
+    parameters = {
+        #substruct(bridge_mongodb:action_parameters)
+    }
+    connector = "mongodb_connector"
+    resource_opts = {
+        #substruct(bridge_mongodb:action_resource_opts)
+    }
 }

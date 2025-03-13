@@ -1,4 +1,4 @@
 dashboard.sso.oidc.client_jwks {
-  type = file
-  file = "base64encodedkey"
+    type = "file"
+    file = "your_jwks_content_here"
 }

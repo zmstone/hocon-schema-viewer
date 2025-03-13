@@ -1,5 +1,5 @@
 gateway.stomp.frame {
-  max_headers = 10
-  max_headers_length = 1024
-  max_body_length = 65536
+    max_headers = 10
+    max_headers_length = 1024
+    max_body_length = 65536
 }

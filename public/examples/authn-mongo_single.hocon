@@ -1,29 +1,30 @@
-authentication = [
-  {
+authentication[0] {
     mechanism = password_based
     backend = mongodb
-    collection = "example_collection"
+    collection = "auth_collection"
     filter = {}
     password_hash_field = "password_hash"
     salt_field = "salt"
     is_superuser_field = "is_superuser"
-    password_hash_algorithm = {name = sha256, salt_position = prefix}
+    password_hash_algorithm = {
+        #substruct(authn_hash:bcrypt)
+        #substruct(authn_hash:pbkdf2)
+        #substruct(authn_hash:simple)
+    }
     mongo_type = single
     server = "localhost:27017"
     w_mode = unsafe
     srv_record = false
     pool_size = 8
-    username = "example_username"
-    password = "example_password"
+    username = "user"
+    password = "secret_password"
     use_legacy_protocol = auto
-    auth_source = "example_auth_source"
-    database = "example_database"
+    auth_source = "admin"
+    database = "my_database"
     topology = {
-      #substruct(mongo:topology)
+        #substruct(mongo:topology)
     }
     ssl = {
-      enable = false
-      #substruct(emqx:ssl_client_opts)
+        enable = false
     }
-  }
-]
+}

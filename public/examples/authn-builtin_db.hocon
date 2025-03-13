@@ -1,14 +1,12 @@
-authentication = [
-  {
-    password_hash_algorithm = {
-      #substruct(authn_hash:bcrypt_rw)
-      #substruct(authn_hash:pbkdf2)
-      #substruct(authn_hash:simple)
+authentication[0] {
+    password_hash_algorithm {
+        #substruct(authn_hash:bcrypt_rw)
+        #substruct(authn_hash:pbkdf2)
+        #substruct(authn_hash:simple)
     }
     mechanism = password_based
     backend = built_in_database
     user_id_type = username
     bootstrap_file = "${EMQX_ETC_DIR}/auth-built-in-db-bootstrap.csv"
     bootstrap_type = plain
-  }
-]
+}

@@ -1,17 +1,15 @@
-authorization.sources = [
-  {
-    type = mysql
-    server = "127.0.0.1:3306"
-    database = "example_db"
+authorization.sources[0] {
+    type = "mysql"
+    server = "localhost:3306"
+    database = "auth_db"
     pool_size = 8
     username = "root"
-    password = "your_password"
+    password = "your_password_here"
     ssl = {
-      enable = false
+        #substruct(emqx:ssl_client_opts)
     }
     prepare_statement = {
-      # Add your SQL prepared statements here
+        statement1 = "SELECT * FROM users WHERE id = ?"
     }
-    query = "SELECT * FROM authz WHERE user = ?"
-  }
-]
+    query = "SELECT permission FROM permissions WHERE user_id = ?"
+}

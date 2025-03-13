@@ -1,10 +1,10 @@
-log.file {
-  path = "${EMQX_LOG_DIR}/emqx.log"
-  rotation_count = 10
-  rotation_size = "50MB"
-  level = warning
-  formatter = text
-  timestamp_format = auto
-  time_offset = system
-  payload_encode = text
+log.file.my_webhook_1 {
+    path = "${EMQX_LOG_DIR}/emqx.log"
+    rotation_count = 10
+    rotation_size = "50MB"
+    level = warning
+    formatter = text
+    timestamp_format = auto
+    time_offset = system
+    payload_encode = text
 }

@@ -1,10 +1,10 @@
 log.audit {
-  path = "${EMQX_LOG_DIR}/audit.log"
-  rotation_count = 10
-  rotation_size = "50MB"
-  max_filter_size = 5000
-  ignore_high_frequency_request = true
-  timestamp_format = auto
-  time_offset = system
-  payload_encode = text
+    path = "${EMQX_LOG_DIR}/audit.log"
+    rotation_count = 10
+    rotation_size = "50MB"
+    max_filter_size = 5000
+    ignore_high_frequency_request = true
+    timestamp_format = auto
+    time_offset = system
+    payload_encode = text
 }

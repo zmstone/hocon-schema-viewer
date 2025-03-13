@@ -1,12 +1,9 @@
-sources.kafka_consumer.my_consumer {
-  parameters = {
-    #substruct(kafka_consumer:source_parameters)
-  }
-  connector = "example_connector"
-  tags = [
-    "tag1",
-    "tag2"
-  ]
-  description = ""
-  resource_opts = {}
+sources.kafka_consumer.my_webhook_1 {
+    connector = "connector_name"
+    parameters = {
+        #substruct(kafka_consumer:source_parameters)
+    }
+    resource_opts = {
+        #substruct(actions_and_sources:source_resource_opts)
+    }
 }

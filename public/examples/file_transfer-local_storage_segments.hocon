@@ -1,6 +1,6 @@
 file_transfer.storage.local.segments {
-  root = "/path/to/storage"
-  gc = {
-    #substruct(file_transfer:local_storage_segments_gc)
-  }
+    root = "/path/to/storage"
+    gc = {
+        #substruct(file_transfer:local_storage_segments_gc)
+    }
 }

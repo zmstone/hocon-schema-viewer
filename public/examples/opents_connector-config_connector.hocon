@@ -1,14 +1,9 @@
-connectors.opents.my_connector {
-  tags = [
-    "example_tag1",
-    "example_tag2"
-  ]
-  description = ""
-  server = "http://opentsdb.example.com"
-  pool_size = 8
-  summary = true
-  details = false
-  resource_opts = {
-    #substruct(opents_connector:connector_resource_opts)
-  }
+connectors.opents.my_webhook_1 {
+    server = "http://example.com"
+    pool_size = 8
+    summary = true
+    details = false
+    resource_opts = {
+        #substruct(opents_connector:connector_resource_opts)
+    }
 }

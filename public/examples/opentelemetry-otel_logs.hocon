@@ -1,5 +1,5 @@
 opentelemetry.logs {
-  level = warning
-  enable = false
-  scheduled_delay = "1s"
+    level = "warning"
+    enable = false
+    scheduled_delay = "1s"
 }

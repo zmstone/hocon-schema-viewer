@@ -1,10 +1,10 @@
 dashboard.listeners.http {
-  bind = 0
-  num_acceptors = 20
-  max_connections = 512
-  backlog = 1024
-  send_timeout = "10s"
-  inet6 = false
-  ipv6_v6only = false
-  proxy_header = false
+    bind = 0
+    num_acceptors = 20
+    max_connections = 512
+    backlog = 1024
+    send_timeout = "10s"
+    inet6 = false
+    ipv6_v6only = false
+    proxy_header = false
 }

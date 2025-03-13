@@ -1,28 +1,30 @@
-authentication = [
-    {
-        mechanism = password_based
-        backend = mongodb
-        collection = "auth_collection"
-        filter = {}
-        password_hash_field = "password_hash"
-        salt_field = "salt"
-        is_superuser_field = "is_superuser"
-        password_hash_algorithm = {name = sha256, salt_position = prefix}
-        mongo_type = sharded
-        servers = "127.0.0.1:27017"
-        w_mode = unsafe
-        srv_record = false
-        pool_size = 8
-        username = "auth_user"
-        password = "auth_password"
-        use_legacy_protocol = auto
-        auth_source = "auth_db"
-        database = "main_db"
-        topology = {
-            #substruct(mongo:topology)
-        }
-        ssl = {
-            enable = false
-        }
+authentication[0] {
+    mechanism = password_based
+    backend = mongodb
+    collection = "auth_collection"
+    filter = {}
+    password_hash_field = "password_hash"
+    salt_field = "salt"
+    is_superuser_field = "is_superuser"
+    password_hash_algorithm = {
+        #substruct(authn_hash:bcrypt)
+        #substruct(authn_hash:pbkdf2)
+        #substruct(authn_hash:simple)
     }
-]
+    mongo_type = sharded
+    servers = "127.0.0.1:27017"
+    w_mode = unsafe
+    srv_record = false
+    pool_size = 8
+    username = "auth_user"
+    password = "auth_password"
+    use_legacy_protocol = auto
+    auth_source = "auth_db"
+    database = "user_db"
+    topology = {
+        #substruct(mongo:topology)
+    }
+    ssl = {
+        #substruct(emqx:ssl_client_opts)
+    }
+}

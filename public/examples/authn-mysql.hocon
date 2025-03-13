@@ -1,15 +1,18 @@
-authentication = [
-  {
+authentication[0] {
     mechanism = password_based
     backend = mysql
-    password_hash_algorithm = {name = sha256, salt_position = prefix}
-    query = "<YOUR_QUERY_HERE>"
+    password_hash_algorithm = {
+        name = sha256
+        salt_position = prefix
+    }
+    query = "SELECT password_hash FROM users WHERE username = ?"
     query_timeout = "5s"
-    server = "<YOUR_SERVER:PORT>"
-    database = "<YOUR_DATABASE_NAME>"
+    server = "localhost:3306"
+    database = "my_database"
     pool_size = 8
-    username = root
-    password = "<YOUR_PASSWORD>"
-    ssl = {enable = false}
-  }
-]
+    username = "root"
+    password = "your_password"
+    ssl = {
+        #substruct(emqx:ssl_client_opts)
+    }
+}

@@ -1,22 +1,22 @@
 gateway.ocpp {
-  mountpoint = "ocpp/"
-  default_heartbeat_interval = "60s"
-  heartbeat_checking_times_backoff = 1
-  upstream = {
-    #substruct(gateway_ocpp:upstream)
-  }
-  dnstream = {
-    #substruct(gateway_ocpp:dnstream)
-  }
-  message_format_checking = disable
-  json_schema_dir = "${application_priv}/schemas"
-  json_schema_id_prefix = "urn:OCPP:1.6:2019:12:"
-  listeners = {
-    #substruct(gateway_ocpp:ws_listeners)
-  }
-  enable_stats = true
-  idle_timeout = "30s"
-  clientinfo_override = {
-    #substruct(gateway:clientinfo_override)
-  }
+    mountpoint = "ocpp/"
+    default_heartbeat_interval = "60s"
+    heartbeat_checking_times_backoff = 1
+    upstream = {
+        #substruct(gateway_ocpp:upstream)
+    }
+    dnstream = {
+        #substruct(gateway_ocpp:dnstream)
+    }
+    message_format_checking = disable
+    json_schema_dir = "${application_priv}/schemas"
+    json_schema_id_prefix = "urn:OCPP:1.6:2019:12:"
+    listeners = {
+        #substruct(gateway_ocpp:ws_listeners)
+    }
+    enable_stats = true
+    idle_timeout = "30s"
+    clientinfo_override = {
+        #substruct(gateway:clientinfo_override)
+    }
 }

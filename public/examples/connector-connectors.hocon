@@ -1,193 +1,195 @@
 connectors {
-  mqtt {
-    name {
-      #substruct(connector_mqtt:config_connector)
+    mqtt {
+        my_mqtt_connector = {
+            #substruct(connector_mqtt:config_connector)
+        }
     }
-  }
-  azure_event_hub_producer {
-    name {
-      #substruct(bridge_azure_event_hub:config_connector)
+    azure_event_hub_producer {
+        my_azure_event_hub_connector = {
+            #substruct(bridge_azure_event_hub:config_connector)
+        }
     }
-  }
-  elasticsearch {
-    name {
-      #substruct(elasticsearch:config)
+    elasticsearch {
+        my_elasticsearch_connector = {
+            #substruct(elasticsearch:config)
+        }
     }
-  }
-  kafka_producer {
-    name {
-      #substruct(bridge_kafka:config_connector)
+    kafka_producer {
+        my_kafka_producer_connector = {
+            #substruct(bridge_kafka:config_connector)
+        }
     }
-  }
-  datalayers {
-    name {
-      #substruct(bridge_datalayers:config_connector)
+    datalayers {
+        my_datalayers_connector = {
+            #substruct(bridge_datalayers:config_connector)
+        }
     }
-  }
-  oracle {
-    name {
-      #substruct(bridge_oracle:config_connector)
+    oracle {
+        my_oracle_connector = {
+            #substruct(bridge_oracle:config_connector)
+        }
     }
-  }
-  azure_blob_storage {
-    name {
-      #substruct(connector_azure_blob_storage:config_connector)
+    azure_blob_storage {
+        my_azure_blob_storage_connector = {
+            #substruct(connector_azure_blob_storage:config_connector)
+        }
     }
-  }
-  s3 {
-    name {
-      #substruct(bridge_s3:config_connector)
+    s3 {
+        my_s3_connector = {
+            #substruct(bridge_s3:config_connector)
+        }
     }
-  }
-  tdengine {
-    name {
-      #substruct(tdengine_connector:config_connector)
+    tdengine {
+        my_tdengine_connector = {
+            #substruct(tdengine_connector:config_connector)
+        }
     }
-  }
-  pulsar {
-    name {
-      #substruct(pulsar:config_connector)
+    pulsar {
+        my_pulsar_connector = {
+            #substruct(pulsar:config_connector)
+        }
     }
-  }
-  sqlserver {
-    name {
-      #substruct(bridge_sqlserver:config_connector)
+    sqlserver {
+        my_sqlserver_connector = {
+            #substruct(bridge_sqlserver:config_connector)
+        }
     }
-  }
-  opents {
-    name {
-      #substruct(opents_connector:config_connector)
+    opents {
+        my_opents_connector = {
+            #substruct(opents_connector:config_connector)
+        }
     }
-  }
-  clickhouse {
-    name {
-      #substruct(bridge_clickhouse:config_connector)
+    clickhouse {
+        my_clickhouse_connector = {
+            #substruct(bridge_clickhouse:config_connector)
+        }
     }
-  }
-  couchbase {
-    name {
-      #substruct(connector_couchbase:config_connector)
+    couchbase {
+        my_couchbase_connector = {
+            #substruct(connector_couchbase:config_connector)
+        }
     }
-  }
-  syskeeper_forwarder {
-    name {
-      #substruct(syskeeper_forwarder:config)
+    syskeeper_forwarder {
+        my_syskeeper_forwarder_connector = {
+            #substruct(syskeeper_forwarder:config)
+        }
     }
-  }
-  cassandra {
-    name {
-      #substruct(bridge_cassa:config_connector)
+    cassandra {
+        my_cassandra_connector = {
+            #substruct(bridge_cassa:config_connector)
+        }
     }
-  }
-  mongodb {
-    name {
-      #substruct(bridge_mongodb:config_connector)
+    mongodb {
+        my_mongodb_connector = {
+            #substruct(bridge_mongodb:config_connector)
+        }
     }
-  }
-  iotdb {
-    name {
-      #substruct(iotdb:config_restapi)
-      #substruct(iotdb:config_thrift)
+    iotdb {
+        my_iotdb_connector_restapi = {
+            #substruct(iotdb:config_restapi)
+        }
+        my_iotdb_connector_thrift = {
+            #substruct(iotdb:config_thrift)
+        }
     }
-  }
-  tablestore {
-    name {
-      #substruct(bridge_tablestore:config_connector)
+    tablestore {
+        my_tablestore_connector = {
+            #substruct(bridge_tablestore:config_connector)
+        }
     }
-  }
-  dynamo {
-    name {
-      #substruct(bridge_dynamo:config_connector)
+    dynamo {
+        my_dynamo_connector = {
+            #substruct(bridge_dynamo:config_connector)
+        }
     }
-  }
-  greptimedb {
-    name {
-      #substruct(bridge_greptimedb:config_connector)
+    greptimedb {
+        my_greptimedb_connector = {
+            #substruct(bridge_greptimedb:config_connector)
+        }
     }
-  }
-  hstreamdb {
-    name {
-      #substruct(bridge_hstreamdb:config_connector)
+    hstreamdb {
+        my_hstreamdb_connector = {
+            #substruct(bridge_hstreamdb:config_connector)
+        }
     }
-  }
-  rocketmq {
-    name {
-      #substruct(rocketmq:config_connector)
+    rocketmq {
+        my_rocketmq_connector = {
+            #substruct(rocketmq:config_connector)
+        }
     }
-  }
-  gcp_pubsub_producer {
-    name {
-      #substruct(gcp_pubsub_producer:config_connector)
+    gcp_pubsub_producer {
+        my_gcp_pubsub_producer_connector = {
+            #substruct(gcp_pubsub_producer:config_connector)
+        }
     }
-  }
-  pgsql {
-    name {
-      #substruct(bridge_pgsql:config_connector)
+    pgsql {
+        my_pgsql_connector = {
+            #substruct(bridge_pgsql:config_connector)
+        }
     }
-  }
-  kinesis {
-    name {
-      #substruct(bridge_kinesis:config_connector)
+    kinesis {
+        my_kinesis_connector = {
+            #substruct(bridge_kinesis:config_connector)
+        }
     }
-  }
-  snowflake {
-    name {
-      #substruct(connector_snowflake:config_connector)
+    snowflake {
+        my_snowflake_connector = {
+            #substruct(connector_snowflake:config_connector)
+        }
     }
-  }
-  redis {
-    name {
-      #substruct(redis:config_connector)
+    redis {
+        my_redis_connector = {
+            #substruct(redis:config_connector)
+        }
     }
-  }
-  rabbitmq {
-    name {
-      #substruct(rabbitmq:config_connector)
+    rabbitmq {
+        my_rabbitmq_connector = {
+            #substruct(rabbitmq:config_connector)
+        }
     }
-  }
-  timescale {
-    name {
-      #substruct(bridge_timescale:config_connector)
+    timescale {
+        my_timescale_connector = {
+            #substruct(bridge_timescale:config_connector)
+        }
     }
-  }
-  http {
-    name {
-      #substruct(bridge_http:config_connector)
+    http {
+        my_http_connector = {
+            #substruct(bridge_http:config_connector)
+        }
     }
-  }
-  syskeeper_proxy {
-    name {
-      #substruct(connector_syskeeper_proxy:config)
+    syskeeper_proxy {
+        my_syskeeper_proxy_connector = {
+            #substruct(connector_syskeeper_proxy:config)
+        }
     }
-  }
-  mysql {
-    name {
-      #substruct(bridge_mysql:config_connector)
+    mysql {
+        my_mysql_connector = {
+            #substruct(bridge_mysql:config_connector)
+        }
     }
-  }
-  confluent_producer {
-    name {
-      #substruct(confluent:config_connector)
+    confluent_producer {
+        my_confluent_producer_connector = {
+            #substruct(confluent:config_connector)
+        }
     }
-  }
-  kafka_consumer {
-    name {
-      #substruct(kafka_consumer:config_connector)
+    kafka_consumer {
+        my_kafka_consumer_connector = {
+            #substruct(kafka_consumer:config_connector)
+        }
     }
-  }
-  influxdb {
-    name {
-      #substruct(bridge_influxdb:config_connector)
+    influxdb {
+        my_influxdb_connector = {
+            #substruct(bridge_influxdb:config_connector)
+        }
     }
-  }
-  matrix {
-    name {
-      #substruct(bridge_matrix:config_connector)
+    matrix {
+        my_matrix_connector = {
+            #substruct(bridge_matrix:config_connector)
+        }
     }
-  }
-  gcp_pubsub_consumer {
-    name {
-      #substruct(gcp_pubsub_consumer:config_connector)
+    gcp_pubsub_consumer {
+        my_gcp_pubsub_consumer_connector = {
+            #substruct(gcp_pubsub_consumer:config_connector)
+        }
     }
-  }
 }

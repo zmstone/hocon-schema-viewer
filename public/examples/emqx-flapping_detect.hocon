@@ -1,6 +1,6 @@
 flapping_detect {
-  enable = false
-  window_time = "1m"
-  max_count = 15
-  ban_time = "5m"
+    enable = false
+    window_time = "1m"
+    max_count = 15
+    ban_time = "5m"
 }

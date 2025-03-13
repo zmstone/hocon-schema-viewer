@@ -1,30 +1,30 @@
-authentication = [
-  {
+authentication[0] {
     mechanism = password_based
     backend = mongodb
-    collection = "my_auth_collection"
+    collection = "auth_data_collection"
     filter = {}
     password_hash_field = "password_hash"
     salt_field = "salt"
     is_superuser_field = "is_superuser"
-    password_hash_algorithm = {name = sha256, salt_position = prefix}
+    #password_hash_algorithm (authn_hash:bcrypt)
+    #password_hash_algorithm (authn_hash:pbkdf2)
+    #password_hash_algorithm (authn_hash:simple)
     mongo_type = rs
-    servers = "192.168.1.100,192.168.1.101"
+    servers = "localhost:27017"
     w_mode = unsafe
     r_mode = master
     replica_set_name = "myReplicaSet"
     srv_record = false
     pool_size = 8
-    username = "mongoUser"
-    password = "mongoPass"
+    username = "auth_user"
+    password = "auth_password"
     use_legacy_protocol = auto
     auth_source = "admin"
-    database = "authDB"
+    database = "auth_db"
     topology = {
-      #substruct(mongo:topology)
+        #substruct(mongo:topology)
     }
     ssl = {
-      enable = false
+        #substruct(emqx:ssl_client_opts)
     }
-  }
-]
+}

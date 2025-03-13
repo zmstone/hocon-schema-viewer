@@ -1,27 +1,42 @@
 listeners {
-  tcp {
-    my_tcp_listener = {
-      #substruct(emqx:mqtt_tcp_listener)
+    tcp {
+        my_tcp_listener = {
+            #substruct(emqx:mqtt_tcp_listener)
+        }
+        my_tcp_listener_deletion = {
+            #singleton(marked_for_deletion)
+        }
     }
-  }
-  ssl {
-    my_ssl_listener = {
-      #substruct(emqx:mqtt_ssl_listener)
+    ssl {
+        my_ssl_listener = {
+            #substruct(emqx:mqtt_ssl_listener)
+        }
+        my_ssl_listener_deletion = {
+            #singleton(marked_for_deletion)
+        }
     }
-  }
-  ws {
-    my_ws_listener = {
-      #substruct(emqx:mqtt_ws_listener)
+    ws {
+        my_ws_listener = {
+            #substruct(emqx:mqtt_ws_listener)
+        }
+        my_ws_listener_deletion = {
+            #singleton(marked_for_deletion)
+        }
     }
-  }
-  wss {
-    my_wss_listener = {
-      #substruct(emqx:mqtt_wss_listener)
+    wss {
+        my_wss_listener = {
+            #substruct(emqx:mqtt_wss_listener)
+        }
+        my_wss_listener_deletion = {
+            #singleton(marked_for_deletion)
+        }
     }
-  }
-  quic {
-    my_quic_listener = {
-      #substruct(emqx:mqtt_quic_listener)
+    quic {
+        my_quic_listener = {
+            #substruct(emqx:mqtt_quic_listener)
+        }
+        my_quic_listener_deletion = {
+            #singleton(marked_for_deletion)
+        }
     }
-  }
 }

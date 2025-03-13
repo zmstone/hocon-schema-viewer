@@ -1,4 +1,4 @@
-sources.gcp_pubsub_consumer.my_gcp_pubsub_consumer.resource_opts {
-  health_check_interval = "30s"
-  request_ttl = "45s"
+sources.gcp_pubsub_consumer.my_webhook_1.resource_opts {
+    health_check_interval = "30s"
+    request_ttl = "45s"
 }

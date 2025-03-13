@@ -1,27 +1,25 @@
-authorization.sources = [
-  {
-    type = mongodb
-    collection = "auth_collection"
+authorization.sources[0] {
+    type = "mongodb"
+    collection = "authz_data"
     filter = {}
     limit = 1000
     skip = 0
-    mongo_type = rs
-    servers = "127.0.0.1:27017"
-    w_mode = unsafe
-    r_mode = master
-    replica_set_name = "myReplicaSet"
+    mongo_type = "rs"
+    servers = "host1:27017,host2:27017"
+    w_mode = "unsafe"
+    r_mode = "master"
+    replica_set_name = "my_replica_set"
     srv_record = false
     pool_size = 8
-    username = "mongoUser"
-    password = "mongoPassword"
-    use_legacy_protocol = auto
-    auth_source = "authDB"
-    database = "myDatabase"
+    username = "bridge_user"
+    password = "secret_password"
+    use_legacy_protocol = "auto"
+    auth_source = "admin"
+    database = "auth_db"
     topology = {
-      #substruct(mongo:topology)
+        #substruct(mongo:topology)
     }
     ssl = {
-      enable = false
+        #substruct(emqx:ssl_client_opts)
     }
-  }
-]
+}

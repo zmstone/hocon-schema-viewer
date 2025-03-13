@@ -1,8 +1,8 @@
 prometheus.collectors {
-  vm_dist = disabled
-  mnesia = disabled
-  vm_statistics = disabled
-  vm_system_info = disabled
-  vm_memory = disabled
-  vm_msacc = disabled
+    vm_dist = disabled
+    mnesia = disabled
+    vm_statistics = disabled
+    vm_system_info = disabled
+    vm_memory = disabled
+    vm_msacc = disabled
 }

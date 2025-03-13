@@ -1,18 +1,16 @@
-authorization.sources = [
-  {
-    type = postgresql
-    server = "your_host:5432"
+authorization.sources[0] {
+    type = "postgresql"
+    server = "localhost:5432"
     disable_prepared_statements = false
-    database = "your_database"
+    database = <<"my_database">>
     pool_size = 8
-    username = "your_username"
-    password = "your_password"
+    username = <<"my_user">>
+    password = "my_password"
     ssl = {
-      enable = false
+        #substruct(emqx:ssl_client_opts)
     }
     prepare_statement = {
-      # Add your SQL prepared statements here
+        # Key-value pairs of SQL prepared statements
     }
-    query = "your_query"
-  }
-]
+    query = <<"SELECT * FROM auth_table WHERE user = $1">>
+}

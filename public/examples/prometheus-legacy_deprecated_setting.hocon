@@ -1,1 +1,1 @@
-Since all fields in the schema are marked as deprecated, according to the requirements, no example should be generated for deprecated fields. Therefore, the resulting HOCON example is empty.
+The provided schema indicates that all fields are deprecated, and the description for the entire struct also marks it as deprecated. Therefore, according to the instructions, no example should be generated for deprecated fields or structs. Thus, there is no valid HOCON example to provide from this schema.

@@ -1,5 +1,4 @@
-schema_registry.schemas.my_schema {
-  type = protobuf
-  source = ""
-  description = ""
+schema_registry.schemas.my_protobuf_schema {
+    type = "protobuf"
+    source = "binary_content_here"
 }

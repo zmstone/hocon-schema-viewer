@@ -1,8 +1,13 @@
-actions.opents.my_action.parameters.data = [
-  {
-    timestamp = "${timestamp_var}"
-    metric = "${metric_var}"
-    tags = "${tags_var}"
-    value = 42
-  }
-]
+actions.opents.my_webhook_1.parameters.data[0] {
+    timestamp = "2023-10-11T12:00:00Z"
+    metric = "cpu.usage"
+    tags = {
+      # {"key1": "value1", "key2": "value2"}
+      # "${some_placeholder}"
+    }
+    value = {
+      # 42
+      # 3.14
+      # "${value_placeholder}"
+    }
+}

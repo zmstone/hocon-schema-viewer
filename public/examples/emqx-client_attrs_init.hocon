@@ -1,6 +1,4 @@
-mqtt.client_attrs_init = [
-  {
+mqtt.client_attrs_init[0] {
     expression = "nth(1, tokens(clientid, '.'))"
     set_as_attr = "client_prefix"
-  }
-]
+}

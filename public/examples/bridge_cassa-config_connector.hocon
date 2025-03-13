@@ -1,11 +1,13 @@
-connectors.cassandra.my_connector {
-  tags = []
-  description = ""
-  servers = "127.0.0.1:9042"
-  keyspace = "my_keyspace"
-  pool_size = 8
-  username = "my_username"
-  password = "my_password"
-  ssl = {enable = false}
-  resource_opts = {}
+connectors.cassandra.my_webhook_1 {
+    servers = "Host[:Port][,Host2:Port]"
+    keyspace = "my_keyspace"
+    pool_size = 8
+    username = "my_username"
+    password = "my_password"
+    ssl = {
+        #substruct(emqx:ssl_client_opts)
+    }
+    resource_opts = {
+        #substruct(bridge_cassa:connector_resource_opts)
+    }
 }

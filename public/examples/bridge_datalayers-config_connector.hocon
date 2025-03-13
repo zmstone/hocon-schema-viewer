@@ -1,13 +1,13 @@
-connectors.datalayers.my_datalayer {
-  tags = []
-  description = ""
-  server = "127.0.0.1:8361"
-  pool_size = 8
-  parameters = {
-    #substruct(connector_datalayers:datalayers_influxdb_v1_parameters)
-  }
-  ssl = {
-    enable = false
-  }
-  resource_opts = {}
+connectors.datalayers.my_datalayer_1 {
+    server = "127.0.0.1:8361"
+    pool_size = 8
+    parameters = {
+        #substruct(connector_datalayers:datalayers_influxdb_v1_parameters)
+    }
+    ssl = {
+        #substruct(emqx:ssl_client_opts)
+    }
+    resource_opts = {
+        #substruct(bridge_datalayers:connector_resource_opts)
+    }
 }

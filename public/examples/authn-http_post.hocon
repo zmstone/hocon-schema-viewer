@@ -1,9 +1,8 @@
-authentication = [
-  {
-    method = post
+authentication[0] = {
+    method = "post"
     headers = {accept = "application/json", cache-control = "no-cache", connection = "keep-alive", content-type = "application/json", keep-alive = "timeout=30, max=1000"}
-    mechanism = password_based
-    backend = http
+    mechanism = "password_based"
+    backend = "http"
     url = "http://example.com"
     body = {}
     request_timeout = "5s"
@@ -14,5 +13,4 @@ authentication = [
     pool_size = 8
     connect_timeout = "15s"
     enable_pipelining = 100
-  }
-]
+}

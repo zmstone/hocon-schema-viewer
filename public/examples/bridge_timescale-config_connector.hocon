@@ -1,19 +1,14 @@
-connectors.timescale.my_connector {
-  server = "localhost:5432"
-  disable_prepared_statements = false
-  database = "my_database"
-  pool_size = 8
-  username = "user"
-  password = "secret"
-  ssl = {
-    enable = false
-  }
-  tags = [
-    "tag1",
-    "tag2"
-  ]
-  description = "Description of the connector"
-  resource_opts = {
-    #substruct(connector_postgres:resource_opts)
-  }
+connectors.timescale.my_webhook_1 {
+    server = "host.example.com:5432"
+    disable_prepared_statements = false
+    database = "my_database"
+    pool_size = 8
+    username = "db_user"
+    password = "secret_password"
+    ssl = {
+        #substruct(emqx:ssl_client_opts)
+    }
+    resource_opts = {
+        #substruct(connector_postgres:resource_opts)
+    }
 }

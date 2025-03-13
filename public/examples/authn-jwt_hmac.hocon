@@ -1,12 +1,10 @@
-authentication = [
-  {
+authentication[0] {
     algorithm = hmac-based
-    secret = "your_hmac_secret_key"
+    secret = "your-secret-key"
     secret_base64_encoded = false
     mechanism = jwt
     acl_claim_name = acl
     verify_claims = {}
     disconnect_after_expire = true
     from = password
-  }
-]
+}

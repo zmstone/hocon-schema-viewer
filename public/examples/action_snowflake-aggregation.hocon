@@ -1,5 +1,7 @@
-actions.snowflake.my_aggregation.parameters.aggregation {
-  container = {type = csv}
-  time_interval = "1h"
-  max_records = 1000000
+actions.snowflake.my_webhook_1.parameters.aggregation {
+    container = {
+        #substruct(connector_aggregator:container_csv)
+    }
+    time_interval = "1h"
+    max_records = 1000000
 }
