@@ -1,25 +1,18 @@
-authentication[0] {
+authentication = [
+  {
     method = "get"
-    headers = {
-        accept = "application/json"
-        cache-control = "no-cache"
-        connection = "keep-alive"
-        keep-alive = "timeout=30, max=1000"
-    }
+    headers = {accept = "application/json", cache-control = "no-cache", connection = "keep-alive", keep-alive = "timeout=30, max=1000"}
     mechanism = "password_based"
     backend = "http"
-    url = "http://example.com/api"
-    body = {
-        # Provide HTTP request body as a map
-    }
+    url = "http://example.com"
+    body = {}
     request_timeout = "5s"
     request = {
-        #substruct(connector_http:request)
+      #substruct(connector_http:request)
     }
-    ssl = {
-        enable = false
-    }
+    ssl = {enable = false}
     pool_size = 8
     connect_timeout = "15s"
     enable_pipelining = 100
-}
+  }
+]

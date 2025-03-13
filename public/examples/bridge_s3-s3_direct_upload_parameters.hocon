@@ -1,10 +1,10 @@
-actions.s3.my_webhook_1.parameters {
-    bucket = "my-s3-bucket"
-    key = "path/to/object"
-    acl = "private"
-    headers = {
-        # Headers as a map of key-values
-    }
-    mode = direct
-    content = "${.}"
+actions.s3.my_webhook_1.parameters = {
+  bucket = "your-bucket-name"
+  key = "your-object-key"
+  acl = "private"
+  headers = {
+    # specify your headers here, e.g., "Content-Type": "application/json"
+  }
+  mode = "direct"
+  content = "${.}"
 }

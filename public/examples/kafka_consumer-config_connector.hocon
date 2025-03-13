@@ -1,23 +1,23 @@
-connectors.kafka_consumer.my_webhook_1 {
-    bootstrap_hosts = "kafka1:9092,kafka2:9092"
-    connect_timeout = "5s"
-    min_metadata_refresh_interval = "3s"
-    metadata_request_timeout = "5s"
-    authentication = none
-    #authentication = {
+connectors.kafka_consumer.my_kafka_consumer {
+  bootstrap_hosts = "localhost:9092"
+  connect_timeout = "5s"
+  min_metadata_refresh_interval = "3s"
+  metadata_request_timeout = "5s"
+  authentication = none
+  #authentication {
     #substruct(bridge_kafka:auth_username_password)
-    #}
-    #authentication = {
+  #}
+  #authentication {
     #substruct(bridge_kafka:auth_gssapi_kerberos)
-    #}
-    socket_opts = {
+  #}
+  socket_opts = {
     #substruct(bridge_kafka:socket_opts)
-    }
-    health_check_topic = "health_check_topic_name"
-    ssl = {
+  }
+  health_check_topic = "health_check_topic_name"
+  ssl = {
     #substruct(bridge_kafka:ssl_client_opts)
-    }
-    resource_opts = {
+  }
+  resource_opts = {
     #substruct(bridge_kafka:connector_resource_opts)
-    }
+  }
 }

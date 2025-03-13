@@ -1,17 +1,17 @@
 gateway.lwm2m.translators = {
-    command = {
-        #substruct(gateway:translator)
-    }
-    response = {
-        #substruct(gateway:translator)
-    }
-    notify = {
-        #substruct(gateway:translator)
-    }
-    register = {
-        #substruct(gateway:translator)
-    }
-    update = {
-        #substruct(gateway:translator)
-    }
+  command = {
+    #substruct(gateway:translator)
+  }
+  response = {
+    #substruct(gateway:translator)
+  }
+  notify = {
+    #substruct(gateway:translator)
+  }
+  register = {
+    #substruct(gateway:translator)
+  }
+  update = {
+    #substruct(gateway:translator)
+  }
 }

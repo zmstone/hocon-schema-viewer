@@ -1,10 +1,10 @@
-actions.greptimedb.my_action {
-    local_topic = "example/topic"
-    parameters = {
-        #substruct(bridge_greptimedb:action_parameters)
-    }
-    connector = "my_connector"
-    resource_opts = {
-        #substruct(actions_and_sources:action_resource_opts)
-    }
+actions.greptimedb.my_greptimedb_action {
+  local_topic = "my/local/topic"
+  parameters = {
+    #substruct(bridge_greptimedb:action_parameters)
+  }
+  connector = "my_connector_name"
+  resource_opts = {
+    #substruct(actions_and_sources:action_resource_opts)
+  }
 }

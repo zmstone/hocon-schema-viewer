@@ -1,16 +1,16 @@
 actions.pulsar.my_webhook_1.parameters {
-    message = {
-        #substruct(pulsar:producer_pulsar_message)
-    }
-    sync_timeout = "3s"
-    pulsar_topic = "my_topic"
-    batch_size = 100
-    compression = no_compression
-    send_buffer = "1MB"
-    retention_period = infinity
-    max_batch_bytes = "900KB"
-    strategy = random
-    buffer = {
-        #substruct(bridge_pulsar:producer_buffer)
-    }
+  message = {
+    #substruct(pulsar:producer_pulsar_message)
+  }
+  sync_timeout = "3s"
+  pulsar_topic = "your_pulsar_topic_here"
+  batch_size = 100
+  compression = no_compression
+  send_buffer = "1MB"
+  retention_period = infinity
+  max_batch_bytes = "900KB"
+  strategy = random
+  buffer = {
+    #substruct(bridge_pulsar:producer_buffer)
+  }
 }

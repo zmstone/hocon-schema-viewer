@@ -1,7 +1,15 @@
-authentication[0].checks[0] = {
-    is_match = [
-        "username == 'admin'",
-        "clientid == 'client_123'"
+authentication = [
+  {
+    checks = [
+      {
+        is_match = "expression_here"
+        # Alternatively, for an array of expressions:
+        # is_match = [
+        #   "expression1",
+        #   "expression2"
+        # ]
+        result = "allow"
+      }
     ]
-    result = allow
-}
+  }
+]

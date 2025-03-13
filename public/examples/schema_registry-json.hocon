@@ -1,4 +1,5 @@
-schema_registry.schemas.my_webhook_1 {
-    type = "json"
-    source = <<"{ \"type\": \"object\", \"properties\": { \"example\": { \"type\": \"string\" } } }">>
+schema_registry.schemas.my_json_schema {
+  type = json
+  source = "{\"type\": \"object\", \"properties\": {\"key\": {\"type\": \"string\"}}}"
+  description = ""
 }

@@ -1,4 +1,5 @@
-authentication[0] {
+authentication = [
+  {
     mechanism = password_based
     backend = mongodb
     collection = "auth_collection"
@@ -7,9 +8,9 @@ authentication[0] {
     salt_field = "salt"
     is_superuser_field = "is_superuser"
     password_hash_algorithm = {
-        #substruct(authn_hash:bcrypt)
-        #substruct(authn_hash:pbkdf2)
-        #substruct(authn_hash:simple)
+      #substruct(authn_hash:bcrypt)
+      #substruct(authn_hash:pbkdf2)
+      #substruct(authn_hash:simple)
     }
     mongo_type = single
     server = "localhost:27017"
@@ -19,12 +20,13 @@ authentication[0] {
     username = "user"
     password = "secret_password"
     use_legacy_protocol = auto
-    auth_source = "admin"
-    database = "my_database"
+    auth_source = "auth_db"
+    database = "database_name"
     topology = {
-        #substruct(mongo:topology)
+      #substruct(mongo:topology)
     }
     ssl = {
-        enable = false
+      enable = false
     }
-}
+  }
+]

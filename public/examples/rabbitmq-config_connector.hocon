@@ -1,16 +1,16 @@
 connectors.rabbitmq.my_webhook_1 {
-    server = "localhost"
-    port = 5672
-    username = "guest"
-    password = "guest"
-    pool_size = 8
-    timeout = "5s"
-    virtual_host = "/"
-    heartbeat = "30s"
-    ssl = {
-        #substruct(emqx:ssl_client_opts)
-    }
-    resource_opts = {
-        #substruct(rabbitmq:connector_resource_opts)
-    }
+  server = "localhost"
+  port = 5672
+  username = "your_username"
+  password = "your_password"
+  pool_size = 8
+  timeout = "5s"
+  virtual_host = "/"
+  heartbeat = "30s"
+  ssl = {
+    #substruct(emqx:ssl_client_opts)
+  }
+  resource_opts = {
+    #substruct(rabbitmq:connector_resource_opts)
+  }
 }

@@ -1,8 +1,8 @@
 actions.confluent_producer.my_webhook_1 {
-    local_topic = ""
-    parameters = {
-        #substruct(confluent:producer_kafka_opts)
-    }
-    resource_opts = {}
-    connector = ""
+  local_topic = "mqtt/topic/filter"
+  parameters = {
+    #substruct(confluent:producer_kafka_opts)
+  }
+  resource_opts = {}
+  connector = "my_connector"
 }

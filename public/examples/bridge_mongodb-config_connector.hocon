@@ -1,22 +1,19 @@
 connectors.mongodb.my_webhook_1 {
-    parameters = {
-        #substruct(mongo:connector_single)
-        #substruct(mongo:connector_sharded)
-        #substruct(mongo:connector_rs)
-    }
-    srv_record = false
-    pool_size = 8
-    username = "your_username"
-    password = "your_password"
-    use_legacy_protocol = auto
-    auth_source = "your_auth_source"
-    database = "your_database"
-    topology = {
-        #substruct(mongo:topology)
-    }
-    ssl = {
-        enable = false
-    }
-    resource_opts = {
-    }
+  parameters = [
+    #substruct(mongo:connector_single)
+    #substruct(mongo:connector_sharded)
+    #substruct(mongo:connector_rs)
+  ]
+  srv_record = false
+  pool_size = 8
+  username = "your-username"
+  password = "your-secret-password"
+  use_legacy_protocol = auto
+  auth_source = "auth-database-name"
+  database = "your-database-name"
+  topology = {
+    #substruct(mongo:topology)
+  }
+  ssl = {enable = false}
+  resource_opts = {}
 }

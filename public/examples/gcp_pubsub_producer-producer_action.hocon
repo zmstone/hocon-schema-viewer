@@ -1,10 +1,10 @@
-actions.gcp_pubsub_producer.my_webhook_1 {
-    local_topic = ""
-    parameters = {
-        #substruct(gcp_pubsub_producer:action_parameters)
-    }
-    connector = ""
-    resource_opts = {
-        #substruct(actions_and_sources:action_resource_opts)
-    }
+actions.gcp_pubsub_producer.my_gcp_action {
+  local_topic = "my/local/topic"
+  parameters = {
+    #substruct(gcp_pubsub_producer:action_parameters)
+  }
+  connector = "my_connector_name"
+  resource_opts = {
+    #substruct(actions_and_sources:action_resource_opts)
+  }
 }

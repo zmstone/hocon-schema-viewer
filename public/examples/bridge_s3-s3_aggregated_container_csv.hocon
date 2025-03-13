@@ -1,4 +1,4 @@
 actions.s3.my_webhook_1.parameters.container {
-    type = csv
-    column_order = []
+  type = "csv"
+  column_order = []
 }

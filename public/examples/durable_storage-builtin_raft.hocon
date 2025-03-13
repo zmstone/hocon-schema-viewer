@@ -1,12 +1,12 @@
-durable_storage.messages {
-    backend = builtin_raft
-    replication_factor = 3
-    n_sites = 1
-    data_dir = "/path/to/data_dir"
-    n_shards = 16
-    layout {
-        #substruct(durable_storage:layout_builtin_wildcard_optimized_v2)
-        #substruct(durable_storage:layout_builtin_wildcard_optimized)
-        #substruct(durable_storage:layout_builtin_reference)
-    }
+durable_storage.messages = {
+  backend = builtin_raft
+  replication_factor = 3
+  n_sites = 1
+  data_dir = "/path/to/data_dir"
+  n_shards = 16
+  layout {
+    #substruct(durable_storage:layout_builtin_wildcard_optimized_v2)
+    #substruct(durable_storage:layout_builtin_wildcard_optimized)
+    #substruct(durable_storage:layout_builtin_reference)
+  }
 }

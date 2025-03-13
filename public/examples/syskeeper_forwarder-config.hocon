@@ -1,9 +1,9 @@
 connectors.syskeeper_forwarder.my_webhook_1 {
-    server = "127.0.0.1:8080"
-    ack_mode = "no_ack"
-    ack_timeout = "10s"
-    pool_size = 16
-    resource_opts = {
-        #substruct(syskeeper_forwarder:connector_resource_opts)
-    }
+  server = "example.syskeeper.server"
+  ack_mode = no_ack
+  ack_timeout = "10s"
+  pool_size = 16
+  resource_opts = {
+    #substruct(syskeeper_forwarder:connector_resource_opts)
+  }
 }

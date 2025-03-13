@@ -1,7 +1,7 @@
 connectors.redis.my_redis_connector.parameters {
-    servers = "127.0.0.1:6379,192.168.1.1:6379"
-    redis_type = cluster
-    pool_size = 8
-    username = "redis_user"
-    password = "my_secret_password"
+  servers = "192.168.1.1:6379,192.168.1.2:6379"
+  redis_type = "cluster"
+  pool_size = 8
+  username = "redis_user"
+  password = "super_secret_password"
 }

@@ -1,19 +1,18 @@
-authentication[0] = {
-    mechanism = password_based
-    backend = redis
+authentication = [
+  {
+    mechanism = "password_based"
+    backend = "redis"
     cmd = "HGET"
-    password_hash_algorithm = {
-        name = sha256
-        salt_position = prefix
-    }
-    servers = "127.0.0.1:26379,127.0.0.2:26379"
-    redis_type = sentinel
-    sentinel = "mymaster"
+    password_hash_algorithm = {name = sha256, salt_position = prefix}
+    servers = "127.0.0.1:6379"
+    redis_type = "sentinel"
+    sentinel = "my_sentinel_cluster"
     pool_size = 8
-    username = "auth_user"
-    password = "secret_password"
+    username = "user"
+    password = "secret"
     database = 0
     ssl = {
-        #substruct(emqx:ssl_client_opts)
+      #substruct(emqx:ssl_client_opts)
     }
-}
+  }
+]

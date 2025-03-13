@@ -1,4 +1,4 @@
 actions.pulsar.my_webhook_1.resource_opts {
-    health_check_interval = "15s"
-    query_mode = async
+  health_check_interval = "15s"
+  query_mode = async
 }

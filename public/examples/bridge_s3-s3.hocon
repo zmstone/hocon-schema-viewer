@@ -1,11 +1,11 @@
 actions.s3.my_webhook_1 {
-    local_topic = "your/local/topic"
-    parameters = {
-        #substruct(bridge_s3:s3_aggregated_upload_parameters)
-        #substruct(bridge_s3:s3_direct_upload_parameters)
-    }
-    connector = "your_connector_name"
-    resource_opts = {
-        #substruct(bridge_s3:s3_upload_resource_opts)
-    }
+  local_topic = "source/topic"
+  parameters {
+    #substruct(bridge_s3:s3_aggregated_upload_parameters)
+    #substruct(bridge_s3:s3_direct_upload_parameters)
+  }
+  connector = "s3_connector_name"
+  resource_opts = {
+    #substruct(bridge_s3:s3_upload_resource_opts)
+  }
 }

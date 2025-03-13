@@ -1,14 +1,14 @@
 connectors.tablestore.my_webhook_1 {
-    storage_model_type = timeseries
-    endpoint = "https://myinstance.cn-hangzhou.ots.aliyuncs.com"
-    instance_name = "my_instance"
-    access_key_id = "NTS**********************"
-    access_key_secret = "7NR2****************************************"
-    pool_size = 8
-    ssl = {
-        #substruct(emqx:ssl_client_opts)
-    }
-    resource_opts = {
-        #substruct(bridge_tablestore:connector_resource_opts)
-    }
+  storage_model_type = "timeseries"
+  endpoint = "https://myinstance.cn-hangzhou.ots.aliyuncs.com"
+  instance_name = "my_instance"
+  access_key_id = "NTS**********************"
+  access_key_secret = "7NR2****************************************"
+  pool_size = 8
+  ssl = {
+    #substruct(emqx:ssl_client_opts)
+  }
+  resource_opts = {
+    #substruct(bridge_tablestore:connector_resource_opts)
+  }
 }

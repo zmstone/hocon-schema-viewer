@@ -1,14 +1,14 @@
 actions.tablestore.my_webhook_1.parameters {
-    storage_model_type = timeseries
-    table_name = "my_table"
-    measurement = "my_measurement"
-    tags = {}
-    fields = [
-        {
-            #substruct(bridge_tablestore:tablestore_fields)
-        }
-    ]
-    data_source = "my_data_source"
-    timestamp = ${payload.microsecond_timestamp}
-    meta_update_model = MUM_NORMAL
+  storage_model_type = "timeseries"
+  table_name = "${payload.table_name}"
+  measurement = "${payload.measurement}"
+  tags = {}
+  fields = [
+    {
+      #substruct(bridge_tablestore:tablestore_fields)
+    }
+  ]
+  data_source = "${payload.data_source}"
+  timestamp = 0
+  meta_update_model = "MUM_NORMAL"
 }

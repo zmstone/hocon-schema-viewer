@@ -1,4 +1,4 @@
 connectors.snowflake.my_webhook_1.proxy {
-    host = "proxy.example.com"
-    port = 8080
+  host = "proxy.example.com"
+  port = 8080
 }

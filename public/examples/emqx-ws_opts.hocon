@@ -1,18 +1,18 @@
 listeners.ws.my_webhook_1.websocket {
-    mqtt_path = "/mqtt"
-    mqtt_piggyback = multiple
-    compress = false
-    idle_timeout = "7200s"
-    max_frame_size = infinity
-    fail_if_no_subprotocol = true
-    supported_subprotocols = "mqtt, mqtt-v3, mqtt-v3.1.1, mqtt-v5"
-    check_origin_enable = false
-    allow_origin_absence = true
-    check_origins = "http://localhost:18083, http://127.0.0.1:18083"
-    proxy_address_header = "x-forwarded-for"
-    proxy_port_header = "x-forwarded-port"
-    deflate_opts = {
-        #substruct(emqx:deflate_opts)
-    }
-    validate_utf8 = true
+  mqtt_path = "/mqtt"
+  mqtt_piggyback = multiple
+  compress = false
+  idle_timeout = "7200s"
+  max_frame_size = infinity
+  fail_if_no_subprotocol = true
+  supported_subprotocols = "mqtt, mqtt-v3, mqtt-v3.1.1, mqtt-v5"
+  check_origin_enable = false
+  allow_origin_absence = true
+  check_origins = "http://localhost:18083, http://127.0.0.1:18083"
+  proxy_address_header = "x-forwarded-for"
+  proxy_port_header = "x-forwarded-port"
+  deflate_opts = {
+    #substruct(emqx:deflate_opts)
+  }
+  validate_utf8 = true
 }

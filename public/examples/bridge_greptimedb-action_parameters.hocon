@@ -1,4 +1,4 @@
 actions.greptimedb.my_webhook_1.parameters {
-    write_syntax = "<measurement>,<tag_key>=<tag_value> <field_key>=<field_value> <timestamp>"
-    precision = "ms"
+  write_syntax = "temperature,location=us-west value=82i 1465839830100400200"
+  precision = "ms"
 }

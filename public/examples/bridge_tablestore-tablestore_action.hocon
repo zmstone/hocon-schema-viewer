@@ -1,8 +1,8 @@
 actions.tablestore.my_webhook_1 {
-    local_topic = "topic/example"
-    parameters = {
-        #substruct(bridge_tablestore:action_parameters)
-    }
-    connector = "connector_name"
-    resource_opts = {}
+  local_topic = "mqtt_topic"
+  parameters = {
+    #substruct(bridge_tablestore:action_parameters)
+  }
+  connector = "connector_name"
+  resource_opts = {}
 }

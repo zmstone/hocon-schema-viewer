@@ -1,8 +1,8 @@
-file_transfer.storage.local {
-    segments = {
-        #substruct(file_transfer:local_storage_segments)
-    }
-    exporter = {
-        #substruct(file_transfer:local_storage_exporter_backend)
-    }
+file_transfer.storage.local = {
+  segments = {
+    #substruct(file_transfer:local_storage_segments)
+  }
+  exporter = {
+    #substruct(file_transfer:local_storage_exporter_backend)
+  }
 }

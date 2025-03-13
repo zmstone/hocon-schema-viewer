@@ -1,6 +1,6 @@
 opentelemetry.exporter {
-    endpoint = "http://localhost:4317"
-    ssl_options = {
-        #substruct(emqx:ssl_client_opts)
-    }
+  endpoint = "http://localhost:4317"
+  ssl_options = {
+    #substruct(emqx:ssl_client_opts)
+  }
 }

@@ -1,10 +1,10 @@
-actions.couchbase.my_webhook_1 {
-    local_topic = "your/topic/here"
-    parameters = {
-        #substruct(action_couchbase:parameters)
-    }
-    connector = "connector_name"
-    resource_opts = {
-        #substruct(action_couchbase:action_resource_opts)
-    }
+actions.couchbase.my_webhook_1 = {
+  local_topic = "<<binary_topic>>"
+  parameters = {
+    #substruct(action_couchbase:parameters)
+  }
+  connector = "<<binary_connector_name>>"
+  resource_opts = {
+    #substruct(action_couchbase:action_resource_opts)
+  }
 }

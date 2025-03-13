@@ -1,14 +1,14 @@
 connectors.matrix.my_webhook_1 {
-    server = "Host:Port"
-    disable_prepared_statements = false
-    database = "my_database"
-    pool_size = 8
-    username = "my_username"
-    password = "my_password"
-    ssl = {
-        #substruct(emqx:ssl_client_opts)
-    }
-    resource_opts = {
-        #substruct(connector_postgres:resource_opts)
-    }
+  server = "Host[:Port]"
+  disable_prepared_statements = false
+  database = "example_db"
+  pool_size = 8
+  username = "example_user"
+  password = "secret_password"
+  ssl = {
+    #substruct(emqx:ssl_client_opts)
+  }
+  resource_opts = {
+    #substruct(connector_postgres:resource_opts)
+  }
 }

@@ -1,6 +1,10 @@
-exhook.servers[0].socket_options {
-    keepalive = true
-    nodelay = true
-    recbuf = "64KB"
-    sndbuf = "16KB"
-}
+exhook.servers = [
+  {
+    socket_options {
+      keepalive = true
+      nodelay = true
+      recbuf = "64KB"
+      sndbuf = "16KB"
+    }
+  }
+]

@@ -1,7 +1,7 @@
 connectors.mongodb.my_webhook_1.parameters {
-    mongo_type = rs
-    servers = "127.0.0.1:27017,192.168.1.1:27017"
-    w_mode = unsafe
-    r_mode = master
-    replica_set_name = "myReplicaSet"
+  mongo_type = "rs"
+  servers = "localhost:27017,anotherhost:27017"
+  w_mode = "unsafe"
+  r_mode = "master"
+  replica_set_name = "myReplicaSet"
 }

@@ -1,4 +1,6 @@
-authorization.sources[0] {
+authorization.sources = [
+  {
     type = "built_in_database"
     max_rules = 100
-}
+  }
+]

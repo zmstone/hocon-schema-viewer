@@ -1,10 +1,10 @@
-connectors.kinesis.my_webhook_1 {
-    aws_access_key_id = "your_access_key_id_here"
-    aws_secret_access_key = "your_secret_access_key_here"
-    endpoint = "https://kinesis.us-east-1.amazonaws.com"
-    max_retries = 2
-    pool_size = 8
-    resource_opts = {
-        #substruct(bridge_kinesis:connector_resource_opts)
-    }
+connectors.kinesis.my_webhook_1 = {
+  aws_access_key_id = "your_access_key_id"
+  aws_secret_access_key = "your_secret_access_key"
+  endpoint = "https://kinesis.us-east-1.amazonaws.com"
+  max_retries = 2
+  pool_size = 8
+  resource_opts = {
+    #substruct(bridge_kinesis:connector_resource_opts)
+  }
 }

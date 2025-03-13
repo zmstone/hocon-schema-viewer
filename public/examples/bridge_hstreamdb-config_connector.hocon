@@ -1,10 +1,10 @@
 connectors.hstreamdb.my_webhook_1 {
-    url = "http://127.0.0.1:6570"
-    grpc_timeout = "30s"
-    ssl = {
-        #substruct(emqx:ssl_client_opts)
-    }
-    resource_opts = {
-        #substruct(bridge_hstreamdb:connector_resource_opts)
-    }
+  url = "http://127.0.0.1:6570"
+  grpc_timeout = "30s"
+  ssl = {
+    #substruct(emqx:ssl_client_opts)
+  }
+  resource_opts = {
+    #substruct(bridge_hstreamdb:connector_resource_opts)
+  }
 }

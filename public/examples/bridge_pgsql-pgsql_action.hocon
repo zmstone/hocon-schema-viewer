@@ -1,10 +1,10 @@
 actions.pgsql.my_pgsql_action {
-    local_topic = "my_mqtt_topic"
-    parameters = {
-        #substruct(bridge_pgsql:action_parameters)
-    }
-    connector = "my_connector"
-    resource_opts = {
-        #substruct(actions_and_sources:action_resource_opts)
-    }
+  local_topic = "my/mqtt/topic"
+  parameters = {
+    #substruct(bridge_pgsql:action_parameters)
+  }
+  connector = "my_connector"
+  resource_opts = {
+    #substruct(actions_and_sources:action_resource_opts)
+  }
 }

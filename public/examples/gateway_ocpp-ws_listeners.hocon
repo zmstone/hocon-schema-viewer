@@ -1,12 +1,12 @@
 gateway.ocpp.listeners {
-    ws = {
-        my_websocket_listener = {
-            #substruct(gateway_ocpp:ws_listener)
-        }
+  ws = {
+    my_websocket_listener = {
+      #substruct(gateway_ocpp:ws_listener)
     }
-    wss = {
-        my_secure_websocket_listener = {
-            #substruct(gateway_ocpp:wss_listener)
-        }
+  }
+  wss = {
+    my_websocket_tls_listener = {
+      #substruct(gateway_ocpp:wss_listener)
     }
+  }
 }

@@ -1,6 +1,11 @@
 retainer.backend {
-    type = "built_in_database"
-    storage_type = "ram"
-    max_retained_messages = 0
-    index_specs = [[1, 2, 3], [1, 3], [2, 3], [3]]
+  type = built_in_database
+  storage_type = ram
+  max_retained_messages = 0
+  index_specs = [
+    [1, 2, 3],
+    [1, 3],
+    [2, 3],
+    [3]
+  ]
 }

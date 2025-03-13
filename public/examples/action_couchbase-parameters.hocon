@@ -1,4 +1,4 @@
-actions.couchbase.my_webhook_1.parameters {
-    sql = "SELECT * FROM bucket WHERE type = 'user'"
-    max_retries = 3
+actions.couchbase.my_webhook_1.parameters = {
+  sql = "SELECT * FROM bucket WHERE condition"
+  max_retries = 3
 }

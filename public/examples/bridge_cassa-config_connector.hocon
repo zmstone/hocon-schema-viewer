@@ -1,13 +1,13 @@
 connectors.cassandra.my_webhook_1 {
-    servers = "Host[:Port][,Host2:Port]"
-    keyspace = "my_keyspace"
-    pool_size = 8
-    username = "my_username"
-    password = "my_password"
-    ssl = {
-        #substruct(emqx:ssl_client_opts)
-    }
-    resource_opts = {
-        #substruct(bridge_cassa:connector_resource_opts)
-    }
+  servers = "Host[:Port][,Host2:Port]"
+  keyspace = "my_keyspace"
+  pool_size = 8
+  username = "my_username"
+  password = "my_password"
+  ssl = {
+    #substruct(emqx:ssl_client_opts)
+  }
+  resource_opts = {
+    #substruct(bridge_cassa:connector_resource_opts)
+  }
 }

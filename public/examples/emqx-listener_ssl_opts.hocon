@@ -1,26 +1,22 @@
-listeners.ssl.my_webhook_1.ssl_options {
-    cacertfile = "${EMQX_ETC_DIR}/certs/cacert.pem"
-    certfile = "${EMQX_ETC_DIR}/certs/cert.pem"
-    keyfile = "${EMQX_ETC_DIR}/certs/key.pem"
-    verify = verify_none
-    reuse_sessions = true
-    depth = 10
-    password = ""
-    versions = ["tlsv1.3", "tlsv1.2"]
-    ciphers = []
-    secure_renegotiate = true
-    log_level = notice
-    hibernate_after = "5s"
-    partial_chain = false
-    verify_peer_ext_key_usage = ""
-    dhfile = ""
-    fail_if_no_peer_cert = false
-    honor_cipher_order = true
-    client_renegotiation = true
-    handshake_timeout = "15s"
-    gc_after_handshake = false
-    ocsp = {
-        #substruct(emqx:ocsp)
-    }
-    enable_crl_check = false
+gateway.exproto.listeners.ssl.my_webhook_1.ssl_options {
+  cacertfile = "${EMQX_ETC_DIR}/certs/cacert.pem"
+  certfile = "${EMQX_ETC_DIR}/certs/cert.pem"
+  keyfile = "${EMQX_ETC_DIR}/certs/key.pem"
+  verify = verify_none
+  reuse_sessions = true
+  depth = 10
+  versions = ["tlsv1.3", "tlsv1.2"]
+  ciphers = []
+  secure_renegotiate = true
+  log_level = notice
+  hibernate_after = "5s"
+  fail_if_no_peer_cert = false
+  honor_cipher_order = true
+  client_renegotiation = true
+  handshake_timeout = "15s"
+  gc_after_handshake = false
+  ocsp = {
+    #substruct(emqx:ocsp)
+  }
+  enable_crl_check = false
 }

@@ -1,3 +1,3 @@
 durable_queues {
-    enable = false
+  enable = false
 }

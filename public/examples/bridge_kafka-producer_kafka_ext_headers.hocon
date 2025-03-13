@@ -1,4 +1,6 @@
-actions.azure_event_hub_producer.my_webhook_1.parameters.kafka_ext_headers[0] {
-    kafka_ext_header_key = "example_key"
-    kafka_ext_header_value = "example_value"
-}
+actions.azure_event_hub_producer.my_webhook_1.parameters.kafka_ext_headers = [
+  {
+    kafka_ext_header_key = "header_key"
+    kafka_ext_header_value = "header_value"
+  }
+]

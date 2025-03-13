@@ -1,18 +1,19 @@
-authentication[0] = {
-    mechanism = "password_based"
-    backend = "redis"
+authentication = [
+  {
+    mechanism = password_based
+    backend = redis
     cmd = "HGET"
     password_hash_algorithm = {
-        #substruct(authn_hash:bcrypt)
-        #substruct(authn_hash:pbkdf2)
-        #substruct(authn_hash:simple)
+      name = sha256
+      salt_position = prefix
     }
-    servers = "127.0.0.1:6379"
-    redis_type = "cluster"
+    servers = "127.0.0.1:6379,127.0.0.1:6380"
+    redis_type = cluster
     pool_size = 8
-    username = "my_username"
-    password = "my_secret_password"
+    username = "user"
+    password = "secret_password"
     ssl = {
-        #substruct(emqx:ssl_client_opts)
+      #substruct(emqx:ssl_client_opts)
     }
-}
+  }
+]

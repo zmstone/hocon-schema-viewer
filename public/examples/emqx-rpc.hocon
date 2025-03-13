@@ -1,23 +1,26 @@
 rpc {
-    mode = async
-    protocol = tcp
-    async_batch_size = 256
-    port_discovery = stateless
-    server_port = 5369
-    client_num = 10
-    connect_timeout = "5s"
-    send_timeout = "5s"
-    authentication_timeout = "5s"
-    call_receive_timeout = "15s"
-    socket_keepalive_idle = "15m"
-    socket_keepalive_interval = "75s"
-    socket_keepalive_count = 9
-    socket_sndbuf = "1MB"
-    socket_recbuf = "1MB"
-    socket_buffer = "1MB"
-    insecure_fallback = true
-    ciphers = []
-    tls_versions = ["tlsv1.3", "tlsv1.2"]
-    listen_address = "0.0.0.0"
-    ipv6_only = false
+  mode = "async"
+  protocol = "tcp"
+  async_batch_size = 256
+  port_discovery = "stateless"
+  server_port = 5369
+  client_num = 10
+  connect_timeout = "5s"
+  send_timeout = "5s"
+  authentication_timeout = "5s"
+  call_receive_timeout = "15s"
+  socket_keepalive_idle = "15m"
+  socket_keepalive_interval = "75s"
+  socket_keepalive_count = 9
+  socket_sndbuf = "1MB"
+  socket_recbuf = "1MB"
+  socket_buffer = "1MB"
+  insecure_fallback = true
+  ciphers = []
+  tls_versions = [
+    "tlsv1.3",
+    "tlsv1.2"
+  ]
+  listen_address = "0.0.0.0"
+  ipv6_only = false
 }

@@ -1,4 +1,4 @@
-sources.gcp_pubsub_consumer.my_webhook_1.parameters {
-    topic = "my-gcp-topic"
-    pull_max_messages = 100
+sources.gcp_pubsub_consumer.my_gcp_consumer.parameters {
+  topic = "your-gcp-topic"
+  pull_max_messages = 100
 }

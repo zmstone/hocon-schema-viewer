@@ -1,14 +1,13 @@
 connectors.s3.my_webhook_1.transport_options {
-    ipv6_probe = false
-    connect_timeout = "15s"
-    pool_size = 8
-    ssl = {
-        #substruct(emqx:ssl_client_opts)
-    }
-    headers = {
-        # Example header
-        "Content-Type" = "application/json"
-    }
-    max_retries = 3
-    request_timeout = "30s"
+  ipv6_probe = false
+  connect_timeout = "15s"
+  pool_size = 8
+  ssl = {
+    #substruct(emqx:ssl_client_opts)
+  }
+  headers = {
+    # key-value pairs of HTTP headers
+  }
+  max_retries = 0
+  request_timeout = "30s"
 }

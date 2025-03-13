@@ -1,7 +1,7 @@
 gateway.exproto.handler {
-    address = "localhost:50051"
-    service_name = ConnectionUnaryHandler
-    ssl_options = {
-        #substruct(emqx:ssl_client_opts)
-    }
+  address = "127.0.0.1:50051"
+  service_name = ConnectionUnaryHandler
+  ssl_options = {
+    #substruct(emqx:ssl_client_opts)
+  }
 }

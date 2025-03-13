@@ -1,13 +1,15 @@
-authorization.sources[0] {
-    type = redis
+authorization.sources = [
+  {
+    type = "redis"
     server = "localhost:6379"
-    redis_type = single
+    redis_type = "single"
     pool_size = 8
-    username = "user"
-    password = "secret"
+    username = "my_username"
+    password = "my_password"
     database = 0
     ssl = {
-        #substruct(emqx:ssl_client_opts)
+      #substruct(emqx:ssl_client_opts)
     }
     cmd = "HGETALL mqtt_authz"
-}
+  }
+]

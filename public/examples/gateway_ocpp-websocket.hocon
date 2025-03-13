@@ -1,17 +1,17 @@
 gateway.ocpp.listeners.ws.my_webhook_1.websocket {
-    path = "/ocpp"
-    piggyback = single
-    compress = false
-    idle_timeout = "7200s"
-    max_frame_size = infinity
-    fail_if_no_subprotocol = true
-    supported_subprotocols = "ocpp1.6, ocpp2.0"
-    check_origin_enable = false
-    allow_origin_absence = true
-    check_origins = "http://localhost:18083, http://127.0.0.1:18083"
-    proxy_address_header = "x-forwarded-for"
-    proxy_port_header = "x-forwarded-port"
-    deflate_opts = {
-        #substruct(emqx:deflate_opts)
-    }
+  path = "/ocpp"
+  piggyback = single
+  compress = false
+  idle_timeout = "7200s"
+  max_frame_size = infinity
+  fail_if_no_subprotocol = true
+  supported_subprotocols = "ocpp1.6, ocpp2.0"
+  check_origin_enable = false
+  allow_origin_absence = true
+  check_origins = "http://localhost:18083, http://127.0.0.1:18083"
+  proxy_address_header = "x-forwarded-for"
+  proxy_port_header = "x-forwarded-port"
+  deflate_opts = {
+    #substruct(emqx:deflate_opts)
+  }
 }

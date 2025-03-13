@@ -1,10 +1,10 @@
-actions.elasticsearch.my_webhook_1.parameters {
-    action = "update"
-    index = "${payload.index}"
-    id = "${payload.id}"
-    doc = "${payload.doc}"
-    doc_as_upsert = false
-    routing = "${payload.routing}"
-    require_alias = false
-    max_retries = 2
+actions.elasticsearch.my_elasticsearch_action.parameters = {
+  action = update
+  index = "${payload.index}"
+  id = "${payload.id}"
+  doc = "${payload.doc}"
+  doc_as_upsert = false
+  routing = "${payload.routing}"
+  require_alias = false
+  max_retries = 2
 }

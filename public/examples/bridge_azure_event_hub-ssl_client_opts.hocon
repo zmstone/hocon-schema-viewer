@@ -1,18 +1,18 @@
 connectors.azure_event_hub_producer.my_webhook_1.ssl {
-    cacertfile = "/path/to/cacertfile.pem"
-    certfile = "/path/to/certfile.pem"
-    keyfile = "/path/to/keyfile.pem"
-    verify = verify_none
-    reuse_sessions = true
-    depth = 10
-    password = "your_password"
-    versions = ["tlsv1.3", "tlsv1.2"]
-    ciphers = []
-    secure_renegotiate = true
-    log_level = notice
-    hibernate_after = "5s"
-    partial_chain = false
-    verify_peer_ext_key_usage = "serverAuth"
-    enable = true
-    server_name_indication = auto
+  cacertfile = "/path/to/cacertfile.pem"
+  certfile = "/path/to/certfile.pem"
+  keyfile = "/path/to/keyfile.pem"
+  verify = verify_none
+  reuse_sessions = true
+  depth = 10
+  password = "your_password"
+  versions = ["tlsv1.3", "tlsv1.2"]
+  ciphers = []
+  secure_renegotiate = true
+  log_level = notice
+  hibernate_after = "5s"
+  partial_chain = false
+  verify_peer_ext_key_usage = "clientAuth"
+  enable = true
+  server_name_indication = auto
 }

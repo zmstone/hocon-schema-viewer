@@ -1,8 +1,6 @@
-schema_registry.external.my_webhook_1 {
-    type = "confluent"
-    url = "http://example.com"
-    auth = none
-    #auth = {
-    #substruct(schema_registry:confluent_schema_registry_auth_basic)
-    }
+schema_registry.external.my_webhook_1 = {
+  type = "confluent"
+  url = "https://example.com/schema"
+  auth = "none"
+  #substruct(schema_registry:confluent_schema_registry_auth_basic)
 }

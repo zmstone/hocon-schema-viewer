@@ -1,10 +1,10 @@
 actions.kinesis.my_webhook_1 {
-    local_topic = "my/mqtt/topic"
-    parameters = {
-        #substruct(bridge_kinesis:action_parameters)
-    }
-    connector = "my_connector_name"
-    resource_opts = {
-        #substruct(bridge_kinesis:action_resource_opts)
-    }
+  local_topic = ""
+  parameters = {
+    #substruct(bridge_kinesis:action_parameters)
+  }
+  connector = ""
+  resource_opts = {
+    #substruct(bridge_kinesis:action_resource_opts)
+  }
 }

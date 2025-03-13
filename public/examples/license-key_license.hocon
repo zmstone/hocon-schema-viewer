@@ -1,5 +1,5 @@
 license {
-    key = "default"
-    connection_low_watermark = "75%"
-    connection_high_watermark = "80%"
+  key = default
+  connection_low_watermark = "75%"
+  connection_high_watermark = "80%"
 }

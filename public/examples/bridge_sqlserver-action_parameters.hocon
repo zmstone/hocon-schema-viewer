@@ -1,4 +1,4 @@
 actions.sqlserver.my_webhook_1.parameters {
-    sql = "insert into t_mqtt_msg(msgid, topic, qos, payload) values ( ${id}, ${topic}, ${qos}, ${payload} )"
-    undefined_vars_as_null = false
+  sql = "insert into t_mqtt_msg(msgid, topic, qos, payload) values ( ${id}, ${topic}, ${qos}, ${payload} )"
+  undefined_vars_as_null = false
 }

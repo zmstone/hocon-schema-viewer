@@ -1,6 +1,6 @@
-cluster.static {
-    seeds = [
-        "node1@hostname",
-        "node2@hostname"
-    ]
+cluster.static = {
+  seeds = [
+    #union(emqx_schema:comma_separated_atoms())
+    #union(array(atom()))
+  ]
 }

@@ -1,9 +1,9 @@
 sources.gcp_pubsub_consumer.my_webhook_1 = {
-    parameters = {
-        #substruct(gcp_pubsub_consumer:source_parameters)
-    }
-    connector = "gcp-connector"
-    resource_opts = {
-        #substruct(gcp_pubsub_consumer:source_resource_opts)
-    }
+  parameters = {
+    #substruct(gcp_pubsub_consumer:source_parameters)
+  }
+  connector = "my_connector"
+  resource_opts = {
+    #substruct(gcp_pubsub_consumer:source_resource_opts)
+  }
 }

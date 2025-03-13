@@ -1,5 +1,5 @@
-connectors.gcp_pubsub_consumer.my_webhook_1.resource_opts {
-    health_check_interval = "15s"
-    start_after_created = true
-    start_timeout = "5s"
+connectors.gcp_pubsub_consumer.my_webhook_1.resource_opts = {
+  health_check_interval = "15s"
+  start_after_created = true
+  start_timeout = "5s"
 }

@@ -1,12 +1,12 @@
 gateway.coap.listeners {
-    udp {
-        my_udp_listener = {
-            #substruct(gateway:udp_listener)
-        }
+  udp = {
+    my_listener_1 = {
+      #substruct(gateway:udp_listener)
     }
-    dtls {
-        my_dtls_listener = {
-            #substruct(gateway:dtls_listener)
-        }
+  }
+  dtls = {
+    my_listener_2 = {
+      #substruct(gateway:dtls_listener)
     }
+  }
 }

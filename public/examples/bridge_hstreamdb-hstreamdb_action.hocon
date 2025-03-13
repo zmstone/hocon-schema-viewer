@@ -1,10 +1,10 @@
 actions.hstreamdb.my_webhook_1 {
-    local_topic = ""
-    parameters = {
-        #substruct(bridge_hstreamdb:action_parameters)
-    }
-    connector = ""
-    resource_opts = {
-        #substruct(actions_and_sources:action_resource_opts)
-    }
+  local_topic = "example_topic"
+  parameters = {
+    #substruct(bridge_hstreamdb:action_parameters)
+  }
+  connector = "example_connector"
+  resource_opts = {
+    #substruct(actions_and_sources:action_resource_opts)
+  }
 }

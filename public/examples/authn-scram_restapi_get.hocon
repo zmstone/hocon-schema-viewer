@@ -1,9 +1,15 @@
-authentication[0] = {
-    method = get
-    headers = {accept = "application/json", cache-control = "no-cache", connection = "keep-alive", keep-alive = "timeout=30, max=1000"}
-    mechanism = scram
-    backend = http
-    algorithm = sha256
+authentication = [
+  {
+    method = "get"
+    headers = {
+      accept = "application/json",
+      cache-control = "no-cache",
+      connection = "keep-alive",
+      keep-alive = "timeout=30, max=1000"
+    }
+    mechanism = "scram"
+    backend = "http"
+    algorithm = "sha256"
     iteration_count = 4096
     url = "http://example.com"
     body = {}
@@ -12,7 +18,10 @@ authentication[0] = {
     pool_size = 8
     enable_pipelining = 100
     request = {
-        #substruct(connector_http:request)
+      #substruct(connector_http:request)
     }
-    ssl = {enable = false}
-}
+    ssl = {
+      enable = false
+    }
+  }
+]

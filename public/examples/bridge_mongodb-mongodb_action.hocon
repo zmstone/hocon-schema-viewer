@@ -1,10 +1,10 @@
 actions.mongodb.my_webhook_1 {
-    local_topic = "example/topic"
-    parameters = {
-        #substruct(bridge_mongodb:action_parameters)
-    }
-    connector = "mongodb_connector"
-    resource_opts = {
-        #substruct(bridge_mongodb:action_resource_opts)
-    }
+  local_topic = "your/mqtt/topic"
+  parameters = {
+    #substruct(bridge_mongodb:action_parameters)
+  }
+  connector = "mongodb_connector_name"
+  resource_opts = {
+    #substruct(bridge_mongodb:action_resource_opts)
+  }
 }

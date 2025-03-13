@@ -1,12 +1,12 @@
-connectors.oracle.my_webhook_1 {
-    server = "Host:1521"
-    sid = "my_sid"
-    service_name = "my_service_name"
-    role = normal
-    pool_size = 8
-    username = "my_username"
-    password = "my_password"
-    resource_opts = {
-        #substruct(bridge_oracle:connector_resource_opts)
-    }
+connectors.oracle.my_oracle_connector {
+  server = "localhost:1521"
+  sid = "orcl"
+  service_name = "orcl_service"
+  role = "normal"
+  pool_size = 8
+  username = "oracle_user"
+  password = "oracle_password"
+  resource_opts = {
+    #substruct(bridge_oracle:connector_resource_opts)
+  }
 }

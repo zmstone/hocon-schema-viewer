@@ -1,4 +1,4 @@
 actions.s3.my_webhook_1.parameters.aggregation {
-    time_interval = "30m"
-    max_records = "100000"
+  time_interval = "30m"
+  max_records = 100000
 }

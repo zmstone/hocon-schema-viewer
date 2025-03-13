@@ -1,6 +1,10 @@
-authentication[0].password_hash_algorithm = {
-    name = "pbkdf2"
-    mac_fun = "sha256"
-    iterations = 10000
-    dk_length = 32
-}
+authentication = [
+  {
+    password_hash_algorithm = {
+      name = pbkdf2
+      mac_fun = sha256
+      iterations = 1000
+      dk_length = 32
+    }
+  }
+]

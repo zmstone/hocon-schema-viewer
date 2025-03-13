@@ -1,5 +1,5 @@
 actions.clickhouse.my_webhook_1.parameters {
-    sql = "INSERT INTO messages(data, arrived) VALUES ('${payload}', ${timestamp})"
-    undefined_vars_as_null = false
-    batch_value_separator = ", "
+  sql = "INSERT INTO messages(data, arrived) VALUES ('${payload}', ${timestamp})"
+  undefined_vars_as_null = false
+  batch_value_separator = ", "
 }

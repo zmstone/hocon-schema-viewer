@@ -1,18 +1,18 @@
 connectors.iotdb.my_webhook_1 {
-    connect_timeout = "15s"
-    pool_type = random
-    pool_size = 8
-    enable_pipelining = 100
-    ssl = {
-        #substruct(emqx:ssl_client_opts)
-    }
-    resource_opts = {
-        #substruct(bridge_http:connector_resource_opts)
-    }
-    driver = restapi
-    base_url = "http://example.com"  // Provide the actual base URL
-    iotdb_version = "v1.3.x"
-    authentication = {
-        #substruct(iotdb:authentication)
-    }
+  connect_timeout = "15s"
+  pool_type = random
+  pool_size = 8
+  enable_pipelining = 100
+  ssl = {
+    #substruct(emqx:ssl_client_opts)
+  }
+  resource_opts = {
+    #substruct(bridge_http:connector_resource_opts)
+  }
+  driver = restapi
+  base_url = "http://example-iotdb.com/api"
+  iotdb_version = "v1.3.x"
+  authentication = {
+    #substruct(iotdb:authentication)
+  }
 }

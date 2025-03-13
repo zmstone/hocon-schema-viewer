@@ -1,10 +1,10 @@
-actions.kafka_producer.my_webhook_1 {
-    connector = "my_connector"
-    local_topic = "my/topic"
-    parameters = {
-        #substruct(bridge_kafka:producer_kafka_opts)
-    }
-    resource_opts = {
-        #substruct(bridge_kafka:resource_opts)
-    }
+actions.kafka_producer.my_webhook_1 = {
+  connector = "your_connector_name"
+  local_topic = "your_local_topic"
+  parameters = {
+    #substruct(bridge_kafka:producer_kafka_opts)
+  }
+  resource_opts = {
+    #substruct(bridge_kafka:resource_opts)
+  }
 }

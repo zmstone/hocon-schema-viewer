@@ -1,10 +1,7 @@
-actions.pulsar.my_webhook_1 {
-    local_topic = "my/local/topic"
-    parameters = {
-        #substruct(pulsar:action_parameters)
-    }
-    connector = "my_connector_name"
-    resource_opts = {
-        #substruct(pulsar:action_resource_opts)
-    }
+actions.pulsar.my_pulsar_action = {
+  local_topic = "sample_topic"
+  parameters = {
+    #substruct(pulsar:action_parameters)
+  }
+  connector = "my_connector"
 }

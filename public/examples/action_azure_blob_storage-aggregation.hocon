@@ -1,7 +1,7 @@
-actions.azure_blob_storage.my_webhook_1.parameters.aggregation {
-    container {
-        #substruct(connector_aggregator:container_csv)
-    }
-    time_interval = "1h"
-    max_records = 1000000
+actions.azure_blob_storage.my_webhook_1.parameters.aggregation = {
+  container = {
+    #substruct(connector_aggregator:container_csv)
+  }
+  time_interval = "1h"
+  max_records = 1000000
 }

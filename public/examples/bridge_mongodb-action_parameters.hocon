@@ -1,4 +1,4 @@
 actions.mongodb.my_webhook_1.parameters {
-    collection = "mqtt"
-    payload_template = "JSON format or specific template"
+  collection = "mqtt"
+  #payload_template = "Your formatting template here"
 }

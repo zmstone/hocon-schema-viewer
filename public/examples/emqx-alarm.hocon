@@ -1,5 +1,5 @@
 alarm {
-    actions = [log, publish]
-    size_limit = 1000
-    validity_period = "24h"
+  actions = [log, publish]
+  size_limit = 1000
+  validity_period = "24h"
 }

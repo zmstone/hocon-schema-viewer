@@ -1,3 +1,3 @@
 connectors.pulsar.my_webhook_1.authentication {
-    jwt = "your_jwt_token_here"
+  jwt = "your_jwt_token_here"
 }

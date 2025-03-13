@@ -1,9 +1,9 @@
 node {
-    name = "emqx@127.0.0.1"
-    cookie = "random_secret_cookie"
-    max_ports = 1048576
-    dist_buffer_size = 8192
-    data_dir = "/var/lib/emqx"
-    global_gc_interval = "15m"
-    role = core
+  name = "emqx@127.0.0.1"
+  cookie = "your_secret_cookie"
+  max_ports = 1048576
+  dist_buffer_size = 8192
+  data_dir = "/path/to/data/dir"
+  global_gc_interval = "15m"
+  role = core
 }

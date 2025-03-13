@@ -1,6 +1,6 @@
-actions.azure_event_hub_producer.my_webhook_1.parameters.buffer {
-    mode = memory
-    per_partition_limit = "256MB"
-    segment_bytes = "10MB"
-    memory_overload_protection = true
+actions.azure_event_hub_producer.my_buffer.parameters.buffer {
+  mode = memory
+  per_partition_limit = "256MB"
+  segment_bytes = "10MB"
+  memory_overload_protection = true
 }

@@ -1,10 +1,10 @@
-actions.cassandra.my_webhook_1 {
-    local_topic = "some/topic"
-    parameters = {
-        #substruct(bridge_cassa:action_parameters)
-    }
-    connector = "my_connector"
-    resource_opts = {
-        #substruct(actions_and_sources:action_resource_opts)
-    }
+actions.cassandra.my_cassandra_action {
+  local_topic = "example/topic"
+  parameters = {
+    #substruct(bridge_cassa:action_parameters)
+  }
+  connector = "my_connector"
+  resource_opts = {
+    #substruct(actions_and_sources:action_resource_opts)
+  }
 }

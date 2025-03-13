@@ -1,13 +1,13 @@
 connectors.redis.my_redis_connector {
-    parameters = {
-        #substruct(redis:redis_single_connector)
-        #substruct(redis:redis_sentinel_connector)
-        #substruct(redis:redis_cluster_connector)
-    }
-    resource_opts = {
-        #substruct(redis:connector_resource_opts)
-    }
-    ssl = {
-        #substruct(emqx:ssl_client_opts)
-    }
+  parameters {
+    #substruct(redis:redis_single_connector)
+    #substruct(redis:redis_sentinel_connector)
+    #substruct(redis:redis_cluster_connector)
+  }
+  resource_opts = {
+    #substruct(redis:connector_resource_opts)
+  }
+  ssl = {
+    #substruct(emqx:ssl_client_opts)
+  }
 }

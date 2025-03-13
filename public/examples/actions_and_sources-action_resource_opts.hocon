@@ -1,10 +1,10 @@
-actions.cassandra.my_webhook_1.resource_opts {
-    worker_pool_size = 16
-    health_check_interval = "15s"
-    query_mode = async
-    request_ttl = "45s"
-    inflight_window = 100
-    batch_size = 1
-    batch_time = "0ms"
-    max_buffer_bytes = "256MB"
+actions.cassandra.my_webhook_1.resource_opts = {
+  worker_pool_size = 16
+  health_check_interval = "15s"
+  query_mode = async
+  request_ttl = "45s"
+  inflight_window = 100
+  batch_size = 1
+  batch_time = "0ms"
+  max_buffer_bytes = "256MB"
 }

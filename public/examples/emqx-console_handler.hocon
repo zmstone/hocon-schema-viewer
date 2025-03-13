@@ -1,8 +1,8 @@
 log.console {
-    level = "warning"
-    enable = false
-    formatter = "text"
-    timestamp_format = "auto"
-    time_offset = "system"
-    payload_encode = "text"
+  level = "warning"
+  enable = false
+  formatter = "text"
+  timestamp_format = "auto"
+  time_offset = "system"
+  payload_encode = "text"
 }

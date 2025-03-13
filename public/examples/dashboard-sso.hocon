@@ -1,11 +1,11 @@
-dashboard.sso {
-    ldap = {
-        #substruct(sso:ldap)
-    }
-    oidc = {
-        #substruct(sso:oidc)
-    }
-    saml = {
-        #substruct(dashboard:saml)
-    }
+dashboard.sso = {
+  ldap = {
+    #substruct(sso:ldap)
+  }
+  oidc = {
+    #substruct(sso:oidc)
+  }
+  saml = {
+    #substruct(dashboard:saml)
+  }
 }

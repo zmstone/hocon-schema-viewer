@@ -1,17 +1,17 @@
 connectors.iotdb.my_webhook_1 {
-    driver = restapi
-    server = "host:port"
-    protocol_version = protocol_v3
-    zoneId = "Asia/Shanghai"
-    pool_size = 8
-    connect_timeout = "10s"
-    recv_timeout = "10s"
-    username = "your_username"
-    password = "your_password"
-    ssl = {
-        #substruct(emqx:ssl_client_opts)
-    }
-    resource_opts = {
-        #substruct(iotdb:connector_resource_opts)
-    }
+  driver = restapi
+  server = "your_iotdb_server:port"
+  protocol_version = protocol_v3
+  zoneId = "Asia/Shanghai"
+  pool_size = 8
+  connect_timeout = "10s"
+  recv_timeout = "10s"
+  username = "your_username"
+  password = "your_password"
+  ssl = {
+    #substruct(emqx:ssl_client_opts)
+  }
+  resource_opts = {
+    #substruct(iotdb:connector_resource_opts)
+  }
 }

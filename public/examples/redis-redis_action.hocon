@@ -1,10 +1,10 @@
-actions.redis.my_webhook_1 {
-    local_topic = "sample_topic"
-    parameters = {
-        #substruct(bridge_redis:action_parameters)
-    }
-    connector = "my_connector"
-    resource_opts = {
-        #substruct(redis:action_resource_opts)
-    }
+actions.redis.my_redis_action {
+  local_topic = "my/local/topic"
+  parameters = {
+    #substruct(bridge_redis:action_parameters)
+  }
+  connector = "my_connector"
+  resource_opts = {
+    #substruct(redis:action_resource_opts)
+  }
 }

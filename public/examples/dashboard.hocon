@@ -1,12 +1,12 @@
 dashboard {
-    listeners = {
-        #substruct(dashboard:listeners)
-    }
-    default_password = public
-    token_expired_time = "60m"
-    cors = false
-    swagger_support = true
-    sso = {
-        #substruct(dashboard:sso)
-    }
+  listeners = {
+    #substruct(dashboard:listeners)
+  }
+  default_password = public
+  token_expired_time = "60m"
+  cors = false
+  swagger_support = true
+  sso = {
+    #substruct(dashboard:sso)
+  }
 }

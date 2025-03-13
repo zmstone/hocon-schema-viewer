@@ -1,20 +1,20 @@
 gateway.jt808 {
-    frame = {
-        #substruct(gateway:jt808_frame)
-    }
-    proto = {
-        #substruct(gateway:jt808_proto)
-    }
-    mountpoint = "jt808/${clientid}/"
-    retry_interval = "8s"
-    max_retry_times = 3
-    message_queue_len = 10
-    listeners = {
-        #substruct(gateway:tcp_listeners)
-    }
-    enable_stats = true
-    idle_timeout = "30s"
-    clientinfo_override = {
-        #substruct(gateway:clientinfo_override)
-    }
+  frame = {
+    #substruct(gateway:jt808_frame)
+  }
+  proto = {
+    #substruct(gateway:jt808_proto)
+  }
+  mountpoint = "jt808/${clientid}/"
+  retry_interval = "8s"
+  max_retry_times = 3
+  message_queue_len = 10
+  listeners = {
+    #substruct(gateway:tcp_listeners)
+  }
+  enable_stats = true
+  idle_timeout = "30s"
+  clientinfo_override = {
+    #substruct(gateway:clientinfo_override)
+  }
 }

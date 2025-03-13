@@ -1,10 +1,8 @@
-actions.iotdb.my_webhook_1 {
-    local_topic = ""
-    parameters = {
-        #substruct(bridge_iotdb:action_parameters)
-    }
-    connector = ""
-    resource_opts = {
-        #substruct(bridge_iotdb:action_resource_opts)
-    }
+actions.iotdb.my_webhook_1 = {
+  local_topic = "your/topic/here"
+  parameters = {
+    #substruct(bridge_iotdb:action_parameters)
+  }
+  connector = "your_connector_name"
+  resource_opts = {}
 }

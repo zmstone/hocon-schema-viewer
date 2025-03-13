@@ -1,12 +1,14 @@
-exhook.servers[0] {
+exhook.servers = [
+  {
     name = "default"
     url = "http://127.0.0.1:9000"
     request_timeout = "5s"
-    failed_action = deny
+    failed_action = "deny"
     ssl = {
-        #substruct(exhook:ssl_conf)
+      #substruct(exhook:ssl_conf)
     }
     socket_options = {keepalive = true, nodelay = true}
     auto_reconnect = "60s"
     pool_size = 8
-}
+  }
+]

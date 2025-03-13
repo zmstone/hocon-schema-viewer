@@ -1,25 +1,25 @@
-authorization.sources[0] {
+authorization.sources = [
+  {
     type = "http"
-    url = "https://auth.example.com"
+    url = "http://auth.server.url"
     request_timeout = "30s"
     body = {
-        # Add body parameters here
+      # add key-value pairs here for the HTTP request body
     }
     connect_timeout = "15s"
     pool_size = 8
     enable_pipelining = 100
     request = {
-        #substruct(connector_http:request)
+      #substruct(connector_http:request)
     }
-    ssl = {
-        enable = false
-    }
+    ssl = {enable = false}
     method = "post"
     headers = {
-        accept = "application/json"
-        cache-control = "no-cache"
-        connection = "keep-alive"
-        content-type = "application/json"
-        keep-alive = "timeout=30, max=1000"
+      accept = "application/json"
+      cache-control = "no-cache"
+      connection = "keep-alive"
+      content-type = "application/json"
+      keep-alive = "timeout=30, max=1000"
     }
-}
+  }
+]

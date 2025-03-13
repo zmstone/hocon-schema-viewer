@@ -1,17 +1,18 @@
-actions.s3.my_webhook_1.parameters {
-    mode = aggregated
-    container = {
+actions.s3.my_webhook_1.parameters = {
+  mode = aggregated
+  container = {
     #substruct(bridge_s3:s3_aggregated_container_csv)
-    }
-    aggregation = {
+  }
+  aggregation = {
     #substruct(bridge_s3:s3_aggregation)
-    }
-    bucket = "my-s3-bucket"
-    key = "${action}/${node}/${datetime.rfc3339utc}/${sequence}"
-    acl = private
-    headers = {
-        "Content-Type" = "application/json"
-    }
-    min_part_size = "5mb"
-    max_part_size = "5gb"
+  }
+  bucket = "your-s3-bucket-name"
+  key = "${action}/${node}/${datetime.rfc3339utc}/${datetime_until.rfc3339utc}/${sequence}"
+  acl = private
+  headers = {
+    "Content-Type" = "application/json"
+    "Content-Encoding" = "gzip"
+  }
+  min_part_size = "5mb"
+  max_part_size = "5gb"
 }

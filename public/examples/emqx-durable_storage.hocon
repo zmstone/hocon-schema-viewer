@@ -1,6 +1,6 @@
 durable_storage {
-    messages = {
-        #substruct(durable_storage:builtin_raft)
-        #substruct(durable_storage:builtin_local)
-    }
+  messages {
+    #substruct(durable_storage:builtin_raft)
+    #substruct(durable_storage:builtin_local)
+  }
 }

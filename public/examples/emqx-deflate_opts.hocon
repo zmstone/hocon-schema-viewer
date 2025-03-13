@@ -1,9 +1,9 @@
 gateway.ocpp.listeners.ws.my_webhook_1.websocket.deflate_opts {
-    level = "default"
-    mem_level = 8
-    strategy = "default"
-    server_context_takeover = "takeover"
-    client_context_takeover = "takeover"
-    server_max_window_bits = 15
-    client_max_window_bits = 15
+  level = none
+  mem_level = 8
+  strategy = default
+  server_context_takeover = takeover
+  client_context_takeover = takeover
+  server_max_window_bits = 15
+  client_max_window_bits = 15
 }

@@ -1,9 +1,11 @@
-authentication[0] {
-    algorithm = "public-key"
-    public_key = "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAn1N7\n...END PUBLIC KEY-----"
-    mechanism = "jwt"
-    acl_claim_name = "acl"
+authentication = [
+  {
+    algorithm = public-key
+    public_key = "your-public-key-here"
+    mechanism = jwt
+    acl_claim_name = acl
     verify_claims = {}
     disconnect_after_expire = true
-    from = "password"
-}
+    from = password
+  }
+]

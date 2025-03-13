@@ -1,14 +1,14 @@
-connectors.couchbase.my_webhook_1 {
-    server = "localhost:8093"
-    connect_timeout = "15s"
-    pipelining = 100
-    pool_size = 8
-    username = "my_username"
-    password = "my_password_secret"
-    resource_opts = {
-      #substruct(connector:resource_opts)
-    }
-    ssl = {
-      #substruct(emqx:ssl_client_opts)
-    }
+connectors.couchbase.my_couchbase_connector {
+  server = "my-couchbase-server:8093"
+  connect_timeout = "15s"
+  pipelining = 100
+  pool_size = 8
+  username = "my_username"
+  password = "my_password"
+  resource_opts = {
+    #substruct(connector:resource_opts)
+  }
+  ssl = {
+    #substruct(emqx:ssl_client_opts)
+  }
 }

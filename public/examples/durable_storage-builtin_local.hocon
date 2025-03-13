@@ -1,10 +1,10 @@
 durable_storage.messages {
-    backend = "builtin_local"
-    data_dir = "/var/lib/myapp/data"
-    n_shards = 16
-    layout = {
-        #substruct(durable_storage:layout_builtin_wildcard_optimized_v2)
-        #substruct(durable_storage:layout_builtin_wildcard_optimized)
-        #substruct(durable_storage:layout_builtin_reference)
-    }
+  backend = "builtin_local"
+  data_dir = "/path/to/data/directory"
+  n_shards = 16
+  layout {
+    #substruct(durable_storage:layout_builtin_wildcard_optimized_v2)
+    #substruct(durable_storage:layout_builtin_wildcard_optimized)
+    #substruct(durable_storage:layout_builtin_reference)
+  }
 }

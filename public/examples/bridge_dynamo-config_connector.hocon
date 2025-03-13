@@ -1,10 +1,10 @@
-connectors.dynamo.my_webhook_1 {
-    url = "https://dynamodb.us-west-2.amazonaws.com"
-    region = "us-west-2"
-    aws_access_key_id = "AKIAIOSFODNN7EXAMPLE"
-    aws_secret_access_key = "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"
-    pool_size = 8
-    resource_opts = {
-        #substruct(bridge_dynamo:connector_resource_opts)
-    }
+connectors.dynamo.my_dynamo_connector = {
+  url = "https://dynamodb.us-west-2.amazonaws.com"
+  region = "us-west-2"
+  aws_access_key_id = "AKIAIOSFODNN7EXAMPLE"
+  aws_secret_access_key = "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"
+  pool_size = 8
+  resource_opts = {
+    #substruct(bridge_dynamo:connector_resource_opts)
+  }
 }

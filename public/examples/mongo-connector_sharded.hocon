@@ -1,5 +1,5 @@
-connectors.mongodb.my_webhook_1.parameters {
-    mongo_type = sharded
-    servers = "localhost:27017"
-    w_mode = unsafe
+connectors.mongodb.my_mongodb_connector.parameters {
+  mongo_type = "sharded"
+  servers = "localhost:27017,secondaryhost:27017"
+  w_mode = "unsafe"
 }

@@ -1,10 +1,8 @@
-actions.snowflake.my_snowflake_action {
-    local_topic = "mqtt/topic/filter"
-    parameters = {
-        #substruct(action_snowflake:aggreg_parameters)
-    }
-    connector = "my_connector_name"
-    resource_opts = {
-        #substruct(action_snowflake:action_resource_opts)
-    }
+actions.snowflake.my_webhook_1 {
+  local_topic = "my/local/topic"
+  parameters {
+    #substruct(action_snowflake:aggreg_parameters)
+  }
+  connector = "my_connector_name"
+  resource_opts = {}
 }

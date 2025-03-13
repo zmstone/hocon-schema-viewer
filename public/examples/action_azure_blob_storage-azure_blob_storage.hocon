@@ -1,11 +1,11 @@
-actions.azure_blob_storage.my_webhook_1 {
-    local_topic = "your_topic_here"
-    parameters = {
-        #substruct(action_azure_blob_storage:aggreg_parameters)
-        #substruct(action_azure_blob_storage:direct_parameters)
-    }
-    connector = "your_connector_name"
-    resource_opts = {
-        #substruct(action_azure_blob_storage:action_resource_opts)
-    }
+actions.azure_blob_storage.my_webhook_1 = {
+  local_topic = "example/topic"
+  parameters = {
+    #substruct(action_azure_blob_storage:aggreg_parameters)
+    #substruct(action_azure_blob_storage:direct_parameters)
+  }
+  connector = "my_connector"
+  resource_opts = {
+    #substruct(action_azure_blob_storage:action_resource_opts)
+  }
 }

@@ -1,8 +1,8 @@
-actions.rocketmq.my_webhook_1.parameters {
-    template = ""
-    strategy = roundrobin
-    topic = "TopicTest"
-    sync_timeout = "3s"
-    refresh_interval = "3s"
-    send_buffer = "1024KB"
+actions.rocketmq.my_rocketmq_action.parameters {
+  template = ""
+  strategy = roundrobin
+  topic = "TopicTest"
+  sync_timeout = "3s"
+  refresh_interval = "3s"
+  send_buffer = "1024KB"
 }

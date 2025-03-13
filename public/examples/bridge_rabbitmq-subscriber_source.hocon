@@ -1,9 +1,9 @@
 sources.rabbitmq.my_webhook_1 {
-    parameters = {
-        #substruct(bridge_rabbitmq:source_parameters)
-    }
-    connector = "my_connector"
-    resource_opts = {
-        #substruct(actions_and_sources:source_resource_opts)
-    }
+  parameters = {
+    #substruct(bridge_rabbitmq:source_parameters)
+  }
+  connector = "my_connector_name"
+  resource_opts = {
+    #substruct(actions_and_sources:source_resource_opts)
+  }
 }

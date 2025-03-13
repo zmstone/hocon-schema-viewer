@@ -1,5 +1,5 @@
-actions.kafka_producer.my_webhook_1.parameters.message {
-    key = "${.clientid}"
-    value = "${.}"
-    timestamp = "${.timestamp}"
+actions.kafka_producer.my_kafka_producer.parameters.message = {
+  key = "${.clientid}"
+  value = "${.}"
+  timestamp = "${.timestamp}"
 }

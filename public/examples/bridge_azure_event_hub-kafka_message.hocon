@@ -1,4 +1,4 @@
-actions.azure_event_hub_producer.my_webhook_1.parameters.message {
-    key = "${.clientid}"
-    value = "${.}"
+actions.azure_event_hub_producer.my_webhook_1.parameters.message = {
+  key = "${.clientid}"
+  value = "${.}"
 }

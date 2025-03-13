@@ -1,6 +1,6 @@
 sys_topics.sys_event_messages {
-    client_connected = true
-    client_disconnected = true
-    client_subscribed = false
-    client_unsubscribed = false
+  client_connected = true
+  client_disconnected = true
+  client_subscribed = false
+  client_unsubscribed = false
 }

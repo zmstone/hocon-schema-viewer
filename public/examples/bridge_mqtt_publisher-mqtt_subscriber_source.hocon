@@ -1,9 +1,9 @@
-sources.mqtt.my_webhook_1 = {
-    parameters = {
-        #substruct(bridge_mqtt_publisher:ingress_parameters)
-    }
-    connector = "example_connector"
-    resource_opts = {
-        #substruct(bridge_mqtt_publisher:source_resource_opts)
-    }
+sources.mqtt.my_mqtt_source {
+  parameters = {
+    #substruct(bridge_mqtt_publisher:ingress_parameters)
+  }
+  connector = "your_connector_name"
+  resource_opts = {
+    #substruct(bridge_mqtt_publisher:source_resource_opts)
+  }
 }

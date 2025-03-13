@@ -1,9 +1,9 @@
 durable_sessions {
-    enable = false
-    batch_size = 100
-    idle_poll_interval = "10s"
-    heartbeat_interval = "5000ms"
-    session_gc_interval = "10m"
-    session_gc_batch_size = 100
-    message_retention_period = "1d"
+  enable = false
+  batch_size = 100
+  idle_poll_interval = "10s"
+  heartbeat_interval = "5000ms"
+  session_gc_interval = "10m"
+  session_gc_batch_size = 100
+  message_retention_period = "1d"
 }

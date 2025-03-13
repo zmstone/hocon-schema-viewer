@@ -1,13 +1,13 @@
-actions.http.my_webhook_1.parameters {
-    path = "/room/${room_no}"
-    method = "post"
-    headers = {
-        accept = "application/json"
-        cache-control = "no-cache"
-        connection = "keep-alive"
-        content-type = "application/json"
-        keep-alive = "timeout=5"
-    }
-    body = ""
-    max_retries = 2
+actions.http.my_webhook_1.parameters = {
+  path = "/room/${room_no}"
+  method = "post"
+  headers = {
+    accept = "application/json"
+    cache-control = "no-cache"
+    connection = "keep-alive"
+    content-type = "application/json"
+    keep-alive = "timeout=5"
+  }
+  body = ""
+  max_retries = 2
 }

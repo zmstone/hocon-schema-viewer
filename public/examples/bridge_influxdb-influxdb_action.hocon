@@ -1,10 +1,8 @@
 actions.influxdb.my_webhook_1 {
-    local_topic = "your/mqtt/topic"
-    parameters = {
-        #substruct(bridge_influxdb:action_parameters)
-    }
-    connector = "influxdb_connector_name"
-    resource_opts = {
-        #substruct(actions_and_sources:action_resource_opts)
-    }
+  local_topic = "some/topic"
+  parameters = {
+    #substruct(bridge_influxdb:action_parameters)
+  }
+  connector = "my_connector"
+  resource_opts = {}
 }

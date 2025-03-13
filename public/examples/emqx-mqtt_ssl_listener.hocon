@@ -1,20 +1,20 @@
 listeners.ssl.my_webhook_1 {
-    bind = 8883
-    acceptors = 16
-    max_connections = infinity
-    mountpoint = ""
-    zone = default
-    enable_authn = true
-    max_conn_rate = infinity
-    messages_rate = "500/s"
-    bytes_rate = "100MB/s"
-    access_rules = ["allow all"]
-    proxy_protocol = false
-    proxy_protocol_timeout = "3s"
-    tcp_options = {
-        #substruct(emqx:tcp_opts)
-    }
-    ssl_options = {
-        #substruct(emqx:listener_ssl_opts)
-    }
+  bind = 8883
+  acceptors = 16
+  max_connections = infinity
+  mountpoint = ""
+  zone = default
+  enable_authn = true
+  max_conn_rate = infinity
+  messages_rate = "500/s"
+  bytes_rate = "100MB/s"
+  access_rules = ["allow all"]
+  proxy_protocol = false
+  proxy_protocol_timeout = "3s"
+  tcp_options = {
+    #substruct(emqx:tcp_opts)
+  }
+  ssl_options = {
+    #substruct(emqx:listener_ssl_opts)
+  }
 }

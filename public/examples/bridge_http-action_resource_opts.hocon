@@ -1,8 +1,8 @@
-actions.http.my_webhook_1.resource_opts {
-    worker_pool_size = 16
-    health_check_interval = "15s"
-    query_mode = async
-    request_ttl = "45s"
-    inflight_window = 100
-    max_buffer_bytes = "256MB"
+actions.http.my_webhook_1.resource_opts = {
+  worker_pool_size = 16
+  health_check_interval = "15s"
+  query_mode = async
+  request_ttl = "45s"
+  inflight_window = 100
+  max_buffer_bytes = "256MB"
 }

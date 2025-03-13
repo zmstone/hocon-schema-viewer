@@ -1,7 +1,7 @@
 cluster.k8s {
-    apiserver = "https://kubernetes.default.svc:443"
-    service_name = "emqx"
-    address_type = "ip"
-    namespace = "default"
-    suffix = "pod.local"
+  apiserver = "https://kubernetes.default.svc:443"
+  service_name = "emqx"
+  address_type = "ip"
+  namespace = "default"
+  suffix = "pod.local"
 }

@@ -1,12 +1,18 @@
-actions.tablestore.my_webhook_1.parameters.fields[0] {
-    column = "example_column"
+actions.tablestore.my_webhook_1.parameters.fields = [
+  {
+    column = "column_name"
     value = {
-        #union: boolean()
-        #union: number()
-        #union: binary()
+      #true
+      #123
+      #"string_value"
     }
     isint = {
-        #union: boolean()
-        #union: binary()
+      #false
+      #"is_integer"
     }
-}
+    isbinary = {
+      #false
+      #"is_binary"
+    }
+  }
+]

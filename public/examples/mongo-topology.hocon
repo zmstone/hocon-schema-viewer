@@ -1,12 +1,12 @@
 connectors.mongodb.my_webhook_1.topology {
-    max_overflow = 0
-    overflow_ttl = "5000ms"
-    overflow_check_period = "10000ms"
-    local_threshold_ms = "15ms"
-    connect_timeout_ms = "10000ms"
-    socket_timeout_ms = "5000ms"
-    server_selection_timeout_ms = "30000ms"
-    wait_queue_timeout_ms = "120000ms"
-    heartbeat_frequency_ms = "200s"
-    min_heartbeat_frequency_ms = "500ms"
+  max_overflow = 0
+  overflow_ttl = "30s"
+  overflow_check_period = "30s"
+  local_threshold_ms = "15ms"
+  connect_timeout_ms = "10s"
+  socket_timeout_ms = "30s"
+  server_selection_timeout_ms = "5s"
+  wait_queue_timeout_ms = "10s"
+  heartbeat_frequency_ms = "200s"
+  min_heartbeat_frequency_ms = "500ms"
 }

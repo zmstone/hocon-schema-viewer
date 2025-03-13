@@ -1,16 +1,16 @@
-authorization.sources[0] {
+authorization.sources = [
+  {
     type = "postgresql"
     server = "localhost:5432"
     disable_prepared_statements = false
-    database = <<"my_database">>
+    database = "my_database"
     pool_size = 8
-    username = <<"my_user">>
-    password = "my_password"
+    username = "db_user"
+    password = "db_password"
     ssl = {
-        #substruct(emqx:ssl_client_opts)
+      #substruct(emqx:ssl_client_opts)
     }
-    prepare_statement = {
-        # Key-value pairs of SQL prepared statements
-    }
-    query = <<"SELECT * FROM auth_table WHERE user = $1">>
-}
+    prepare_statement = {}
+    query = "SELECT * FROM auth_table WHERE user_id = ?"
+  }
+]

@@ -1,4 +1,6 @@
-gateway.mqttsn.predefined[0] {
+gateway.mqttsn.predefined = [
+  {
     id = 1
-    topic = "my/topic/name"
-}
+    topic = "example/topic/name"
+  }
+]

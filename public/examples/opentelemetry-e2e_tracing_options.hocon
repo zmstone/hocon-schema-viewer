@@ -1,11 +1,11 @@
-opentelemetry.traces.filter.e2e_tracing_options {
-    cluster_identifier = "emqxcl"
-    msg_trace_level = 0
-    clientid_match_rules_max = 30
-    topic_match_rules_max = 30
-    sample_ratio = "10%"
-    client_connect_disconnect = false
-    client_subscribe_unsubscribe = false
-    client_messaging = false
-    follow_traceparent = true
+opentelemetry.traces.filter.e2e_tracing_options = {
+  cluster_identifier = "emqxcl"
+  msg_trace_level = 0
+  clientid_match_rules_max = 30
+  topic_match_rules_max = 30
+  sample_ratio = "10%"
+  client_connect_disconnect = false
+  client_subscribe_unsubscribe = false
+  client_messaging = false
+  follow_traceparent = true
 }

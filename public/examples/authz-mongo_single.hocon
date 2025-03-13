@@ -1,6 +1,7 @@
-authorization.sources[0] {
+authorization.sources = [
+  {
     type = "mongodb"
-    collection = "auth_data_collection"
+    collection = "authz_data"
     filter = {}
     limit = 1000
     skip = 0
@@ -9,15 +10,14 @@ authorization.sources[0] {
     w_mode = "unsafe"
     srv_record = false
     pool_size = 8
-    username = "db_user"
-    password = "secret_password"
+    username = "admin"
+    password = "secret"
     use_legacy_protocol = "auto"
-    auth_source = "auth_db"
-    database = "main_db"
+    auth_source = "admin_db"
+    database = "auth_db"
     topology = {
-        #substruct(mongo:topology)
+      #substruct(mongo:topology)
     }
-    ssl = {
-        enable = false
-    }
-}
+    ssl = {enable = false}
+  }
+]

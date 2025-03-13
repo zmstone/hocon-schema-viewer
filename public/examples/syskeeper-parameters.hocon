@@ -1,5 +1,5 @@
 actions.syskeeper_forwarder.my_webhook_1.parameters {
-    target_topic = "${topic}"
-    target_qos = 1
-    template = "${payload}"
+  target_topic = "${topic}"
+  target_qos = 0
+  template = "${payload}"
 }

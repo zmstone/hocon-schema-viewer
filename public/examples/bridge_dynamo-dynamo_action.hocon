@@ -1,10 +1,10 @@
 actions.dynamo.my_webhook_1 {
-    local_topic = "example/topic"
-    parameters = {
-        #substruct(bridge_dynamo:action_parameters)
-    }
-    connector = "example_connector"
-    resource_opts = {
-        #substruct(actions_and_sources:action_resource_opts)
-    }
+  local_topic = "some/topic"
+  parameters = {
+    #substruct(bridge_dynamo:action_parameters)
+  }
+  connector = "my_connector"
+  resource_opts = {
+    #substruct(actions_and_sources:action_resource_opts)
+  }
 }

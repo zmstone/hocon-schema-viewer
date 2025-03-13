@@ -1,14 +1,16 @@
-authorization.sources[0] = {
+authorization.sources = [
+  {
     type = "redis"
-    servers = "192.168.1.10:26379,192.168.1.11:26379"
+    servers = "127.0.0.1:6379"
     redis_type = "sentinel"
     sentinel = "mymaster"
     pool_size = 8
-    username = "my_user"
-    password = "my_password"
+    username = "user"
+    password = "secret"
     database = 0
     ssl = {
-        #substruct(emqx:ssl_client_opts)
+      #substruct(emqx:ssl_client_opts)
     }
     cmd = "HGETALL mqtt_authz"
-}
+  }
+]

@@ -1,8 +1,12 @@
-authentication[0] {
-    mechanism = "cinfo"
+authentication = [
+  {
+    mechanism = {
+      #substruct(authn:cinfo)
+    }
     checks = [
-        {
-            #substruct(authn:cinfo_check)
-        }
+      {
+        #substruct(authn:cinfo_check)
+      }
     ]
-}
+  }
+]

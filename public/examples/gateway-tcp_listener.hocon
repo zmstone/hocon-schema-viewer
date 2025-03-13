@@ -1,14 +1,14 @@
-gateway.exproto.listeners.tcp.my_tcp_listener {
-    acceptors = 16
-    tcp_options = {
-        #substruct(emqx:tcp_opts)
-    }
-    proxy_protocol = false
-    proxy_protocol_timeout = "3s"
-    bind = "127.0.0.1:1883"
-    max_connections = 1024
-    max_conn_rate = 1000
-    enable_authn = true
-    mountpoint = ""
-    access_rules = []
+gateway.exproto.listeners.tcp.my_listener {
+  acceptors = 16
+  tcp_options = {
+    #substruct(emqx:tcp_opts)
+  }
+  proxy_protocol = false
+  proxy_protocol_timeout = "3s"
+  bind = "0.0.0.0:1883"
+  max_connections = 1024
+  max_conn_rate = 1000
+  enable_authn = true
+  mountpoint = ""
+  access_rules = []
 }

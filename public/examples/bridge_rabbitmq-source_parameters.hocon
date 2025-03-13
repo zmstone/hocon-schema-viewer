@@ -1,5 +1,5 @@
-sources.rabbitmq.my_webhook_1.parameters = {
-    queue = "my_queue"
-    wait_for_publish_confirmations = true
-    no_ack = true
+sources.rabbitmq.my_rabbitmq_source.parameters {
+  queue = "my_queue"
+  wait_for_publish_confirmations = true
+  no_ack = true
 }

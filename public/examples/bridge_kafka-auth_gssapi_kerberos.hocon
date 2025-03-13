@@ -1,4 +1,4 @@
 connectors.kafka_consumer.my_webhook_1.authentication {
-    kerberos_principal = "kafka/node1.example.com@EXAMPLE.COM"
-    kerberos_keytab_file = "/path/to/keytab/file"
+  kerberos_principal = "kafka/node1.example.com@EXAMPLE.COM"
+  kerberos_keytab_file = "/path/to/kerberos.keytab"
 }

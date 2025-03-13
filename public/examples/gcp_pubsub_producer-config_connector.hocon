@@ -1,10 +1,10 @@
-connectors.gcp_pubsub_producer.my_webhook_1 {
-    connect_timeout = "15s"
-    pool_size = 8
-    pipelining = 100
-    max_retries = 2
-    service_account_json = "your-service-account-json"
-    resource_opts = {
-        #substruct(gcp_pubsub_producer:connector_resource_opts)
-    }
+connectors.gcp_pubsub_producer.my_webhook_1 = {
+  connect_timeout = "15s"
+  pool_size = 8
+  pipelining = 100
+  max_retries = 2
+  service_account_json = ""  # Please provide the JSON containing the GCP Service Account credentials here.
+  resource_opts = {
+    #substruct(gcp_pubsub_producer:connector_resource_opts)
+  }
 }

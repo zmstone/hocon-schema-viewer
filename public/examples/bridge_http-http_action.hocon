@@ -1,9 +1,9 @@
-actions.http.my_webhook_1 {
-    connector = "my_connector"
-    parameters = {
-        #substruct(bridge_http:parameters_opts)
-    }
-    resource_opts = {
-        #substruct(bridge_http:action_resource_opts)
-    }
+actions.http.my_http_action {
+  connector = "example_connector"
+  parameters = {
+    #substruct(bridge_http:parameters_opts)
+  }
+  resource_opts = {
+    #substruct(bridge_http:action_resource_opts)
+  }
 }

@@ -1,7 +1,7 @@
-connectors.azure_blob_storage.my_webhook_1 {
-    account_name = "example_account_name"
-    account_key = "example_account_key"
-    resource_opts = {
-        #substruct(connector_azure_blob_storage:resource_opts)
-    }
+connectors.azure_blob_storage.my_azure_blob_storage {
+  account_name = "your_account_name"
+  account_key = "your_account_key"
+  resource_opts = {
+    #substruct(connector_azure_blob_storage:resource_opts)
+  }
 }

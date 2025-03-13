@@ -1,13 +1,13 @@
-connectors.mysql.my_webhook_1 {
-    server = "localhost:3306"
-    database = "my_database"
-    pool_size = 8
-    username = "root"
-    password = "your_secret_password"
-    ssl = {
-        #substruct(emqx:ssl_client_opts)
-    }
-    resource_opts = {
-        #substruct(bridge_mysql:connector_resource_opts)
-    }
+connectors.mysql.my_webhook_1 = {
+  server = "localhost:3306"
+  database = "my_database"
+  pool_size = 8
+  username = "root"
+  password = "your_password_here"
+  ssl = {
+    #substruct(emqx:ssl_client_opts)
+  }
+  resource_opts = {
+    #substruct(bridge_mysql:connector_resource_opts)
+  }
 }

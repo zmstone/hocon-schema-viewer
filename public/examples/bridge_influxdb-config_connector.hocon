@@ -1,14 +1,14 @@
-connectors.influxdb.my_webhook_1 = {
-    server = "127.0.0.1:8086"
-    pool_size = 8
-    parameters = {
-        #substruct(connector_influxdb:connector_influxdb_api_v1)
-        #substruct(connector_influxdb:connector_influxdb_api_v2)
-    }
-    ssl = {
-        #substruct(emqx:ssl_client_opts)
-    }
-    resource_opts = {
-        #substruct(bridge_influxdb:connector_resource_opts)
-    }
+connectors.influxdb.my_influxdb_connector {
+  server = "127.0.0.1:8086"
+  pool_size = 8
+  parameters {
+    #substruct(connector_influxdb:connector_influxdb_api_v1)
+    #substruct(connector_influxdb:connector_influxdb_api_v2)
+  }
+  ssl = {
+    #substruct(emqx:ssl_client_opts)
+  }
+  resource_opts = {
+    #substruct(bridge_influxdb:connector_resource_opts)
+  }
 }

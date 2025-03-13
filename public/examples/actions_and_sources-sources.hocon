@@ -1,22 +1,22 @@
 sources {
-    mqtt {
-        my_mqtt_source = {
-            #substruct(bridge_mqtt_publisher:mqtt_subscriber_source)
-        }
+  mqtt {
+    my_mqtt_source = {
+      #substruct(bridge_mqtt_publisher:mqtt_subscriber_source)
     }
-    rabbitmq {
-        my_rabbitmq_source = {
-            #substruct(bridge_rabbitmq:subscriber_source)
-        }
+  }
+  rabbitmq {
+    my_rabbitmq_source = {
+      #substruct(bridge_rabbitmq:subscriber_source)
     }
-    kafka_consumer {
-        my_kafka_consumer = {
-            #substruct(kafka_consumer:consumer_source)
-        }
+  }
+  kafka_consumer {
+    my_kafka_consumer = {
+      #substruct(kafka_consumer:consumer_source)
     }
-    gcp_pubsub_consumer {
-        my_gcp_pubsub_source = {
-            #substruct(gcp_pubsub_consumer:consumer_source)
-        }
+  }
+  gcp_pubsub_consumer {
+    my_gcp_pubsub_consumer = {
+      #substruct(gcp_pubsub_consumer:consumer_source)
     }
+  }
 }

@@ -1,7 +1,7 @@
 actions.dynamo.my_webhook_1.parameters {
-    template = ""
-    hash_key = "example_hash_key"
-    range_key = "example_range_key"
-    table = "example_table"
-    undefined_vars_as_null = false
+  template = ""
+  hash_key = "example_hash_key"
+  range_key = "example_range_key"
+  table = "example_table"
+  undefined_vars_as_null = false
 }

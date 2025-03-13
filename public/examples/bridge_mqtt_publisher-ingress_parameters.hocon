@@ -1,5 +1,5 @@
-sources.mqtt.my_webhook_1.parameters {
-    no_local = false
-    topic = "example/topic"
-    qos = 1
+sources.mqtt.my_mqtt_connector.parameters {
+  no_local = false
+  topic = "example/topic"
+  qos = 1
 }

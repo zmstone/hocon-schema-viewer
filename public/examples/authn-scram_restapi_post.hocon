@@ -1,20 +1,20 @@
-authentication[0] {
+authentication = [
+  {
     method = post
     headers = {accept = "application/json", cache-control = "no-cache", connection = "keep-alive", content-type = "application/json", keep-alive = "timeout=30, max=1000"}
     mechanism = scram
     backend = http
     algorithm = sha256
     iteration_count = 4096
-    url = "http://example.com"
-    body = {
-        # example_key = "example_value"
-    }
+    url = "http://example.com/api"
+    body = {}
     request_timeout = "5s"
     connect_timeout = "15s"
     pool_size = 8
     enable_pipelining = 100
     request = {
-        #substruct(connector_http:request)
+      #substruct(connector_http:request)
     }
     ssl = {enable = false}
-}
+  }
+]

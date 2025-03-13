@@ -1,18 +1,18 @@
-connectors.cassandra.my_webhook_1.ssl {
-    cacertfile = "/path/to/ca.pem"
-    certfile = "/path/to/cert.pem"
-    keyfile = "/path/to/key.pem"
-    verify = verify_none
-    reuse_sessions = true
-    depth = 10
-    password = "your_password_here"
-    versions = ["tlsv1.3", "tlsv1.2"]
-    ciphers = []
-    secure_renegotiate = true
-    log_level = notice
-    hibernate_after = "5s"
-    partial_chain = false
-    verify_peer_ext_key_usage = "clientAuth"
-    enable = false
-    server_name_indication = "disable"
+connectors.cassandra.my_webhook_1.ssl = {
+  cacertfile = "/path/to/cacertfile.pem"
+  certfile = "/path/to/certfile.pem"
+  keyfile = "/path/to/keyfile.pem"
+  verify = verify_none
+  reuse_sessions = true
+  depth = 10
+  password = "your_password"
+  versions = ["tlsv1.3", "tlsv1.2"]
+  ciphers = []
+  secure_renegotiate = true
+  log_level = notice
+  hibernate_after = "5s"
+  partial_chain = false
+  verify_peer_ext_key_usage = "clientAuth"
+  enable = false
+  server_name_indication = "disable"
 }

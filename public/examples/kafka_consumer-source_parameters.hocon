@@ -1,10 +1,10 @@
 sources.kafka_consumer.my_webhook_1.parameters {
-    topic = "my_kafka_topic"
-    group_id = "my_consumer_group"
-    max_wait_time = "1s"
-    max_batch_bytes = "896KB"
-    offset_reset_policy = latest
-    offset_commit_interval_seconds = "5s"
-    key_encoding_mode = none
-    value_encoding_mode = none
+  topic = "your_topic"
+  group_id = "your_group_id"
+  max_wait_time = "1s"
+  max_batch_bytes = "896KB"
+  offset_reset_policy = latest
+  offset_commit_interval_seconds = "5s"
+  key_encoding_mode = none
+  value_encoding_mode = none
 }

@@ -1,7 +1,7 @@
 actions.elasticsearch.my_action_1.parameters {
-    action = delete
-    index = "${payload.index}"
-    id = "${payload.id}"
-    routing = "${payload.routing}"
-    max_retries = 2
+  action = delete
+  index = "${payload.index}"
+  id = "${payload.id}"
+  routing = "${payload.routing}"
+  max_retries = 2
 }

@@ -1,39 +1,73 @@
 mqtt {
-    idle_timeout = "15s"
-    max_packet_size = "1MB"
-    max_clientid_len = 65535
-    max_topic_levels = 128
-    max_topic_alias = 65535
-    retain_available = true
-    wildcard_subscription = true
-    shared_subscription = true
-    shared_subscription_strategy = round_robin
-    shared_subscription_initial_sticky_pick = random
-    exclusive_subscription = false
-    ignore_loop_deliver = false
-    strict_mode = false
-    response_information = ""
-    server_keepalive = disabled
-    keepalive_multiplier = 1.5
-    keepalive_check_interval = "30s"
-    retry_interval = infinity
-    use_username_as_clientid = false
-    peer_cert_as_username = disabled
-    peer_cert_as_clientid = disabled
-    client_attrs_init = [
-        #substruct(emqx:client_attrs_init)
-    ]
-    clientid_override = disabled
-    session_expiry_interval = "2h"
-    message_expiry_interval = infinity
-    max_awaiting_rel = 100
-    max_qos_allowed = 2
-    mqueue_priorities = disabled
-    mqueue_default_priority = lowest
-    mqueue_store_qos0 = true
-    max_mqueue_len = 1000
-    max_inflight = 32
-    max_subscriptions = infinity
-    upgrade_qos = false
-    await_rel_timeout = "300s"
+  idle_timeout = "15s"
+  
+  max_packet_size = "1MB"
+  
+  max_clientid_len = 65535
+  
+  max_topic_levels = 128
+  
+  max_topic_alias = 65535
+  
+  retain_available = true
+  
+  wildcard_subscription = true
+  
+  shared_subscription = true
+  
+  shared_subscription_strategy = round_robin
+  
+  shared_subscription_initial_sticky_pick = random
+  
+  exclusive_subscription = false
+  
+  ignore_loop_deliver = false
+  
+  strict_mode = false
+  
+  response_information = ""
+  
+  server_keepalive = disabled
+  
+  keepalive_multiplier = 1.5
+  
+  keepalive_check_interval = "30s"
+  
+  retry_interval = infinity
+  
+  use_username_as_clientid = false
+  
+  peer_cert_as_username = disabled
+  
+  peer_cert_as_clientid = disabled
+  
+  client_attrs_init = [
+    #substruct(emqx:client_attrs_init)
+  ]
+  
+  clientid_override = disabled
+  
+  session_expiry_interval = "2h"
+  
+  message_expiry_interval = infinity
+  
+  max_awaiting_rel = 100
+  
+  max_qos_allowed = 2
+  
+  mqueue_priorities = disabled
+  
+  mqueue_default_priority = lowest
+  
+  mqueue_store_qos0 = true
+  
+  max_mqueue_len = 1000
+  
+  max_inflight = 32
+  
+  max_subscriptions = infinity
+  
+  upgrade_qos = false
+  
+  await_rel_timeout = "300s"
 }

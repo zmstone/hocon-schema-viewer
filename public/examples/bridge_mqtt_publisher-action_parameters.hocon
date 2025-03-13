@@ -1,6 +1,6 @@
-actions.mqtt.my_webhook_1.parameters {
-    topic = "your/topic/here"
-    qos = 1
-    retain = false
-    payload = "your payload template"
+actions.mqtt.my_mqtt_action.parameters {
+  topic = "your/topic/here"
+  qos = 1
+  retain = false
+  payload = "your payload here"
 }

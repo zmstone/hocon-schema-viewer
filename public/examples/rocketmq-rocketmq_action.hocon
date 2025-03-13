@@ -1,10 +1,10 @@
-actions.rocketmq.my_rocketmq_action {
-    local_topic = "some/topic"
-    parameters = {
-        #substruct(rocketmq:action_parameters)
-    }
-    connector = "my_connector"
-    resource_opts = {
-        #substruct(actions_and_sources:action_resource_opts)
-    }
+actions.rocketmq.my_rocketmq_action = {
+  local_topic = "<<your_topic_here>>"
+  parameters = {
+    #substruct(rocketmq:action_parameters)
+  }
+  connector = "<<your_connector_name>>"
+  resource_opts = {
+    #substruct(actions_and_sources:action_resource_opts)
+  }
 }

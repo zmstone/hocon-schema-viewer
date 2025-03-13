@@ -1,4 +1,4 @@
 schema_registry.external.my_webhook_1.auth {
-    username = "user123"
-    password = "secret_password"
+  username = "your_username"
+  password = "your_password"
 }

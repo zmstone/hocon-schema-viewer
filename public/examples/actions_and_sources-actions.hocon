@@ -1,177 +1,177 @@
 actions {
-    mqtt {
-        my_mqtt_action = {
-            #substruct(bridge_mqtt_publisher:mqtt_publisher_action)
-        }
+  mqtt {
+    my_mqtt_action = {
+      #substruct(bridge_mqtt_publisher:mqtt_publisher_action)
     }
-    azure_event_hub_producer {
-        my_azure_event_hub_action = {
-            #substruct(bridge_azure_event_hub:actions)
-        }
+  }
+  azure_event_hub_producer {
+    my_azure_event_hub_action = {
+      #substruct(bridge_azure_event_hub:actions)
     }
-    elasticsearch {
-        my_elasticsearch_action = {
-            #substruct(bridge_elasticsearch:action_config)
-        }
+  }
+  elasticsearch {
+    my_elasticsearch_action = {
+      #substruct(bridge_elasticsearch:action_config)
     }
-    kafka_producer {
-        my_kafka_producer_action = {
-            #substruct(bridge_kafka:kafka_producer_action)
-        }
+  }
+  kafka_producer {
+    my_kafka_producer_action = {
+      #substruct(bridge_kafka:kafka_producer_action)
     }
-    datalayers {
-        my_datalayers_action = {
-            #substruct(bridge_datalayers:datalayers_action)
-        }
+  }
+  datalayers {
+    my_datalayers_action = {
+      #substruct(bridge_datalayers:datalayers_action)
     }
-    oracle {
-        my_oracle_action = {
-            #substruct(bridge_oracle:oracle_action)
-        }
+  }
+  oracle {
+    my_oracle_action = {
+      #substruct(bridge_oracle:oracle_action)
     }
-    azure_blob_storage {
-        my_azure_blob_storage_action = {
-            #substruct(action_azure_blob_storage:azure_blob_storage)
-        }
+  }
+  azure_blob_storage {
+    my_azure_blob_storage_action = {
+      #substruct(action_azure_blob_storage:azure_blob_storage)
     }
-    s3 {
-        my_s3_action = {
-            #substruct(bridge_s3:s3)
-        }
+  }
+  s3 {
+    my_s3_action = {
+      #substruct(bridge_s3:s3)
     }
-    tdengine {
-        my_tdengine_action = {
-            #substruct(bridge_tdengine:action_config)
-        }
+  }
+  tdengine {
+    my_tdengine_action = {
+      #substruct(bridge_tdengine:action_config)
     }
-    pulsar {
-        my_pulsar_action = {
-            #substruct(pulsar:publisher_action)
-        }
+  }
+  pulsar {
+    my_pulsar_action = {
+      #substruct(pulsar:publisher_action)
     }
-    sqlserver {
-        my_sqlserver_action = {
-            #substruct(bridge_sqlserver:sqlserver_action)
-        }
+  }
+  sqlserver {
+    my_sqlserver_action = {
+      #substruct(bridge_sqlserver:sqlserver_action)
     }
-    opents {
-        my_opents_action = {
-            #substruct(bridge_opents:action_config)
-        }
+  }
+  opents {
+    my_opents_action = {
+      #substruct(bridge_opents:action_config)
     }
-    clickhouse {
-        my_clickhouse_action = {
-            #substruct(bridge_clickhouse:clickhouse_action)
-        }
+  }
+  clickhouse {
+    my_clickhouse_action = {
+      #substruct(bridge_clickhouse:clickhouse_action)
     }
-    couchbase {
-        my_couchbase_action = {
-            #substruct(action_couchbase:couchbase)
-        }
+  }
+  couchbase {
+    my_couchbase_action = {
+      #substruct(action_couchbase:couchbase)
     }
-    syskeeper_forwarder {
-        my_syskeeper_forwarder_action = {
-            #substruct(syskeeper:config)
-        }
+  }
+  syskeeper_forwarder {
+    my_syskeeper_forwarder_action = {
+      #substruct(syskeeper:config)
     }
-    cassandra {
-        my_cassandra_action = {
-            #substruct(bridge_cassa:cassandra_action)
-        }
+  }
+  cassandra {
+    my_cassandra_action = {
+      #substruct(bridge_cassa:cassandra_action)
     }
-    mongodb {
-        my_mongodb_action = {
-            #substruct(bridge_mongodb:mongodb_action)
-        }
+  }
+  mongodb {
+    my_mongodb_action = {
+      #substruct(bridge_mongodb:mongodb_action)
     }
-    iotdb {
-        my_iotdb_action = {
-            #substruct(bridge_iotdb:action_config)
-        }
+  }
+  iotdb {
+    my_iotdb_action = {
+      #substruct(bridge_iotdb:action_config)
     }
-    tablestore {
-        my_tablestore_action = {
-            #substruct(bridge_tablestore:tablestore_action)
-        }
+  }
+  tablestore {
+    my_tablestore_action = {
+      #substruct(bridge_tablestore:tablestore_action)
     }
-    dynamo {
-        my_dynamo_action = {
-            #substruct(bridge_dynamo:dynamo_action)
-        }
+  }
+  dynamo {
+    my_dynamo_action = {
+      #substruct(bridge_dynamo:dynamo_action)
     }
-    greptimedb {
-        my_greptimedb_action = {
-            #substruct(bridge_greptimedb:greptimedb_action)
-        }
+  }
+  greptimedb {
+    my_greptimedb_action = {
+      #substruct(bridge_greptimedb:greptimedb_action)
     }
-    hstreamdb {
-        my_hstreamdb_action = {
-            #substruct(bridge_hstreamdb:hstreamdb_action)
-        }
+  }
+  hstreamdb {
+    my_hstreamdb_action = {
+      #substruct(bridge_hstreamdb:hstreamdb_action)
     }
-    rocketmq {
-        my_rocketmq_action = {
-            #substruct(rocketmq:rocketmq_action)
-        }
+  }
+  rocketmq {
+    my_rocketmq_action = {
+      #substruct(rocketmq:rocketmq_action)
     }
-    gcp_pubsub_producer {
-        my_gcp_pubsub_producer_action = {
-            #substruct(gcp_pubsub_producer:producer_action)
-        }
+  }
+  gcp_pubsub_producer {
+    my_gcp_pubsub_producer_action = {
+      #substruct(gcp_pubsub_producer:producer_action)
     }
-    pgsql {
-        my_pgsql_action = {
-            #substruct(bridge_pgsql:pgsql_action)
-        }
+  }
+  pgsql {
+    my_pgsql_action = {
+      #substruct(bridge_pgsql:pgsql_action)
     }
-    kinesis {
-        my_kinesis_action = {
-            #substruct(bridge_kinesis:kinesis_action)
-        }
+  }
+  kinesis {
+    my_kinesis_action = {
+      #substruct(bridge_kinesis:kinesis_action)
     }
-    snowflake {
-        my_snowflake_action = {
-            #substruct(action_snowflake:snowflake)
-        }
+  }
+  snowflake {
+    my_snowflake_action = {
+      #substruct(action_snowflake:snowflake)
     }
-    redis {
-        my_redis_action = {
-            #substruct(redis:redis_action)
-        }
+  }
+  redis {
+    my_redis_action = {
+      #substruct(redis:redis_action)
     }
-    rabbitmq {
-        my_rabbitmq_action = {
-            #substruct(bridge_rabbitmq:publisher_action)
-        }
+  }
+  rabbitmq {
+    my_rabbitmq_action = {
+      #substruct(bridge_rabbitmq:publisher_action)
     }
-    timescale {
-        my_timescale_action = {
-            #substruct(bridge_pgsql:pgsql_action)
-        }
+  }
+  timescale {
+    my_timescale_action = {
+      #substruct(bridge_pgsql:pgsql_action)
     }
-    http {
-        my_http_action = {
-            #substruct(bridge_http:http_action)
-        }
+  }
+  http {
+    my_http_action = {
+      #substruct(bridge_http:http_action)
     }
-    mysql {
-        my_mysql_action = {
-            #substruct(bridge_mysql:mysql_action)
-        }
+  }
+  mysql {
+    my_mysql_action = {
+      #substruct(bridge_mysql:mysql_action)
     }
-    confluent_producer {
-        my_confluent_producer_action = {
-            #substruct(confluent:actions)
-        }
+  }
+  confluent_producer {
+    my_confluent_producer_action = {
+      #substruct(confluent:actions)
     }
-    influxdb {
-        my_influxdb_action = {
-            #substruct(bridge_influxdb:influxdb_action)
-        }
+  }
+  influxdb {
+    my_influxdb_action = {
+      #substruct(bridge_influxdb:influxdb_action)
     }
-    matrix {
-        my_matrix_action = {
-            #substruct(bridge_pgsql:pgsql_action)
-        }
+  }
+  matrix {
+    my_matrix_action = {
+      #substruct(bridge_pgsql:pgsql_action)
     }
+  }
 }

@@ -1,19 +1,19 @@
 connectors.azure_event_hub_producer.my_webhook_1 {
-    bootstrap_hosts = "your-event-hub-namespace.servicebus.windows.net:9093"
-    connect_timeout = "5s"
-    min_metadata_refresh_interval = "3s"
-    metadata_request_timeout = "5s"
-    authentication = {
-        #substruct(bridge_azure_event_hub:auth_username_password)
-    }
-    socket_opts = {
-        #substruct(bridge_kafka:socket_opts)
-    }
-    health_check_topic = "health-check-topic"
-    ssl = {
-        #substruct(bridge_azure_event_hub:ssl_client_opts)
-    }
-    resource_opts = {
-        #substruct(bridge_kafka:connector_resource_opts)
-    }
+  bootstrap_hosts = "host1:9093,host2:9093"
+  connect_timeout = "5s"
+  min_metadata_refresh_interval = "3s"
+  metadata_request_timeout = "5s"
+  authentication = {
+    #substruct(bridge_azure_event_hub:auth_username_password)
+  }
+  socket_opts = {
+    #substruct(bridge_kafka:socket_opts)
+  }
+  health_check_topic = "health_topic_name"
+  ssl = {
+    #substruct(bridge_azure_event_hub:ssl_client_opts)
+  }
+  resource_opts = {
+    #substruct(bridge_kafka:connector_resource_opts)
+  }
 }

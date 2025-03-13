@@ -1,4 +1,4 @@
 connectors.iotdb.my_webhook_1.authentication {
-    username = "your_username"
-    password = "your_password"
+  username = "your_username"
+  password = "your_password"
 }

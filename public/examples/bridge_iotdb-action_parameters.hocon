@@ -1,10 +1,10 @@
 actions.iotdb.my_webhook_1.parameters {
-    is_aligned = false
-    device_id = "device_id_example"
-    data = [
-        {
-            #substruct(bridge_iotdb:action_parameters_data)
-        }
-    ]
-    max_retries = 2
+  is_aligned = false
+  device_id = "your_device_id"
+  data = [
+    {
+      #substruct(bridge_iotdb:action_parameters_data)
+    }
+  ]
+  max_retries = 2
 }

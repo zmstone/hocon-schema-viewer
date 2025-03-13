@@ -1,7 +1,9 @@
-connectors.mqtt.my_webhook_1.static_clientids[0] {
+connectors.mqtt.my_mqtt_connector.static_clientids = [
+  {
     node = "emqx@10.0.0.1"
     ids = [
-        "client_id_1",
-        "client_id_2"
+      "client_id_1",
+      "client_id_2"
     ]
-}
+  }
+]

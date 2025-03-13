@@ -1,20 +1,20 @@
-connectors.http.my_webhook_1 {
-    url = "http://localhost:9901/${topic}"
-    headers = {
-        accept = "application/json"
-        cache-control = "no-cache"
-        connection = "keep-alive"
-        content-type = "application/json"
-        keep-alive = "timeout=5"
-    }
-    connect_timeout = "15s"
-    pool_type = random
-    pool_size = 8
-    enable_pipelining = 100
-    ssl = {
-        enable = false
-    }
-    resource_opts = {
-        #substruct(bridge_http:connector_resource_opts)
-    }
+connectors.http.my_webhook_1 = {
+  url = "http://localhost:9901/${topic}"
+  headers = {
+    accept = "application/json"
+    cache-control = "no-cache"
+    connection = "keep-alive"
+    content-type = "application/json"
+    keep-alive = "timeout=5"
+  }
+  connect_timeout = "15s"
+  pool_type = random
+  pool_size = 8
+  enable_pipelining = 100
+  ssl = {
+    enable = false
+  }
+  resource_opts = {
+    #substruct(bridge_http:connector_resource_opts)
+  }
 }

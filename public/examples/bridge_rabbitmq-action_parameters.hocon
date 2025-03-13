@@ -1,8 +1,8 @@
 actions.rabbitmq.my_webhook_1.parameters {
-    wait_for_publish_confirmations = true
-    publish_confirmation_timeout = "30s"
-    exchange = "e-${payload.e}"
-    routing_key = "k-${payload.r}"
-    delivery_mode = non_persistent
-    payload_template = ""
+  wait_for_publish_confirmations = true
+  publish_confirmation_timeout = "30s"
+  exchange = "e-${payload.e}"
+  routing_key = "k-${payload.r}"
+  delivery_mode = non_persistent
+  payload_template = ""
 }

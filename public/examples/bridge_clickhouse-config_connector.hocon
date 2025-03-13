@@ -1,11 +1,11 @@
-connectors.clickhouse.my_webhook_1 {
-    url = "http://myhostname:8123"
-    connect_timeout = "15s"
-    database = "my_database"
-    pool_size = 8
-    username = "my_username"
-    password = "my_password"
-    resource_opts = {
-        #substruct(bridge_clickhouse:connector_resource_opts)
-    }
+connectors.clickhouse.my_webhook_1 = {
+  url = "http://myhostname:8123"
+  connect_timeout = "15s"
+  database = "my_database"
+  pool_size = 8
+  username = "my_username"
+  password = "my_secret_password"
+  resource_opts = {
+    #substruct(bridge_clickhouse:connector_resource_opts)
+  }
 }
