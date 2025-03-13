@@ -1,8 +1,7 @@
 <script lang="ts">
-import { defineComponent, ref, watch } from 'vue'
+import { defineComponent, ref, watch, onMounted } from 'vue'
 import type { PropType } from 'vue'
 import type * as schema from '../schema'
-import { systemPrompt, generateUserPrompt } from '../prompts/example-generator'
 
 export default defineComponent({
   name: 'ExampleView',
@@ -33,11 +32,13 @@ export default defineComponent({
     const apiKey = ref(localStorage.getItem('openai_api_key') || '')
     const selectedModel = ref(localStorage.getItem('openai_model') || 'gpt-4o')
     const showKeyStored = ref(false)
-    const showMorePrompts = ref(false)
     const additionalPrompts = ref('')
     const models = [{ value: 'gpt-4o', label: 'GPT-4' }]
     const exampleSource = ref<'ai' | 'pre-generated' | null>(null)
     const valuePath = ref(props.valuePath)
+    const systemPrompt = ref('')
+
+    const PROMPT_URL = 'https://gist.githubusercontent.com/zmstone/44747c1adc7f86ca1968f4bf4f16307b/raw/emqx-config-example-generation-prompt.txt'
 
     // Reset state when struct changes
     watch(
@@ -176,7 +177,7 @@ export default defineComponent({
           subExample = stripWrappingLines(await response.text())
         } else {
           // Fall back to AI generation if local example not found
-          const messages = [{ role: 'system', content: systemPrompt }]
+          const messages = [{ role: 'system', content: systemPrompt.value }]
 
           messages.push({ role: 'user', content: generateUserPrompt(struct, valuePath.value) })
 
@@ -336,7 +337,12 @@ export default defineComponent({
         return
       }
       try {
-        const messages = [{ role: 'system', content: systemPrompt }]
+        if (!systemPrompt.value) {
+          error.value = 'System prompt not loaded yet. Please try again.'
+          isLoading.value = false
+          return
+        }
+        const messages = [{ role: 'system', content: systemPrompt.value }]
 
         if (additionalPrompts.value.trim()) {
           messages.push({ role: 'user', content: additionalPrompts.value })
@@ -367,7 +373,11 @@ export default defineComponent({
       if (!struct) return
 
       // Force AI generation
-      const messages = [{ role: 'system', content: systemPrompt }]
+      if (!systemPrompt.value) {
+        error.value = 'System prompt not loaded yet. Please try again.'
+        return
+      }
+      const messages = [{ role: 'system', content: systemPrompt.value }]
 
       if (additionalPrompts.value.trim()) {
         messages.push({ role: 'user', content: additionalPrompts.value })
@@ -408,6 +418,24 @@ export default defineComponent({
       }
     }
 
+    onMounted(async () => {
+      try {
+        const response = await fetch(PROMPT_URL)
+        if (!response.ok) throw new Error('Failed to fetch prompt')
+        systemPrompt.value = await response.text()
+      } catch (error) {
+        console.error('Error fetching prompt:', error)
+      }
+    })
+
+    function generateUserPrompt(schema: any, valuePath: string): string {
+      return `Please generate a valid kHOCON example for this schema:\n${JSON.stringify(
+        schema,
+        null,
+        2
+      )}\n\nValue path hint: ${valuePath}`
+    }
+
     return {
       generatedExample,
       processedExample,
@@ -419,14 +447,14 @@ export default defineComponent({
       selectedModel,
       models,
       showKeyStored,
-      showMorePrompts,
       additionalPrompts,
       findStruct,
       handleGenerateClick,
       handleClearSubstruct,
       exampleSource,
       valuePath,
-      handleRegenerateSubstruct
+      handleRegenerateSubstruct,
+      systemPrompt
     }
   }
 })
@@ -451,12 +479,50 @@ export default defineComponent({
           Schema
         </button>
       </div>
-      <div v-if="activeTab === 'schema'">
+      <div v-if="activeTab === 'schema'" class="schema-content">
         <pre><code>{{ JSON.stringify(currentStruct, null, 2) }}</code></pre>
       </div>
       <div v-else class="example-content">
-        <div class="controls">
-          <div class="controls-inputs">
+        <div class="example-main">
+          <div class="struct-info" v-if="valuePath">
+            <span class="struct-path">{{ valuePath }}</span>
+            <span v-if="exampleSource" class="example-source" :class="exampleSource">
+              {{ exampleSource === 'pre-generated' ? 'pregenerated' : 'regenerated' }}
+            </span>
+          </div>
+          <div
+            class="example-code"
+            @click="
+              (e) => {
+                handleGenerateClick(e)
+                handleClearSubstruct(e)
+                handleRegenerateSubstruct(e)
+              }
+            "
+          >
+            <pre><code v-html="processedExample"></code></pre>
+          </div>
+        </div>
+        <div class="controls-footer">
+          <div class="more-prompts">
+            <textarea
+              v-model="additionalPrompts"
+              class="prompts-input"
+              placeholder="Add additional instructions. For example, skip low importance fields."
+              rows="4"
+            ></textarea>
+          </div>
+          <div class="api-controls">
+            <div class="input-group">
+              <label class="input-label">OpenAI API Key:</label>
+              <input
+                v-model="apiKey"
+                type="password"
+                class="api-key-input"
+                placeholder="sk-..."
+              />
+              <span v-if="showKeyStored" class="key-stored">API key stored!</span>
+            </div>
             <div class="input-group">
               <label class="input-label">Model:</label>
               <select v-model="selectedModel" class="model-select">
@@ -465,65 +531,10 @@ export default defineComponent({
                 </option>
               </select>
             </div>
-            <div class="input-group">
-              <label class="input-label">OpenAI API Key:</label>
-              <div class="api-controls">
-                <input
-                  type="password"
-                  v-model="apiKey"
-                  placeholder="Enter key"
-                  class="api-key-input"
-                />
-                <div v-if="showKeyStored" class="key-stored">API key stored in browser</div>
-              </div>
-            </div>
-          </div>
-          <div class="controls-row">
             <button @click="generateExample(true)" :disabled="isLoading" class="generate-button">
-              {{ isLoading ? 'Generating...' : 'Try Again' }}
-            </button>
-            <button @click="showMorePrompts = !showMorePrompts" class="more-prompts-button">
-              {{ showMorePrompts ? 'Hide Prompts' : 'More Prompts' }}
+              {{ isLoading ? 'Generating...' : '↺' }}
             </button>
           </div>
-          <div class="struct-name">
-            <div class="header-content">
-              <div class="struct-info" v-if="valuePath">
-                <span class="struct-path">{{ valuePath }}</span>
-              </div>
-              <div class="source-info">
-                <span v-if="exampleSource" class="example-source" :class="exampleSource">
-                  {{ exampleSource === 'pre-generated' ? 'pregenerated' : 'regenerated' }}
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div v-if="error" class="error">
-          {{ error }}
-        </div>
-        <div v-else-if="isLoading" class="loading">Generating example...</div>
-        <div v-if="showMorePrompts" class="more-prompts">
-          <label class="input-label">Additional Prompts:</label>
-          <textarea
-            v-model="additionalPrompts"
-            class="prompts-input"
-            placeholder="Add additional instructions. For example, skip low importance fields."
-            rows="4"
-          ></textarea>
-        </div>
-        <div
-          v-if="!isLoading"
-          class="example-code"
-          @click="
-            (e) => {
-              handleGenerateClick(e)
-              handleClearSubstruct(e)
-              handleRegenerateSubstruct(e)
-            }
-          "
-        >
-          <pre><code v-html="processedExample"></code></pre>
         </div>
       </div>
     </div>
@@ -542,32 +553,36 @@ export default defineComponent({
 
 .content {
   flex-grow: 1;
-  overflow-y: auto;
-  min-height: 0; /* Important for Firefox */
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
 }
 
 .example-content {
   padding: 0 16px 16px;
-}
-
-.controls {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  margin-bottom: 16px;
+  height: calc(100% - 37px); /* Subtract tabs height */
+}
+
+.example-main {
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  height: calc(100% - 200px); /* Reserve space for controls */
+}
+
+.controls-footer {
+  height: 200px;
   padding-top: 16px;
+  border-top: 1px solid #eee;
 }
 
-.controls-inputs {
+.api-controls {
   display: flex;
   gap: 12px;
-  align-items: center;
-}
-
-.controls-row {
-  display: flex;
-  gap: 12px;
-  align-items: center;
+  align-items: flex-end;
+  position: relative;
 }
 
 .generate-button {
@@ -640,20 +655,6 @@ pre {
   background: white;
 }
 
-.api-controls {
-  display: flex;
-  gap: 8px;
-  position: relative;
-}
-
-.api-key-input {
-  padding: 4px 8px;
-  border-radius: 4px;
-  border: 1px solid #ccc;
-  font-size: 0.9em;
-  width: 260px;
-}
-
 .key-stored {
   position: absolute;
   top: 100%;
@@ -713,26 +714,19 @@ pre {
   background: #2e5742;
 }
 
-.more-prompts-button {
-  padding: 4px 12px;
-  border-radius: 4px;
-  background: #f5f5f5;
-  border: 1px solid #ccc;
-  cursor: pointer;
-  font-size: 0.9em;
-}
-
 .more-prompts {
-  margin: 12px 0;
+  margin-bottom: 12px;
   padding: 12px;
   background: #f5f5f5;
   border-radius: 4px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
 }
 
 .prompts-input {
   width: 100%;
-  margin-top: 8px;
   padding: 8px;
   border-radius: 4px;
   border: 1px solid #ccc;
@@ -740,7 +734,7 @@ pre {
   font-size: 0.9em;
   resize: vertical;
   transition: border-color 0.2s ease;
-  min-height: 80px;
+  flex-grow: 1;
 }
 
 .prompts-input:focus {
@@ -834,34 +828,9 @@ pre {
     background: #e4f5ea;
   }
 
-  .more-prompts-button {
-    background: #333;
-    border-color: #444;
-    color: #fff;
-  }
-
   .more-prompts {
     background: #333;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
-  }
-
-  .prompts-input {
-    background: #1a1a1a;
-    border-color: #444;
-    color: #fff;
-  }
-
-  .tab-button:hover:not(.active) {
-    background: rgba(228, 245, 234, 0.05);
-  }
-
-  .generate-button:hover:not(:disabled) {
-    background: #234434;
-  }
-
-  .generate-button:disabled {
-    background: #2a2a2a;
-    border-color: #444;
   }
 
   .prompts-input:focus {
@@ -877,6 +846,10 @@ pre {
     text-decoration: underline;
     background: rgba(228, 245, 234, 0.05);
   }
+
+  .controls-footer {
+    border-top-color: #444;
+  }
 }
 
 @media (max-width: 768px) {
@@ -891,6 +864,9 @@ pre {
 
 .example-code {
   position: relative;
+  flex-grow: 1;
+  overflow-y: auto;
+  min-height: 0;
 }
 
 .example-code pre {
@@ -996,38 +972,21 @@ pre {
 .struct-info {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 8px;
-}
-
-.struct-label {
-  color: #666;
-  font-size: var(--text-xs);
-}
-
-@media (prefers-color-scheme: dark) {
-  .struct-label {
-    color: #999;
-  }
+  margin: 12px 0 8px;
 }
 
 .struct-path {
   color: #666;
-  margin-left: 8px;
   font-style: italic;
   font-size: var(--text-xs);
-}
-
-@media (prefers-color-scheme: dark) {
-  .struct-path {
-    color: #999;
-  }
 }
 
 .example-source {
   font-size: var(--text-xs);
   padding: 2px 6px;
   border-radius: 3px;
-  margin-left: 8px;
 }
 
 .example-source.pre-generated {
@@ -1041,35 +1000,26 @@ pre {
 }
 
 @media (prefers-color-scheme: dark) {
-  .example-source.pre-generated {
-    background: #2e5742;
-    color: #e4f5ea;
+  .struct-path {
+    color: #999;
   }
 
+  .example-source.pre-generated,
   .example-source.ai {
     background: #2e5742;
     color: #e4f5ea;
   }
 }
 
-.example-code :deep(code:not(:has(a))) {
-  color: #666;
+.schema-content {
+  flex-grow: 1;
+  overflow-y: auto;
+  min-height: 0;
+  padding: 16px;
 }
 
-@media (prefers-color-scheme: dark) {
-  .example-code :deep(code:not(:has(a))) {
-    color: #999;
-  }
-}
-
-.header-content {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-}
-
-.source-info {
-  flex-shrink: 0;
+.schema-content pre {
+  height: 100%;
+  margin: 0;
 }
 </style>
