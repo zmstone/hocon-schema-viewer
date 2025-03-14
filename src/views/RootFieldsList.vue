@@ -43,10 +43,21 @@ export default defineComponent({
       const currentURL = new URL(window.location.href)
       // Update the 'r' parameter while preserving other parameters
       const params = currentURL.searchParams
-      params.set('r', newRoot)
+      if (newRoot === '') {
+        params.delete('r')
+      } else {
+        params.set('r', newRoot)
+      }
       window.history.pushState({}, '', `${currentURL.pathname}?${params}`)
     }
     const rootClicked = (displayType: schema.DisplayType) => {
+      if (currentRootSelected.value === displayType.list_display) {
+        // Clicking the same root again - collapse it
+        currentRootSelected.value = ''
+        currentExpandSelected.value = ''
+        pushState('')
+        return
+      }
       pushState(displayType.list_display)
       emit('selected', displayType)
     }
@@ -93,7 +104,7 @@ export default defineComponent({
       return schema.fieldToDisplayType('', f)
     },
     maybeFold(f: schema.Field): string {
-      const isExpand = f.name === this.currentExpandSelected
+      const isExpand = f.name === this.currentRootSelected
       const expands = f.expands
       if (!expands || expands.length === 0) {
         return ''
