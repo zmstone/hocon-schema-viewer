@@ -102,9 +102,9 @@ export default defineComponent({
       const expandChar = ' \u25B6' // Right-pointing triangle (▶)
       const collapseChar = ' \u25BC' // Down-pointing triangle (▼)
       if (this.isExpanded) {
-        return collapseChar
+        return `<span class="fold-icon">${collapseChar}</span>`
       }
-      return expandChar
+      return `<span class="fold-icon">${expandChar}</span>`
     },
     appendPath(path: string, typeName: string, fieldName: string) {
       return `${path} / ${typeName}.${fieldName}`
@@ -116,7 +116,7 @@ export default defineComponent({
 <template>
   <div class="struct-view" v-if="!schema.isVirtualRoot(currentStruct)">
     <span class="struct-fullname" @click="toggleExpand()">
-      <code>{{ currentStruct.full_name }} {{ maybeFold() }}</code>
+      <code>{{ currentStruct.full_name }} <span v-html="maybeFold()"></span></code>
     </span>
     <button @click="showExample" class="example-button">Example</button>
     <ul class="field-list" v-if="isExpanded">
@@ -414,5 +414,11 @@ table th {
     border-color: #3fb950;
     background-color: #1f2e1f;
   }
+}
+
+.fold-icon {
+  font-size: 0.7em;
+  display: inline-block;
+  transform: translateY(-2px);
 }
 </style>

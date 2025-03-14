@@ -140,7 +140,7 @@ export default defineComponent({
             {{ field.name }} {{ annotate(field.type) }}
           </span>
           <span class="root-field-fold-state">
-            <code>{{ maybeFold(field) }}</code>
+            {{ maybeFold(field) }}
           </span>
         </div>
         <ul class="root-fields-sub-list" v-if="currentRootSelected === field.name">
@@ -165,12 +165,15 @@ export default defineComponent({
 }
 
 .root-field-fold-state {
-  font-size: 0.9em;
+  font-size: 0.6em;
   margin: 0;
+  transform: translateY(2px);  /* Slight downward adjustment */
+  display: inline-block;
 }
 
 .root-field-display {
   display: flex;
+  align-items: center;
   margin: 4px;
   padding-left: 0;
 }
@@ -182,7 +185,7 @@ export default defineComponent({
 }
 
 .root-fields-sub-list {
-  padding-left: 20px;
+  padding-left: 12px;
   margin: 0;
   list-style-type: none;
 }
@@ -190,7 +193,7 @@ export default defineComponent({
 .root-fields-list li span {
   cursor: pointer;
   display: block;
-  padding: 2px 6px;
+  padding: 2px 4px;
   border-radius: 6px;
 }
 
