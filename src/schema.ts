@@ -251,6 +251,13 @@ export function isVisible(item: HasImportance, expImportance: string): boolean {
   )
 }
 
+// A virtual root is a struct that is not a real struct, but a virtual root.
+// A non-root structs should have at least one value path.
+// So check if the struct has no value path.
+export function isVirtualRoot(struct: Struct) {
+  return struct.paths.length === 0
+}
+
 export function visibleFields(struct: Struct) {
   return struct.fields.filter((field: Field) => {
     // TODO: make user to choose if they want to see deprecated fields

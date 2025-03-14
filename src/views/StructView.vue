@@ -69,7 +69,8 @@ export default defineComponent({
       isExpanded,
       toggleExpand,
       isVisible,
-      showExample
+      showExample,
+      schema
     }
   },
   components: {
@@ -113,7 +114,7 @@ export default defineComponent({
 </script>
 
 <template>
-  <div class="struct-view">
+  <div class="struct-view" v-if="!schema.isVirtualRoot(currentStruct)">
     <span class="struct-fullname" @click="toggleExpand()">
       <code>{{ currentStruct.full_name }} {{ maybeFold() }}</code>
     </span>
@@ -154,7 +155,7 @@ export default defineComponent({
             class="sub-struct"
           >
             <StructView
-              :key="st.name"
+              :key="appendPath(valuePath, st.name, field.name)"
               :currentStruct="findStruct(st.name)"
               :markdownProvider="markdownProvider"
               :structResolver="structResolver"
