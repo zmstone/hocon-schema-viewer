@@ -49,12 +49,12 @@
     border-color: #2f81f7;
     background-color: #051d4d;
   }
-  
+
   .markdown-alert-warning {
     border-color: #f85149;
     background-color: #2d1f1f;
   }
-  
+
   .markdown-alert-tip {
     border-color: #3fb950;
     background-color: #1f2e1f;
@@ -230,7 +230,7 @@ code:not(pre code) {
   .markdown-content h1::after {
     background-color: #30363d;
   }
-  
+
   .markdown-content h6 {
     color: #8b949e;
   }
@@ -291,4 +291,4 @@ code:not(pre code) {
   .heading-hr {
     border-bottom-color: #30363d;
   }
-} 
+}

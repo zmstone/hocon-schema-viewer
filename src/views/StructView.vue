@@ -202,6 +202,22 @@ table td:first-child {
   text-align: right;
   font-size: 0.67em;
   line-height: 2.2em;
+  padding-top: 8px;
+}
+
+table td .markdown-content {
+  margin-top: 4px;
+  margin-bottom: 4px;
+}
+
+/* Remove top margin from first paragraph in description */
+table td .markdown-content p:first-child {
+  margin-top: 0;
+}
+
+/* Remove bottom margin from last paragraph in description */
+table td .markdown-content p:last-child {
+  margin-bottom: 0;
 }
 
 table tr:nth-child(even) {
@@ -220,6 +236,12 @@ table th {
 
 .sub-struct {
   border-bottom: 1px solid;
+  margin-bottom: 16px; /* Add space between sibling structs */
+}
+
+/* Remove margin from last struct to avoid extra space */
+.sub-struct:last-child {
+  margin-bottom: 0;
 }
 
 .struct-fullname {
@@ -227,14 +249,14 @@ table th {
   padding: 8px;
   background-color: #e4f5ea;
   border-radius: 4px;
-  font-size: 0.67em;
+  font-size: 0.85em;
   margin-right: 8px;
 }
 
 .example-button {
   padding: 4px 12px;
   border-radius: 4px;
-  font-size: 0.67em;
+  font-size: 0.85em;
   cursor: pointer;
   background-color: #e4f5ea;
   border: 1px solid #2e5742;
@@ -270,7 +292,7 @@ table th {
 }
 
 .markdown-content {
-  line-height: 1.6;
+  line-height: 1.5;
 }
 
 .markdown-content h1,
@@ -321,7 +343,7 @@ table th {
   .markdown-content blockquote {
     border-left-color: #444;
   }
-  
+
   .markdown-content th,
   .markdown-content td {
     border-color: #444;
@@ -404,12 +426,12 @@ table th {
     border-color: #2f81f7;
     background-color: #051d4d;
   }
-  
+
   .markdown-alert-warning {
     border-color: #f85149;
     background-color: #2d1f1f;
   }
-  
+
   .markdown-alert-tip {
     border-color: #3fb950;
     background-color: #1f2e1f;

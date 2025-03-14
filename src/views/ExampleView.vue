@@ -43,7 +43,8 @@ export default defineComponent({
     const valuePath = ref(props.valuePath)
     const systemPrompt = ref('')
 
-    const PROMPT_URL = 'https://gist.githubusercontent.com/zmstone/44747c1adc7f86ca1968f4bf4f16307b/raw/emqx-config-example-generation-prompt.txt'
+    const PROMPT_URL =
+      'https://gist.githubusercontent.com/zmstone/44747c1adc7f86ca1968f4bf4f16307b/raw/emqx-config-example-generation-prompt.txt'
 
     // Reset state when struct changes
     watch(
@@ -74,9 +75,12 @@ export default defineComponent({
     })
 
     // Watch for changes to valuePath prop
-    watch(() => props.valuePath, (newPath) => {
-      valuePath.value = newPath
-    })
+    watch(
+      () => props.valuePath,
+      (newPath) => {
+        valuePath.value = newPath
+      }
+    )
 
     const findStruct = (name: string): schema.Struct | null => {
       try {
@@ -117,7 +121,11 @@ export default defineComponent({
           if (match) {
             const [fullMatch, indentation, refName] = match
             const hasContent = hasSubstructContent(lines, index)
-            return `<span class="substruct-line">${indentation}<span class="substruct-content"><a href="javascript:void(0)" class="generate-link" data-ref="${refName}" data-indent="${indentation}">#substruct(${refName})</a> <a href="javascript:void(0)" class="regenerate-substruct" data-ref="${refName}" title="Regenerate substruct">↺</a>${hasContent ? ` <a href="javascript:void(0)" class="clear-substruct" data-ref="${refName}" title="Clear substruct">✖</a>` : ''}</span></span>`
+            return `<span class="substruct-line">${indentation}<span class="substruct-content"><a href="javascript:void(0)" class="generate-link" data-ref="${refName}" data-indent="${indentation}">#substruct(${refName})</a> <a href="javascript:void(0)" class="regenerate-substruct" data-ref="${refName}" title="Regenerate substruct">↺</a>${
+              hasContent
+                ? ` <a href="javascript:void(0)" class="clear-substruct" data-ref="${refName}" title="Clear substruct">✖</a>`
+                : ''
+            }</span></span>`
           }
           return line
         })
@@ -187,7 +195,10 @@ export default defineComponent({
           messages.push({ role: 'user', content: generateUserPrompt(struct, valuePath.value) })
 
           if (additionalPrompts.value.trim()) {
-            messages.push({ role: 'user', content: 'Additional instructions:\n' + additionalPrompts.value })
+            messages.push({
+              role: 'user',
+              content: 'Additional instructions:\n' + additionalPrompts.value
+            })
           }
 
           const rawExample = await callOpenAI(apiKey.value, selectedModel.value, messages)
@@ -292,7 +303,7 @@ export default defineComponent({
 
       // Find base indentation level (from first non-empty line)
       const firstNonEmptyLine = lines.find((line) => line.trim())
-      const baseIndent = firstNonEmptyLine ? (firstNonEmptyLine.match(/^\s*/)?.[0].length || 0) : 0
+      const baseIndent = firstNonEmptyLine ? firstNonEmptyLine.match(/^\s*/)?.[0].length || 0 : 0
 
       // Remove one level of indentation from each line
       const deindentedLines = lines.map((line) => {
@@ -337,7 +348,8 @@ export default defineComponent({
       }
       // Fall back to AI generation if local example not found
       if (!apiKey.value) {
-        error.value = 'OpenAI API key is required to generate examples. Please enter your API key above.'
+        error.value =
+          'OpenAI API key is required to generate examples. Please enter your API key above.'
         isLoading.value = false
         return
       }
@@ -353,7 +365,10 @@ export default defineComponent({
           messages.push({ role: 'user', content: additionalPrompts.value })
         }
 
-        messages.push({ role: 'user', content: generateUserPrompt(props.currentStruct, valuePath.value) })
+        messages.push({
+          role: 'user',
+          content: generateUserPrompt(props.currentStruct, valuePath.value)
+        })
 
         generatedExample.value = await callOpenAI(apiKey.value, selectedModel.value, messages)
         exampleSource.value = 'ai'
@@ -371,7 +386,11 @@ export default defineComponent({
       if (!target.classList.contains('regenerate-substruct')) return
 
       const refName = target.getAttribute('data-ref')
-      const indentation = target.closest('.substruct-line')?.querySelector('.generate-link')?.getAttribute('data-indent') || ''
+      const indentation =
+        target
+          .closest('.substruct-line')
+          ?.querySelector('.generate-link')
+          ?.getAttribute('data-indent') || ''
       if (!refName) return
 
       const struct = findStruct(refName)
@@ -491,7 +510,9 @@ export default defineComponent({
       <div v-else class="example-content">
         <div class="example-main">
           <div class="struct-info" v-if="valuePath">
-            <span v-if="!schema.isVirtualRoot(currentStruct)" class="struct-path">{{ valuePath }} </span>
+            <span v-if="!schema.isVirtualRoot(currentStruct)" class="struct-path"
+              >{{ valuePath }}
+            </span>
             <span v-if="exampleSource" class="example-source" :class="exampleSource">
               {{ exampleSource === 'pre-generated' ? 'pregenerated' : 'regenerated' }}
             </span>
@@ -521,12 +542,7 @@ export default defineComponent({
           <div class="api-controls">
             <div class="input-group">
               <label class="input-label">OpenAI API Key:</label>
-              <input
-                v-model="apiKey"
-                type="password"
-                class="api-key-input"
-                placeholder="sk-..."
-              />
+              <input v-model="apiKey" type="password" class="api-key-input" placeholder="sk-..." />
               <span v-if="showKeyStored" class="key-stored">API key stored!</span>
             </div>
             <div class="input-group">

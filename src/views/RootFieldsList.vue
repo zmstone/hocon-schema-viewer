@@ -167,7 +167,7 @@ export default defineComponent({
 .root-field-fold-state {
   font-size: 0.6em;
   margin: 0;
-  transform: translateY(2px);  /* Slight downward adjustment */
+  transform: translateY(2px); /* Slight downward adjustment */
   display: inline-block;
 }
 

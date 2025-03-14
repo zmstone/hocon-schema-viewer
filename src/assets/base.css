@@ -59,8 +59,6 @@
   font-weight: normal;
 }
 
-@import '../../node_modules/@fontsource/roboto/index.css';
-
 body {
   color: var(--color-text);
   background: var(--color-background);

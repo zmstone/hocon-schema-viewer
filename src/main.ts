@@ -1,5 +1,6 @@
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
+import '@fontsource/roboto/400.css'  // Regular weight
 
 import './assets/main.css'
 import './assets/base.css'

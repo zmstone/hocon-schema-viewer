@@ -137,7 +137,13 @@ export default defineComponent({
     const exampleStruct = ref<schema.Struct | null>(null)
     const valuePath = ref<string>('')
 
-    const handleShowExample = ({ struct, valuePath: path }: { struct: schema.Struct; valuePath: string }) => {
+    const handleShowExample = ({
+      struct,
+      valuePath: path
+    }: {
+      struct: schema.Struct
+      valuePath: string
+    }) => {
       exampleStruct.value = struct
       valuePath.value = path
     }
@@ -379,5 +385,15 @@ export default defineComponent({
   .resizer:hover {
     background: #444;
   }
+}
+
+.main-view {
+  display: flex;
+  gap: 20px;
+}
+
+/* Add space between sibling StructViews */
+.struct-view + .struct-view {
+  margin-top: 6px;
 }
 </style>

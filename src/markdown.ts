@@ -1,5 +1,7 @@
 import MarkdownIt from 'markdown-it'
 import container from 'markdown-it-container'
+import type { PluginWithOptions } from 'markdown-it'
+import type Token from 'markdown-it/lib/token'
 
 // Helper to create heading anchors
 function slugify(text: string): string {
@@ -17,7 +19,7 @@ const md = new MarkdownIt({
   typographer: true,
   breaks: true,
   // GitHub-like styling
-  highlight: function(str: string, lang: string) {
+  highlight: function (str: string, lang: string) {
     if (lang) {
       return `<div class="highlight"><pre class="highlight-pre"><code class="language-${lang}">${str}</code></pre></div>`
     }
@@ -27,15 +29,15 @@ const md = new MarkdownIt({
 
 // Define custom heading rule
 const headingRule = (tokens: any[], idx: number, options: any, env: any, self: any) => {
-  const token = tokens[idx];
+  const token = tokens[idx]
   // The next token should be the inline token with the text
-  const inlineToken = tokens[idx + 1];
-  const title = inlineToken.content;
+  const inlineToken = tokens[idx + 1]
+  const title = inlineToken.content
   // Clear the inline token's children to avoid duplicate output.
-  inlineToken.children = [];
-  const slug = slugify(title);
-  const tag = token.tag; // "h1", "h2", etc.
-  
+  inlineToken.children = []
+  const slug = slugify(title)
+  const tag = token.tag // "h1", "h2", etc.
+
   return `<${tag} id="${slug}">
             <span class="heading-wrapper">
               ${title}
@@ -45,8 +47,8 @@ const headingRule = (tokens: any[], idx: number, options: any, env: any, self: a
                 </svg>
               </a>
             </span>
-            <hr class="heading-hr" />`;
-};
+            <hr class="heading-hr" />`
+}
 
 // Override default heading rendering
 md.renderer.rules.heading_open = headingRule
@@ -68,12 +70,12 @@ md.use(container, 'tip', {
     return '</div></div>\n'
   }
 })
-.use(container, 'note', {
-  validate: params => params.trim().match(/^note\s*(.*)$/i),
-  render: (tokens, idx) => {
-    const m = tokens[idx].info.trim().match(/^note\s*(.*)$/i)
-    if (tokens[idx].nesting === 1) {
-      return `<div class="markdown-alert markdown-alert-note">
+  .use(container, 'note', {
+    validate: (params: string) => params.trim().match(/^note\s*(.*)$/i),
+    render: (tokens: Token[], idx: number) => {
+      const m = tokens[idx].info.trim().match(/^note\s*(.*)$/i)
+      if (tokens[idx].nesting === 1 && m) {
+        return `<div class="markdown-alert markdown-alert-note">
                 <div class="markdown-alert-title">
                   <svg class="octicon" viewBox="0 0 16 16" width="16" height="16">
                     <path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm8-6.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13ZM6.5 7.75A.75.75 0 0 1 7.25 7h1a.75.75 0 0 1 .75.75v2.75h.25a.75.75 0 0 1 0 1.5h-2a.75.75 0 0 1 0-1.5h.25v-2h-.25a.75.75 0 0 1-.75-.75ZM8 6a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"></path>
@@ -81,16 +83,16 @@ md.use(container, 'tip', {
                   Note
                 </div>
                 <div class="markdown-alert-content">${m[1] ? `<p>${m[1]}</p>` : ''}`
+      }
+      return '</div></div>\n'
     }
-    return '</div></div>\n'
-  }
-})
-.use(container, 'warning', {
-  validate: params => params.trim().match(/^warning\s*(.*)$/i),
-  render: (tokens, idx) => {
-    const m = tokens[idx].info.trim().match(/^warning\s*(.*)$/i)
-    if (tokens[idx].nesting === 1) {
-      return `<div class="markdown-alert markdown-alert-warning">
+  })
+  .use(container, 'warning', {
+    validate: (params: string) => params.trim().match(/^warning\s*(.*)$/i),
+    render: (tokens: Token[], idx: number) => {
+      const m = tokens[idx].info.trim().match(/^warning\s*(.*)$/i)
+      if (tokens[idx].nesting === 1 && m) {
+        return `<div class="markdown-alert markdown-alert-warning">
                 <div class="markdown-alert-title">
                   <svg class="octicon" viewBox="0 0 16 16" width="16" height="16">
                     <path d="M6.457 1.047c.659-1.234 2.427-1.234 3.086 0l6.082 11.378A1.75 1.75 0 0 1 14.082 15H1.918a1.75 1.75 0 0 1-1.543-2.575Zm1.763.707a.25.25 0 0 0-.44 0L1.698 13.132a.25.25 0 0 0 .22.368h12.164a.25.25 0 0 0 .22-.368Zm.53 3.996v2.5a.75.75 0 0 1-1.5 0v-2.5a.75.75 0 0 1 1.5 0ZM9 11a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z"></path>
@@ -98,10 +100,10 @@ md.use(container, 'tip', {
                   Warning
                 </div>
                 <div class="markdown-alert-content">${m[1] ? `<p>${m[1]}</p>` : ''}`
+      }
+      return '</div></div>\n'
     }
-    return '</div></div>\n'
-  }
-})
+  })
 
 export const render = (content: string): string => {
   if (typeof content === 'string') {
