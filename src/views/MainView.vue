@@ -75,6 +75,10 @@ export default defineComponent({
     const displayType = ref<schema.DisplayType>(defaultDisplay)
     function handleSelectedStruct(clicked: schema.DisplayType) {
       displayType.value = clicked
+      const structView = document.querySelector('.struct-view-box')
+      if (structView) {
+        structView.scrollTop = 0
+      }
     }
     const importanceLevel = ref<string>(defaultImportanceLevel)
     function resolveDisplayStructs(): schema.Struct[] {
