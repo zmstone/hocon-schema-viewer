@@ -146,7 +146,7 @@ export default defineComponent({
             </tr>
             <tr v-if="field.desc">
               <td>Description</td>
-              <td><div v-html="markdownToHtml(field.desc)"></div></td>
+              <td><div class="markdown-content" v-html="markdownToHtml(field.desc)"></div></td>
             </tr>
           </table>
           <div
@@ -172,7 +172,7 @@ export default defineComponent({
   </div>
 </template>
 
-<style scoped>
+<style>
 .field-list {
   list-style-type: none;
   padding-left: 20px;
@@ -266,6 +266,165 @@ table th {
   }
   .example-button:hover {
     background-color: #234434;
+  }
+}
+
+.markdown-content {
+  line-height: 1.6;
+}
+
+.markdown-content h1,
+.markdown-content h2,
+.markdown-content h3,
+.markdown-content h4 {
+  margin-top: 1.5em;
+  margin-bottom: 0.5em;
+  font-weight: 600;
+}
+
+.markdown-content p {
+  margin: 1em 0;
+}
+
+.markdown-content code {
+  background: #f5f5f5;
+  padding: 0.2em 0.4em;
+  border-radius: 3px;
+  font-size: 0.9em;
+}
+
+.markdown-content pre code {
+  display: block;
+  padding: 1em;
+  overflow-x: auto;
+}
+
+.markdown-content ul,
+.markdown-content ol {
+  padding-left: 2em;
+  margin: 1em 0;
+}
+
+.markdown-content blockquote {
+  margin: 1em 0;
+  padding-left: 1em;
+  border-left: 4px solid #ddd;
+  color: #666;
+}
+
+.markdown-content table {
+  border-collapse: collapse;
+  margin: 1em 0;
+  width: 100%;
+}
+
+.markdown-content th,
+.markdown-content td {
+  border: 1px solid #ddd;
+  padding: 0.5em;
+}
+
+@media (prefers-color-scheme: dark) {
+  .markdown-content code {
+    background: #2a2a2a;
+  }
+  
+  .markdown-content blockquote {
+    border-left-color: #444;
+    color: #999;
+  }
+  
+  .markdown-content th,
+  .markdown-content td {
+    border-color: #444;
+  }
+}
+
+.warning-container {
+  background: #ffebee;
+  border-left: 4px solid #ef5350;
+  padding: 1em;
+  margin: 1em 0;
+}
+
+.tip-container {
+  background: #e8f5e9;
+  border-left: 4px solid #4caf50;
+  padding: 1em;
+  margin: 1em 0;
+}
+
+@media (prefers-color-scheme: dark) {
+  .warning-container {
+    background: #311b1b;
+    border-left-color: #832222;
+  }
+  .tip-container {
+    background: #1b2b1b;
+    border-left-color: #2a5a2a;
+  }
+}
+
+/* GitHub-style markdown alerts */
+.markdown-alert {
+  padding: 0.5rem 1rem;
+  margin-bottom: 16px;
+  border-radius: 6px;
+}
+
+.markdown-alert-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.markdown-alert-content {
+  margin-left: 24px;
+}
+
+.markdown-alert-content > p:first-child {
+  margin-top: 0;
+}
+
+.markdown-alert-content > p:last-child {
+  margin-bottom: 0;
+}
+
+.markdown-alert-note {
+  border: 1px solid #0969da1a;
+  background-color: #0969da0a;
+}
+
+.markdown-alert-warning {
+  border: 1px solid #d73a49;
+  background-color: #ffeef0;
+}
+
+.markdown-alert-tip {
+  border: 1px solid #28a745;
+  background-color: #dcffe4;
+}
+
+.octicon {
+  fill: currentColor;
+}
+
+@media (prefers-color-scheme: dark) {
+  .markdown-alert-note {
+    border-color: #2f81f7;
+    background-color: #051d4d;
+  }
+  
+  .markdown-alert-warning {
+    border-color: #f85149;
+    background-color: #2d1f1f;
+  }
+  
+  .markdown-alert-tip {
+    border-color: #3fb950;
+    background-color: #1f2e1f;
   }
 }
 </style>
