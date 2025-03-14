@@ -494,6 +494,7 @@ export default defineComponent({
       activeTab,
       copyStatus,
       copyExample,
+      generateExample,
       error,
       apiKey,
       selectedModel,
