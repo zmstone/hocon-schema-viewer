@@ -1,7 +1,9 @@
 <script lang="ts">
 import { defineComponent, ref, watch, onMounted } from 'vue'
 import type { PropType } from 'vue'
-import type * as schema from '../schema'
+import * as schema from '../schema'
+
+type Schema = typeof schema
 
 export default defineComponent({
   name: 'ExampleView',
@@ -26,6 +28,9 @@ export default defineComponent({
   setup(props) {
     const generatedExample = ref<string>('')
     const processedExample = ref<string>('')
+    const defaultHint = 'Click one of the struct types to load/generate an example.'
+    generatedExample.value = defaultHint
+    processedExample.value = defaultHint
     const isLoading = ref(false)
     const activeTab = ref('example') // 'example' or 'schema'
     const error = ref<string>('')
@@ -45,7 +50,7 @@ export default defineComponent({
       () => props.currentStruct,
       () => {
         activeTab.value = 'example'
-        generatedExample.value = ''
+        generatedExample.value = defaultHint
         error.value = ''
         exampleSource.value = null
         // Auto-generate example when struct changes
@@ -299,9 +304,9 @@ export default defineComponent({
     }
 
     async function generateExample(forceAI: boolean = false) {
-      // Check if paths array is empty
-      if (props.currentStruct.paths.length === 0) {
-        generatedExample.value = 'Click one one of the struct types to generate an example.'
+      // Show a message for virtual root.
+      if (schema.isVirtualRoot(props.currentStruct)) {
+        generatedExample.value = defaultHint
         activeTab.value = 'example'
         isLoading.value = false
         return
@@ -454,7 +459,8 @@ export default defineComponent({
       exampleSource,
       valuePath,
       handleRegenerateSubstruct,
-      systemPrompt
+      systemPrompt,
+      schema
     }
   }
 })
@@ -485,7 +491,7 @@ export default defineComponent({
       <div v-else class="example-content">
         <div class="example-main">
           <div class="struct-info" v-if="valuePath">
-            <span class="struct-path">{{ valuePath }}</span>
+            <span v-if="!schema.isVirtualRoot(currentStruct)" class="struct-path">{{ valuePath }} </span>
             <span v-if="exampleSource" class="example-source" :class="exampleSource">
               {{ exampleSource === 'pre-generated' ? 'pregenerated' : 'regenerated' }}
             </span>
