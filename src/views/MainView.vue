@@ -139,7 +139,7 @@ export default defineComponent({
     }
 
     const exampleWidth = ref(window.innerWidth * 0.4) // 40% of window width
-    const sidebarWidth = ref(200)
+    const sidebarWidth = ref(240)
     const isResizing = ref(false)
     const isResizingSidebar = ref(false)
 
