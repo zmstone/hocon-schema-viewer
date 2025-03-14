@@ -286,13 +286,6 @@ table th {
   margin: 1em 0;
 }
 
-.markdown-content code {
-  background: #f5f5f5;
-  padding: 0.2em 0.4em;
-  border-radius: 3px;
-  font-size: 0.9em;
-}
-
 .markdown-content pre code {
   display: block;
   padding: 1em;
@@ -325,13 +318,8 @@ table th {
 }
 
 @media (prefers-color-scheme: dark) {
-  .markdown-content code {
-    background: #2a2a2a;
-  }
-  
   .markdown-content blockquote {
     border-left-color: #444;
-    color: #999;
   }
   
   .markdown-content th,
