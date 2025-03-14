@@ -42,6 +42,7 @@ export default defineComponent({
     const exampleSource = ref<'ai' | 'pre-generated' | null>(null)
     const valuePath = ref(props.valuePath)
     const systemPrompt = ref('')
+    const copyStatus = ref('Copy')
 
     const PROMPT_URL =
       'https://gist.githubusercontent.com/zmstone/44747c1adc7f86ca1968f4bf4f16307b/raw/emqx-config-example-generation-prompt.txt'
@@ -442,6 +443,32 @@ export default defineComponent({
       }
     }
 
+    function getCleanExample(): string {
+      // Remove substruct links and keep only the actual config
+      return generatedExample.value
+        .split('\n')
+        .map(line => {
+          if (line.includes('#substruct(')) {
+            return line.replace(/#substruct\([^)]+\)/, '').trim()
+          }
+          return line
+        })
+        .join('\n')
+    }
+
+    async function copyExample() {
+      try {
+        await navigator.clipboard.writeText(getCleanExample())
+        copyStatus.value = 'Copied!'
+        setTimeout(() => {
+          copyStatus.value = 'Copy'
+        }, 2000)
+      } catch (err) {
+        console.error('Failed to copy:', err)
+        copyStatus.value = 'Failed to copy'
+      }
+    }
+
     onMounted(async () => {
       try {
         const response = await fetch(PROMPT_URL)
@@ -464,8 +491,9 @@ export default defineComponent({
       generatedExample,
       processedExample,
       isLoading,
-      generateExample,
       activeTab,
+      copyStatus,
+      copyExample,
       error,
       apiKey,
       selectedModel,
@@ -513,9 +541,25 @@ export default defineComponent({
             <span v-if="!schema.isVirtualRoot(currentStruct)" class="struct-path"
               >{{ valuePath }}
             </span>
-            <span v-if="exampleSource" class="example-source" :class="exampleSource">
-              {{ exampleSource === 'pre-generated' ? 'pregenerated' : 'regenerated' }}
-            </span>
+            <div class="info-controls">
+              <span v-if="exampleSource" class="example-source" :class="exampleSource">
+                {{ exampleSource === 'pre-generated' ? 'pregenerated' : 'regenerated' }}
+              </span>
+              <button 
+                v-if="!isLoading && !schema.isVirtualRoot(currentStruct)"
+                class="copy-button" 
+                @click="copyExample"
+                :title="copyStatus"
+              >
+                <svg v-if="copyStatus === 'Copy'" class="copy-icon" viewBox="0 0 16 16" width="16" height="16">
+                  <path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25Z"></path>
+                  <path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z"></path>
+                </svg>
+                <svg v-else-if="copyStatus === 'Copied!'" class="copy-icon" viewBox="0 0 16 16" width="16" height="16">
+                  <path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"></path>
+                </svg>
+              </button>
+            </div>
           </div>
           <div
             class="example-code"
@@ -999,6 +1043,12 @@ pre {
   margin: 12px 0 8px;
 }
 
+.info-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
 .struct-path {
   color: #666;
   font-style: italic;
@@ -1043,5 +1093,34 @@ pre {
 .schema-content pre {
   height: 100%;
   margin: 0;
+}
+
+.copy-button {
+  padding: 4px 12px;
+  border-radius: 4px;
+  background: #e4f5ea;
+  border: 1px solid #2e5742;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.copy-icon {
+  fill: currentColor;
+}
+
+.copy-button:hover {
+  background: #d0ebda;
+}
+
+@media (prefers-color-scheme: dark) {
+  .copy-button {
+    background-color: #2e5742;
+    color: #e4f5ea;
+  }
+  .copy-button:hover {
+    background-color: #234434;
+  }
 }
 </style>
