@@ -1,9 +1,7 @@
 <script lang="ts">
-import { defineComponent, ref, watch } from 'vue'
+import { computed, defineComponent, ref, watch } from 'vue'
 import type { PropType } from 'vue'
 import * as schema from '../schema'
-
-type StructsIndex = { [name: string]: number }
 
 export default defineComponent({
   name: 'RootFieldsList',
@@ -17,7 +15,7 @@ export default defineComponent({
       required: true
     },
     importanceLevel: {
-      trype: String,
+      type: String,
       required: true
     }
   },
@@ -26,6 +24,7 @@ export default defineComponent({
     let defaultExpand = ''
     const currentRootSelected = ref<string>(defaultRoot)
     const currentExpandSelected = ref<string>(defaultExpand)
+    const searchTerm = ref<string>('')
     function updateSelected(display: schema.DisplayType | undefined) {
       if (display) {
         if (display.tpath && display.tpath !== '') {
@@ -62,6 +61,18 @@ export default defineComponent({
     const isVisible = (item: schema.HasImportance): boolean => {
       return schema.isVisible(item, props.importanceLevel as string)
     }
+    const filteredRootFields = computed(() => {
+      const term = searchTerm.value.trim().toLowerCase()
+      if (term === '') {
+        return props.rootFields
+      }
+      return props.rootFields.filter((field) => {
+        if (field.name.toLowerCase().includes(term)) {
+          return true
+        }
+        return (field.aliases || []).some((alias) => alias.toLowerCase().includes(term))
+      })
+    })
     watch(
       () => props.currentDisplay,
       (newDisplay) => {
@@ -76,7 +87,9 @@ export default defineComponent({
       currentExpandSelected,
       rootClicked,
       expandClicked,
-      isVisible
+      isVisible,
+      searchTerm,
+      filteredRootFields
     }
   },
   methods: {
@@ -117,28 +130,36 @@ export default defineComponent({
 </script>
 
 <template>
-  <div>
+  <div class="root-browser">
+    <div class="search-box">
+      <input
+        v-model="searchTerm"
+        type="text"
+        autocomplete="off"
+        placeholder="Filter fields..."
+        aria-label="Filter root fields"
+      />
+    </div>
     <ul class="root-fields-list">
-      <li v-for="(field, index) in rootFields" :key="index">
+      <li v-for="(field, index) in filteredRootFields" :key="index" class="root-field-entry">
         <div
           v-if="isVisible(field)"
-          class="root-field-display"
+          class="root-field-display clickable"
+          :class="{ selected: currentRootSelected === field.name }"
           @click="rootClicked(fieldToDisplayType(field))"
         >
-          <span :class="{ 'selected-root-field': currentRootSelected === field.name }">
-            {{ field.name }} {{ annotate(field.type) }}
-          </span>
-          <span class="root-field-fold-state">
-            <code>{{ maybeFold(field) }}</code>
-          </span>
+          <span class="field-name">{{ field.name }} {{ annotate(field.type) }}</span>
+          <span class="root-field-fold-state">{{ maybeFold(field) }}</span>
         </div>
-        <ul class="root-fields-sub-list" v-if="currentRootSelected === field.name">
+        <ul class="root-fields-sub-list" v-if="currentRootSelected === field.name && isVisible(field)">
           <li v-for="(expand, expIndex) in field.expands || []" :key="expIndex">
-            <div v-if="isVisible(expand)" class="root-field-display" @click="expandClicked(expand)">
-              <span
-                :class="{ 'selected-root-field': currentExpandSelected === expand.list_display }"
-                >{{ selectorSymbol(expand) }}{{ expand.list_display }}</span
-              >
+            <div
+              v-if="isVisible(expand)"
+              class="root-field-display clickable sub-level"
+              :class="{ selected: currentExpandSelected === expand.list_display }"
+              @click="expandClicked(expand)"
+            >
+              <span class="field-name">{{ selectorSymbol(expand) }}{{ expand.list_display }}</span>
             </div>
           </li>
         </ul>
@@ -148,46 +169,83 @@ export default defineComponent({
 </template>
 
 <style scoped>
-.selected-root-field {
-  background-color: #e4f5ea;
-  border-radius: 4px;
+.root-browser {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.search-box {
+  padding: 0 0.5rem;
+}
+
+.search-box input {
+  width: 100%;
+  border-radius: 10px;
+  border: 1px solid var(--line-subtle);
+  background: var(--panel-primary);
+  color: var(--text-strong);
+  padding: 0.52rem 0.62rem;
+  font-size: 0.85rem;
+}
+
+.search-box input:focus-visible {
+  outline: 2px solid rgba(94, 78, 255, 0.35);
+  outline-offset: 1px;
 }
 
 .root-field-fold-state {
-  font-size: 0.9em;
-  margin: 0;
+  color: var(--text-soft);
+  font-size: 0.8rem;
 }
 
 .root-field-display {
   display: flex;
-  margin: 4px;
-  padding-left: 0;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin: 0.2rem 0;
+  padding: 0.4rem 0.6rem;
+  border-radius: 10px;
+  border: 1px solid transparent;
+}
+
+.clickable {
+  cursor: pointer;
+  transition: border-color 140ms ease, background-color 140ms ease, transform 140ms ease;
+}
+
+.clickable:hover {
+  border-color: var(--line-strong);
+  background: #fff;
+  transform: translateX(2px);
+}
+
+.selected {
+  background: rgba(94, 78, 255, 0.08);
+  border-color: rgba(94, 78, 255, 0.25);
+  color: var(--accent);
 }
 
 .root-fields-list {
-  padding-left: 0;
+  padding: 0;
   margin: 0;
   list-style-type: none;
 }
 
 .root-fields-sub-list {
-  padding-left: 20px;
-  margin: 0;
+  padding-left: 0.4rem;
+  margin: 0.2rem 0 0.4rem;
   list-style-type: none;
+  border-left: 1px dashed var(--line-subtle);
 }
 
-.root-fields-list li span {
-  cursor: pointer;
-  display: block;
-  padding: 2px 6px;
-  border-radius: 6px;
+.sub-level {
+  margin-left: 0.4rem;
+  font-size: 0.9rem;
 }
 
-/* Dark mode styles */
-@media (prefers-color-scheme: dark) {
-  .selected-root-field {
-    background-color: #2e5742;
-    color: #d9e9d9;
-  }
+.field-name {
+  overflow-wrap: anywhere;
 }
 </style>

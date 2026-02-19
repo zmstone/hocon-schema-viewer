@@ -37,6 +37,7 @@ export default defineComponent({
     const exampleSource = ref<'ai' | 'pre-generated' | null>(null)
     const valuePath = ref(props.valuePath)
     const systemPrompt = ref('')
+    const showRegenerateControls = ref(false)
 
     const PROMPT_URL = 'https://gist.githubusercontent.com/zmstone/44747c1adc7f86ca1968f4bf4f16307b/raw/emqx-config-example-generation-prompt.txt'
 
@@ -50,7 +51,8 @@ export default defineComponent({
         exampleSource.value = null
         // Auto-generate example when struct changes
         generateExample(false)
-      }
+      },
+      { immediate: true }
     )
 
     // Store API key when it changes
@@ -112,7 +114,14 @@ export default defineComponent({
           if (match) {
             const [fullMatch, indentation, refName] = match
             const hasContent = hasSubstructContent(lines, index)
-            return `<span class="substruct-line">${indentation}<span class="substruct-content"><a href="javascript:void(0)" class="generate-link" data-ref="${refName}" data-indent="${indentation}">#substruct(${refName})</a> <a href="javascript:void(0)" class="regenerate-substruct" data-ref="${refName}" title="Regenerate substruct">↺</a>${hasContent ? ` <a href="javascript:void(0)" class="clear-substruct" data-ref="${refName}" title="Clear substruct">✖</a>` : ''}</span></span>`
+            const regenerateControl = showRegenerateControls.value
+              ? ` <a href="javascript:void(0)" class="regenerate-substruct" data-ref="${refName}" title="Regenerate substruct">↺</a>`
+              : ''
+            const clearControl =
+              showRegenerateControls.value && hasContent
+                ? ` <a href="javascript:void(0)" class="clear-substruct" data-ref="${refName}" title="Clear substruct">✖</a>`
+                : ''
+            return `<span class="substruct-line">${indentation}<span class="substruct-content"><a href="javascript:void(0)" class="generate-link" data-ref="${refName}" data-indent="${indentation}">#substruct(${refName})</a>${regenerateControl}${clearControl}</span></span>`
           }
           return line
         })
@@ -122,6 +131,9 @@ export default defineComponent({
     // Watch for changes in generatedExample and process it
     watch(generatedExample, (newValue) => {
       processedExample.value = processExampleText(newValue)
+    })
+    watch(showRegenerateControls, () => {
+      processedExample.value = processExampleText(generatedExample.value)
     })
 
     // Handle generate link clicks
@@ -454,7 +466,8 @@ export default defineComponent({
       exampleSource,
       valuePath,
       handleRegenerateSubstruct,
-      systemPrompt
+      systemPrompt,
+      showRegenerateControls
     }
   }
 })
@@ -485,10 +498,19 @@ export default defineComponent({
       <div v-else class="example-content">
         <div class="example-main">
           <div class="struct-info" v-if="valuePath">
-            <span class="struct-path">{{ valuePath }}</span>
-            <span v-if="exampleSource" class="example-source" :class="exampleSource">
-              {{ exampleSource === 'pre-generated' ? 'pregenerated' : 'regenerated' }}
-            </span>
+            <div class="struct-status">
+              <span v-if="exampleSource" class="example-source" :class="exampleSource">
+                {{ exampleSource === 'pre-generated' ? 'pregenerated' : 'regenerated' }}
+              </span>
+              <button
+                @click="showRegenerateControls = !showRegenerateControls"
+                type="button"
+                class="regen-toggle"
+                :title="showRegenerateControls ? 'Hide regeneration controls' : 'Show regeneration controls'"
+              >
+                {{ showRegenerateControls ? 'Hide' : 'Refresh' }}
+              </button>
+            </div>
           </div>
           <div
             class="example-code"
@@ -503,7 +525,7 @@ export default defineComponent({
             <pre><code v-html="processedExample"></code></pre>
           </div>
         </div>
-        <div class="controls-footer">
+        <div class="controls-footer" v-if="showRegenerateControls">
           <div class="more-prompts">
             <textarea
               v-model="additionalPrompts"
@@ -562,18 +584,18 @@ export default defineComponent({
   padding: 0 16px 16px;
   display: flex;
   flex-direction: column;
-  height: calc(100% - 37px); /* Subtract tabs height */
+  height: calc(100% - 37px);
 }
 
 .example-main {
+  flex-grow: 1;
   min-height: 0;
   display: flex;
   flex-direction: column;
-  height: calc(100% - 200px); /* Reserve space for controls */
 }
 
 .controls-footer {
-  height: 200px;
+  margin-top: 12px;
   padding-top: 16px;
   border-top: 1px solid #eee;
 }
@@ -975,6 +997,27 @@ pre {
   justify-content: space-between;
   gap: 8px;
   margin: 12px 0 8px;
+}
+
+.struct-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.regen-toggle {
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  background: #fff;
+  color: var(--text-dim);
+  padding: 2px 10px;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.regen-toggle:hover {
+  border-color: var(--accent);
+  color: var(--accent);
 }
 
 .struct-path {

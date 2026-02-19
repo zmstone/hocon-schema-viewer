@@ -1,6 +1,6 @@
 <template>
   <div class="top-banner">
-    <div class="importance-label">Importance level:</div>
+    <div class="importance-label">Importance</div>
     <div
       v-for="(level, index) in importanceLevels"
       :key="index"
@@ -58,45 +58,43 @@ export default defineComponent({
 <style scoped>
 .top-banner {
   display: flex;
-  justify-content: space-around;
-  justify-content: flex-start;
-  background-color: #f5f5f5;
-  border-radius: 4px;
-  font-size: 0.8em;
+  align-items: center;
+  gap: 0.3rem;
+  flex-wrap: wrap;
+  border-radius: 999px;
+  border: 1px solid var(--line-subtle);
+  background: var(--panel-secondary);
+  padding: 0.2rem;
 }
 
 .importance-label {
-  padding: 4px;
+  padding: 0.25rem 0.55rem;
+  color: var(--text-dim);
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
 }
+
 .importance-level {
-  padding: 4px;
-  margin-left: 5px;
-  border-radius: 4px;
+  padding: 0.3rem 0.7rem;
+  margin-left: 0;
+  border-radius: 999px;
   cursor: pointer;
-  border: 1px solid #ccc;
+  border: 1px solid transparent;
+  font-size: 0.8rem;
+  color: var(--text-dim);
+  transition: border-color 140ms ease, color 140ms ease, background-color 140ms ease;
+}
+
+.importance-level:hover {
+  border-color: var(--line-strong);
+  color: var(--accent);
+  background: #fff;
 }
 
 .selected {
-  background-color: #e4f5ea;
-}
-
-/* Dark mode styles */
-@media (prefers-color-scheme: dark) {
-  .top-banner {
-    background-color: #333;
-  }
-
-  .importance-level {
-    border: 1px solid #666;
-    color: #fff;
-  }
-
-  .importance-level:hover {
-    background-color: #444;
-  }
-
-  .selected {
-    background-color: #555;
-  }
+  background: rgba(94, 78, 255, 0.1);
+  border-color: rgba(94, 78, 255, 0.3);
+  color: var(--accent);
 }
 </style>

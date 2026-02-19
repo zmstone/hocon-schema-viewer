@@ -1,11 +1,11 @@
 <script lang="ts">
-import { defineComponent, ref, watch } from 'vue'
+import { defineComponent, ref } from 'vue'
 import type { PropType } from 'vue'
 import * as schema from '../schema'
 
 export default defineComponent({
   name: 'StructView',
-  emits: ['show-example'],
+  emits: ['show-example', 'hide-example'],
   props: {
     // the current struct to expand
     currentStruct: {
@@ -44,26 +44,17 @@ export default defineComponent({
     const toggleExpand = () => {
       isExpanded.value = !isExpanded.value
     }
-    const showExample = () => {
+    const showExample = (event?: MouseEvent) => {
       emit('show-example', {
         struct: props.currentStruct,
-        valuePath: props.valuePath
+        valuePath: props.valuePath,
+        clientX: event?.clientX,
+        clientY: event?.clientY
       })
     }
     function isVisible(field: schema.Field): boolean {
       return schema.isVisible(field, props.importanceLevel)
     }
-
-    // Watch for changes to currentStruct
-    watch(
-      () => props.currentStruct,
-      () => {
-        if (props.isRoot) {
-          showExample()
-        }
-      },
-      { immediate: true } // Run immediately on mount
-    )
 
     return {
       isExpanded,
@@ -88,8 +79,12 @@ export default defineComponent({
     typeDisplay(type: schema.FieldType): string {
       return schema.shortTypeDisplay(type)
     },
-    findStruct(name: string) {
-      return this.structResolver(name)
+    resolveStruct(name: string): schema.Struct | null {
+      const resolved = this.structResolver(name)
+      if (!resolved) {
+        return null
+      }
+      return resolved as schema.Struct
     },
     visibleFields(struct: schema.Struct) {
       return schema.visibleFields(struct)
@@ -98,8 +93,8 @@ export default defineComponent({
       return this.markdownProvider(str)
     },
     maybeFold() {
-      const expandChar = ' \u25B6' // Right-pointing triangle (▶)
-      const collapseChar = ' \u25BC' // Down-pointing triangle (▼)
+      const expandChar = 'Expand'
+      const collapseChar = 'Collapse'
       if (this.isExpanded) {
         return collapseChar
       }
@@ -113,49 +108,70 @@ export default defineComponent({
 </script>
 
 <template>
-  <div class="struct-view">
-    <span class="struct-fullname" @click="toggleExpand()">
-      <code>{{ currentStruct.full_name }} {{ maybeFold() }}</code>
-    </span>
-    <button @click="showExample" class="example-button">Example</button>
+  <section class="struct-view">
+    <div class="struct-head">
+      <button class="struct-fullname" @click="toggleExpand()" type="button">
+        <code>{{ currentStruct.full_name }}</code>
+        <span class="fold-state">{{ maybeFold() }}</span>
+      </button>
+      <button
+        @click="showExample($event)"
+        class="example-button"
+        type="button"
+      >
+        Example
+      </button>
+    </div>
     <ul class="field-list" v-if="isExpanded">
-      <li v-for="(field, index) in visibleFields(currentStruct)" class="field-item">
+      <li
+        v-for="(field, index) in visibleFields(currentStruct)"
+        :key="index"
+        class="field-item"
+        v-show="isVisible(field)"
+      >
         <div v-if="isVisible(field)">
-          <div class="fieldname">{{ field.name }}</div>
-          <table>
-            <tr v-if="field.aliases && field.aliases.length > 0">
-              <td>Aliases:</td>
-              <td>
-                <span v-for="(alias, index) in field.aliases">
-                  <span v-if="index > 0">, </span>{{ alias }}
-                </span>
-              </td>
-            </tr>
-            <tr v-if="field.type.kind !== 'struct'">
-              <td>Type</td>
-              <td>
-                <code>{{ typeDisplay(field.type) }}</code>
-              </td>
-            </tr>
-            <tr v-if="field.raw_default">
-              <td>Default</td>
-              <td>
-                <code>{{ field.raw_default }}</code>
-              </td>
-            </tr>
-            <tr v-if="field.desc">
-              <td>Description</td>
-              <td><div v-html="markdownToHtml(field.desc)"></div></td>
-            </tr>
-          </table>
+          <div class="field-card">
+            <div class="field-header">
+              <h3 class="fieldname">{{ field.name }}</h3>
+            </div>
+            <table class="field-table">
+              <tbody>
+                <tr v-if="field.aliases && field.aliases.length > 0">
+                  <td>Aliases:</td>
+                  <td>
+                    <span v-for="(alias, aliasIndex) in field.aliases" :key="aliasIndex">
+                      <span v-if="aliasIndex > 0">, </span>{{ alias }}
+                    </span>
+                  </td>
+                </tr>
+                <tr v-if="field.type.kind !== 'struct'">
+                  <td>Type:</td>
+                  <td>
+                    <code>{{ typeDisplay(field.type) }}</code>
+                  </td>
+                </tr>
+                <tr v-if="field.raw_default">
+                  <td>Default:</td>
+                  <td>
+                    <code>{{ field.raw_default }}</code>
+                  </td>
+                </tr>
+                <tr v-if="field.desc">
+                  <td>Description:</td>
+                  <td><div v-html="markdownToHtml(field.desc)"></div></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
           <div
             v-if="isComplexType(field.type)"
-            v-for="(st, index) in subStructs(field)"
+            v-for="(st, subIndex) in subStructs(field)"
+            :key="`${field.name}-${subIndex}`"
             class="sub-struct"
           >
             <StructView
-              :key="st.name"
-              :currentStruct="findStruct(st.name)"
+              v-if="resolveStruct(st.name)"
+              :currentStruct="resolveStruct(st.name)"
               :markdownProvider="markdownProvider"
               :structResolver="structResolver"
               :expandByDefault="true"
@@ -163,108 +179,144 @@ export default defineComponent({
               :isRoot="false"
               :valuePath="appendPath(valuePath, st.name, field.name)"
               @show-example="$emit('show-example', $event)"
+              @hide-example="$emit('hide-example')"
             />
           </div>
         </div>
       </li>
     </ul>
-  </div>
+  </section>
 </template>
 
 <style scoped>
-.field-list {
-  list-style-type: none;
-  padding-left: 20px;
-  padding-top: 8px;
-}
-.field-list::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  width: 1px;
-  background-color: rgba(0, 0, 0, 0.3);
+.struct-view {
+  padding-top: 0.75rem;
 }
 
-.fieldname {
-  font-weight: bold;
-  padding-top: 8px;
-  padding-bottom: 8px;
-}
-
-table td {
-  vertical-align: top;
-}
-
-table td:first-child {
-  text-align: right;
-  font-size: 0.67em;
-  line-height: 2.2em;
-}
-
-table tr:nth-child(even) {
-  background-color: #f5f5f5;
-}
-
-table {
-  border-collapse: collapse;
-}
-
-table td,
-table th {
-  border: 0px solid #ccc;
-  padding: 4px;
-}
-
-.sub-struct {
-  border-bottom: 1px solid;
+.struct-head {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .struct-fullname {
   cursor: pointer;
-  padding: 8px;
-  background-color: #e4f5ea;
-  border-radius: 4px;
-  font-size: 0.67em;
-  margin-right: 8px;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.72rem 0.86rem;
+  background: rgba(94, 78, 255, 0.06);
+  border: 1px solid rgba(94, 78, 255, 0.24);
+  border-radius: 12px;
+  font-size: 0.86rem;
+  color: var(--text-strong);
+  text-align: left;
 }
 
 .example-button {
-  padding: 4px 12px;
-  border-radius: 4px;
-  font-size: 0.67em;
+  border: 1px solid var(--line-strong);
+  background: var(--panel-primary);
+  color: var(--text-dim);
+  border-radius: 999px;
+  padding: 0.45rem 0.8rem;
+  font-size: 0.8rem;
   cursor: pointer;
-  background-color: #e4f5ea;
-  border: 1px solid #2e5742;
-  transition: all 0.2s ease;
+  white-space: nowrap;
 }
 
 .example-button:hover {
-  background-color: #d0ebda;
+  border-color: var(--accent);
+  color: var(--accent);
 }
 
-.example-button:active {
-  transform: translateY(1px);
+.field-list {
+  list-style-type: none;
+  padding-left: 0;
+  padding-top: 0.8rem;
+  display: grid;
+  gap: 0.8rem;
 }
 
-@media (prefers-color-scheme: dark) {
-  table tr:nth-child(even) {
-    background-color: #2a2a2a;
+.field-item {
+  margin: 0;
+}
+
+.field-card {
+  border: 1px solid var(--line-subtle);
+  border-radius: 12px;
+  padding: 0.75rem 0.85rem;
+  background: var(--panel-primary);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+.field-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.8rem;
+  margin-bottom: 0.45rem;
+}
+
+.fieldname {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.field-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.field-table td,
+.field-table th {
+  border: 0;
+  padding: 0.42rem 0;
+  vertical-align: top;
+}
+
+.field-table td:first-child {
+  text-align: left;
+  font-size: 0.75rem;
+  color: var(--text-dim);
+  min-width: 110px;
+  padding-right: 0.8rem;
+}
+
+.field-table tr {
+  border-bottom: 1px dashed var(--line-subtle);
+}
+
+.field-table tr:last-child {
+  border-bottom: 0;
+}
+
+.sub-struct {
+  margin: 0.7rem 0 0;
+  padding-left: 110px;
+  padding-right: 0.2rem;
+}
+
+.sub-struct > .struct-view {
+  padding-left: 0.8rem;
+  border-left: 1px dashed var(--line-subtle);
+}
+
+.fold-state {
+  font-size: 0.74rem;
+  color: var(--text-dim);
+}
+
+@media (max-width: 900px) {
+  .field-header {
+    flex-direction: column;
+    align-items: flex-start;
   }
-  .field-list::before {
-    background-color: rgba(255, 255, 255, 0.3);
-  }
+
   .struct-fullname {
-    background-color: #2e5742;
-    color: #d9e9d9;
-  }
-  .example-button {
-    background-color: #2e5742;
-    color: #e4f5ea;
-  }
-  .example-button:hover {
-    background-color: #234434;
+    font-size: 0.8rem;
   }
 }
 </style>

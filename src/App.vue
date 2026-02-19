@@ -63,7 +63,7 @@ function renderMarkdown(desc: string): string {
 </script>
 
 <template>
-  <div class="container">
+  <div class="app-shell">
     <MainView
       class="main-view"
       v-if="!isLoading"
@@ -72,29 +72,68 @@ function renderMarkdown(desc: string): string {
       :markdownProvider="renderMarkdown"
       :version="version"
     />
+    <div v-if="isLoading" class="loading-state">
+      <div class="loading-pulse" aria-hidden="true"></div>
+      <div class="loading-copy">Loading schema and docs...</div>
+    </div>
   </div>
-  <div v-if="isLoading">Loading...</div>
 </template>
 
 <style>
-.container {
+.app-shell {
   display: flex;
   flex-direction: column;
-  height: 100%;
-  width: 100%;
-}
-
-.schema-list {
-  padding: 10px;
+  min-height: 100%;
+  width: min(1512px, 100%);
+  margin: 0 auto;
+  border-radius: 0;
+  overflow: hidden;
+  border: 1px solid var(--line-subtle);
+  background: var(--panel-primary);
 }
 
 .main-view {
   flex-grow: 1;
-  overflow-y: auto;
-  padding: 0px;
+  min-height: 0;
+}
+
+.loading-state {
+  display: grid;
+  place-items: center;
+  gap: 0.9rem;
+  min-height: 50vh;
+  color: var(--text-dim);
+}
+
+.loading-pulse {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 999px;
+  border: 3px solid #e2e2e3;
+  border-top-color: var(--accent);
+  animation: spin 0.8s linear infinite;
+}
+
+.loading-copy {
+  font-size: 0.92rem;
+  letter-spacing: 0.04em;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 #app {
-  height: 100%;
+  min-height: 100%;
+}
+
+@media (max-width: 900px) {
+  .app-shell {
+    width: 100%;
+    border-left: 0;
+    border-right: 0;
+  }
 }
 </style>
