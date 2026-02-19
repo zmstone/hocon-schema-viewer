@@ -30,10 +30,25 @@ export default defineComponent({
     const activeTab = ref('example') // 'example' or 'schema'
     const error = ref<string>('')
     const apiKey = ref(localStorage.getItem('openai_api_key') || '')
-    const selectedModel = ref(localStorage.getItem('openai_model') || 'gpt-4o')
+    const supportedModels = [
+      { value: 'gpt-4.1', label: 'GPT-4.1' },
+      { value: 'gpt-4.1-mini', label: 'GPT-4.1 Mini' },
+      { value: 'gpt-4.1-nano', label: 'GPT-4.1 Nano' },
+      { value: 'gpt-5', label: 'GPT-5' },
+      { value: 'gpt-5.2-codex', label: 'GPT-5.2 Codex' },
+      { value: 'gpt-5-mini', label: 'GPT-5 Mini' },
+      { value: 'gpt-5-nano', label: 'GPT-5 Nano' },
+      { value: 'o4-mini', label: 'o4-mini' },
+      { value: 'o3', label: 'o3' }
+    ]
+    const storedModel = localStorage.getItem('openai_model') || ''
+    const defaultModel = supportedModels.some((m) => m.value === storedModel)
+      ? storedModel
+      : 'gpt-5.2-codex'
+    const selectedModel = ref(defaultModel)
     const showKeyStored = ref(false)
     const additionalPrompts = ref('')
-    const models = [{ value: 'gpt-4o', label: 'GPT-4' }]
+    const models = supportedModels
     const exampleSource = ref<'ai' | 'pre-generated' | null>(null)
     const valuePath = ref(props.valuePath)
     const systemPrompt = ref('')
@@ -261,21 +276,79 @@ export default defineComponent({
     }
 
     async function callOpenAI(apiKey: string, model: string, messages: any[]) {
+      const headers = {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${apiKey}`
+      }
+      const extractError = (data: any, fallback: string) => {
+        return data?.error?.message || data?.message || fallback
+      }
+      const extractResponseText = (data: any): string => {
+        const parts: string[] = []
+
+        if (typeof data?.output_text === 'string' && data.output_text.trim() !== '') {
+          return data.output_text
+        }
+        if (Array.isArray(data?.output_text)) {
+          const joined = data.output_text.filter((s: any) => typeof s === 'string').join('\n').trim()
+          if (joined) return joined
+        }
+
+        if (Array.isArray(data?.output)) {
+          for (const out of data.output) {
+            if (Array.isArray(out?.content)) {
+              for (const block of out.content) {
+                if (typeof block?.text === 'string' && block.text.trim() !== '') {
+                  parts.push(block.text)
+                } else if (typeof block?.output_text === 'string' && block.output_text.trim() !== '') {
+                  parts.push(block.output_text)
+                } else if (typeof block?.value === 'string' && block.value.trim() !== '') {
+                  parts.push(block.value)
+                }
+              }
+            }
+          }
+        }
+
+        const merged = parts.join('\n').trim()
+        if (merged) return merged
+        return ''
+      }
+
+      // Prefer Responses API for GPT-5 family.
+      if (model.startsWith('gpt-5')) {
+        const response = await fetch('https://api.openai.com/v1/responses', {
+          method: 'POST',
+          headers,
+          body: JSON.stringify({
+            model,
+            input: messages
+          })
+        })
+        const data = await response.json()
+        if (!response.ok) {
+          throw new Error(extractError(data, `API error: ${response.statusText}`))
+        }
+        const extracted = extractResponseText(data)
+        if (extracted !== '') {
+          return extracted
+        }
+        throw new Error('No text content returned by Responses API.')
+      }
+
       const response = await fetch('https://api.openai.com/v1/chat/completions', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${apiKey}`
-        },
+        headers,
         body: JSON.stringify({
           model,
           messages,
-          temperature: model === 'gpt-4o' ? 0.7 : undefined
+          temperature: model.startsWith('o') ? undefined : 0.7
         })
       })
-
-      if (!response.ok) throw new Error(`API error: ${response.statusText}`)
       const data = await response.json()
+      if (!response.ok) {
+        throw new Error(extractError(data, `API error: ${response.statusText}`))
+      }
       return data.choices[0].message.content
     }
 
@@ -365,8 +438,8 @@ export default defineComponent({
         generatedExample.value = await callOpenAI(apiKey.value, selectedModel.value, messages)
         exampleSource.value = 'ai'
         activeTab.value = 'example'
-      } catch (error) {
-        generatedExample.value = 'Error generating example'
+      } catch (error: any) {
+        generatedExample.value = `Error generating example: ${error?.message || 'unknown error'}`
         activeTab.value = 'example'
       } finally {
         isLoading.value = false
@@ -512,6 +585,39 @@ export default defineComponent({
               </button>
             </div>
           </div>
+          <div class="controls-footer top-controls" v-if="showRegenerateControls">
+            <div class="more-prompts">
+              <textarea
+                v-model="additionalPrompts"
+                class="prompts-input"
+                placeholder="Add additional instructions. For example, skip low importance fields."
+                rows="4"
+              ></textarea>
+            </div>
+            <div class="api-controls">
+              <div class="input-group">
+                <label class="input-label">OpenAI API Key:</label>
+                <input
+                  v-model="apiKey"
+                  type="password"
+                  class="api-key-input"
+                  placeholder="sk-..."
+                />
+                <span v-if="showKeyStored" class="key-stored">API key stored!</span>
+              </div>
+              <div class="input-group">
+                <label class="input-label">Model:</label>
+                <select v-model="selectedModel" class="model-select">
+                  <option v-for="model in models" :key="model.value" :value="model.value">
+                    {{ model.label }}
+                  </option>
+                </select>
+              </div>
+              <button @click="generateExample(true)" :disabled="isLoading" class="generate-button">
+                {{ isLoading ? 'Generating...' : '↺' }}
+              </button>
+            </div>
+          </div>
           <div
             class="example-code"
             @click="
@@ -523,39 +629,6 @@ export default defineComponent({
             "
           >
             <pre><code v-html="processedExample"></code></pre>
-          </div>
-        </div>
-        <div class="controls-footer" v-if="showRegenerateControls">
-          <div class="more-prompts">
-            <textarea
-              v-model="additionalPrompts"
-              class="prompts-input"
-              placeholder="Add additional instructions. For example, skip low importance fields."
-              rows="4"
-            ></textarea>
-          </div>
-          <div class="api-controls">
-            <div class="input-group">
-              <label class="input-label">OpenAI API Key:</label>
-              <input
-                v-model="apiKey"
-                type="password"
-                class="api-key-input"
-                placeholder="sk-..."
-              />
-              <span v-if="showKeyStored" class="key-stored">API key stored!</span>
-            </div>
-            <div class="input-group">
-              <label class="input-label">Model:</label>
-              <select v-model="selectedModel" class="model-select">
-                <option v-for="model in models" :key="model.value" :value="model.value">
-                  {{ model.label }}
-                </option>
-              </select>
-            </div>
-            <button @click="generateExample(true)" :disabled="isLoading" class="generate-button">
-              {{ isLoading ? 'Generating...' : '↺' }}
-            </button>
           </div>
         </div>
       </div>
@@ -598,6 +671,11 @@ export default defineComponent({
   margin-top: 12px;
   padding-top: 16px;
   border-top: 1px solid #eee;
+}
+
+.top-controls {
+  margin-top: 0;
+  margin-bottom: 10px;
 }
 
 .api-controls {
